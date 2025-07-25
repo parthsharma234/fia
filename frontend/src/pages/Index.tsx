@@ -32,6 +32,7 @@ const Index = () => {
     <div className="min-h-screen">
       <Navigation />
       <Hero />
+      <StorytellingSection />
       
       {/* Quick Overview Section */}
       <section className="py-20 bg-muted/30">
