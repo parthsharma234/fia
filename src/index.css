@@ -8,31 +8,35 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 215 25% 27%;
+    --background: 215 30% 98%; /* Light navy tint for playful professional feel */
+    --foreground: 215 25% 18%; /* Darker navy for better visibility */
 
-    --card: 0 0% 100%;
+    --card: 215 20% 96%;
     --card-foreground: 215 25% 27%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 215 25% 27%;
 
-    /* Navy Blue Primary */
-    --primary: 215 84% 15%;
+    /* Enhanced Navy Blue Primary - More sophisticated and approachable */
+    --primary: 215 85% 18%;
     --primary-foreground: 0 0% 98%;
-    --primary-light: 215 84% 25%;
+    --primary-light: 215 80% 28%;
+    --primary-soft: 215 60% 45%;
 
-    /* Gold Secondary */
-    --secondary: 43 96% 56%;
-    --secondary-foreground: 215 84% 15%;
-    --secondary-light: 43 96% 66%;
+    /* Refined Gold Secondary - Warmer and more playful */
+    --secondary: 45 95% 58%;
+    --secondary-foreground: 215 85% 18%;
+    --secondary-light: 45 90% 68%;
+    --secondary-soft: 45 85% 75%;
 
-    --muted: 215 25% 96%;
-    --muted-foreground: 215 15% 55%;
+    --muted: 215 30% 96%;
+    --muted-foreground: 215 20% 50%;
 
-    /* Gold Accent */
-    --accent: 43 96% 56%;
-    --accent-foreground: 215 84% 15%;
+    /* Enhanced Gold Accent with coral undertones for playfulness */
+    --accent: 45 95% 58%;
+    --accent-foreground: 215 85% 18%;
+    --accent-coral: 25 85% 65%;
+    --accent-coral-foreground: 215 85% 18%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -41,14 +45,18 @@ All colors MUST be HSL.
     --input: 215 25% 91%;
     --ring: 215 84% 15%;
 
-    /* Custom Design Tokens */
-    --gradient-primary: linear-gradient(135deg, hsl(215, 84%, 15%), hsl(215, 84%, 25%));
-    --gradient-hero: linear-gradient(135deg, hsl(215, 84%, 15%) 0%, hsl(215, 84%, 25%) 50%, hsl(43, 96%, 56%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0, 0%, 100%) 0%, hsl(215, 25%, 98%) 100%);
+    /* Enhanced Design Tokens - Professional yet playful */
+    --gradient-primary: linear-gradient(135deg, hsl(215, 85%, 18%), hsl(215, 80%, 28%), hsl(215, 60%, 45%));
+    --gradient-hero: linear-gradient(135deg, hsl(215, 85%, 18%) 0%, hsl(215, 80%, 28%) 40%, hsl(45, 95%, 58%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0, 0%, 100%) 0%, hsl(215, 30%, 98%) 50%, hsl(45, 85%, 98%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(45, 95%, 58%) 0%, hsl(25, 85%, 65%) 100%);
+    --gradient-soft: linear-gradient(135deg, hsl(215, 60%, 45%) 0%, hsl(45, 85%, 75%) 100%);
     
-    --shadow-elegant: 0 10px 30px -10px hsl(215, 84%, 15% / 0.15);
-    --shadow-card: 0 4px 20px -4px hsl(215, 84%, 15% / 0.1);
-    --shadow-glow: 0 0 40px hsl(43, 96%, 56% / 0.3);
+    --shadow-elegant: 0 12px 35px -12px hsl(215, 85%, 18% / 0.18);
+    --shadow-card: 0 6px 25px -6px hsl(215, 85%, 18% / 0.12);
+    --shadow-glow: 0 0 45px hsl(45, 95%, 58% / 0.35);
+    --shadow-coral: 0 0 30px hsl(25, 85%, 65% / 0.25);
+    --shadow-soft: 0 8px 30px -8px hsl(215, 60%, 45% / 0.15);
     
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -73,39 +81,45 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 215 84% 6%;
+    --background: 215 85% 8%;
     --foreground: 0 0% 98%;
 
-    --card: 215 84% 8%;
+    --card: 215 85% 10%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 215 84% 8%;
+    --popover: 215 85% 10%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 43 96% 56%;
-    --primary-foreground: 215 84% 15%;
-    --primary-light: 43 96% 66%;
+    --primary: 45 95% 58%;
+    --primary-foreground: 215 85% 18%;
+    --primary-light: 45 90% 68%;
+    --primary-soft: 45 85% 75%;
 
-    --secondary: 215 84% 20%;
+    --secondary: 215 80% 25%;
     --secondary-foreground: 0 0% 98%;
-    --secondary-light: 215 84% 30%;
+    --secondary-light: 215 75% 35%;
+    --secondary-soft: 215 60% 50%;
 
-    --muted: 215 84% 15%;
-    --muted-foreground: 215 25% 70%;
+    --muted: 215 85% 18%;
+    --muted-foreground: 215 30% 70%;
 
-    --accent: 43 96% 56%;
-    --accent-foreground: 215 84% 15%;
+    --accent: 45 95% 58%;
+    --accent-foreground: 215 85% 18%;
+    --accent-coral: 25 85% 65%;
+    --accent-coral-foreground: 215 85% 18%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 215 84% 20%;
-    --input: 215 84% 20%;
-    --ring: 43 96% 56%;
+    --border: 215 85% 22%;
+    --input: 215 85% 22%;
+    --ring: 45 95% 58%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(215, 84%, 8%), hsl(215, 84%, 15%));
-    --gradient-hero: linear-gradient(135deg, hsl(215, 84%, 6%) 0%, hsl(215, 84%, 15%) 50%, hsl(43, 96%, 56%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(215, 84%, 8%) 0%, hsl(215, 84%, 12%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(215, 85%, 10%), hsl(215, 80%, 18%), hsl(215, 60%, 30%));
+    --gradient-hero: linear-gradient(135deg, hsl(215, 85%, 8%) 0%, hsl(215, 80%, 18%) 40%, hsl(45, 95%, 58%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(215, 85%, 10%) 0%, hsl(215, 80%, 15%) 50%, hsl(45, 85%, 20%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(45, 95%, 58%) 0%, hsl(25, 85%, 65%) 100%);
+    --gradient-soft: linear-gradient(135deg, hsl(215, 60%, 30%) 0%, hsl(45, 85%, 45%) 100%);
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -127,7 +141,20 @@ All colors MUST be HSL.
   }
 
   html {
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
     scroll-behavior: smooth;
+
+    color-scheme: light dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
   }
 }
 
@@ -140,8 +167,23 @@ All colors MUST be HSL.
     background: var(--gradient-card);
   }
   
+  .accent-gradient {
+    background: var(--gradient-accent);
+  }
+  
+  .soft-gradient {
+    background: var(--gradient-soft);
+  }
+  
   .text-gradient {
     background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .text-gradient-coral {
+    background: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent-coral)));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -155,9 +197,42 @@ All colors MUST be HSL.
     box-shadow: var(--shadow-glow);
   }
   
+  .hover-coral {
+    transition: var(--transition-smooth);
+  }
+  
+  .hover-coral:hover {
+    box-shadow: var(--shadow-coral);
+  }
+  
+  .hover-soft {
+    transition: var(--transition-smooth);
+  }
+  
+  .hover-soft:hover {
+    box-shadow: var(--shadow-soft);
+  }
+  
   .parallax-scroll {
     transform: translateZ(0);
     will-change: transform;
+  }
+  
+  .playful-border {
+    border: 2px solid transparent;
+    background: linear-gradient(white, white) padding-box, var(--gradient-accent) border-box;
+  }
+  
+  .professional-card {
+    background: var(--gradient-card);
+    box-shadow: var(--shadow-card);
+    border: 1px solid hsl(var(--border));
+    transition: var(--transition-smooth);
+  }
+  
+  .professional-card:hover {
+    box-shadow: var(--shadow-elegant);
+    transform: translateY(-2px);
   }
 }
 
@@ -180,6 +255,56 @@ All colors MUST be HSL.
   
   .animate-bounce-in {
     animation: bounceIn 0.8s ease-out;
+  }
+  
+  .animate-slide-in-bottom {
+    animation: slideInBottom 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .animate-fade-in-scale {
+    animation: fadeInScale 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .animate-stagger-1 {
+    animation-delay: 0.1s;
+  }
+  
+  .animate-stagger-2 {
+    animation-delay: 0.2s;
+  }
+  
+  .animate-stagger-3 {
+    animation-delay: 0.3s;
+  }
+  
+  .animate-stagger-4 {
+    animation-delay: 0.4s;
+  }
+  
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+  
+  .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .reveal-on-scroll.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .reveal-scale {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .reveal-scale.revealed {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -242,5 +367,27 @@ All colors MUST be HSL.
   100% {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes slideInBottom {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
   }
 }

@@ -43,21 +43,12 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground mb-1">Email</h4>
-                    <p className="text-muted-foreground">info@financeinadvance.org</p>
+                    <p className="text-muted-foreground">financeinadvance@gmail.com</p>
                     <p className="text-muted-foreground text-sm">We typically respond within 24 hours</p>
                   </div>
                 </div>
 
-                <div className="flex items-start">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4 mt-1">
-                    <Phone className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-foreground mb-1">Phone</h4>
-                    <p className="text-muted-foreground">(555) 123-4567</p>
-                    <p className="text-muted-foreground text-sm">Monday - Friday, 9 AM - 5 PM EST</p>
-                  </div>
-                </div>
+
 
                 <div className="flex items-start">
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mr-4 mt-1">
@@ -65,7 +56,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground mb-1">Headquarters</h4>
-                    <p className="text-muted-foreground">Hartford, Connecticut</p>
+                    <p className="text-muted-foreground">JS, CT</p>
                     <p className="text-muted-foreground text-sm">Serving communities nationwide</p>
                   </div>
                 </div>

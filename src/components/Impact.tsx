@@ -85,9 +85,9 @@ const Impact = () => {
   return (
     <section id="impact" ref={sectionRef} className="py-20 bg-primary text-primary-foreground relative overflow-hidden">
       {/* Background decorations */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-1/4 left-1/6 w-64 h-64 bg-secondary rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/6 w-80 h-80 bg-accent rounded-full blur-3xl"></div>
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute top-1/4 left-1/6 w-64 h-64 bg-primary-light rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-1/6 w-80 h-80 bg-primary-soft rounded-full blur-3xl"></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

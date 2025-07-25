@@ -1,7 +1,7 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Calculator, PiggyBank, TrendingUp, CreditCard, Building, Users, Clock, Target, BookOpen } from 'lucide-react';
+import { ArrowRight, Calculator, PiggyBank, TrendingUp, CreditCard, Building, Users, Target, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Programs = () => {
@@ -11,7 +11,7 @@ const Programs = () => {
       title: "Budgeting Basics",
       description: "Learn essential budgeting skills, track expenses, and create sustainable financial plans for your future.",
       features: ["Monthly budget creation", "Expense tracking tools", "Financial goal setting", "Emergency fund planning"],
-      duration: "4 weeks",
+
       level: "Beginner",
       color: "from-primary to-primary-light"
     },
@@ -20,7 +20,7 @@ const Programs = () => {
       title: "Smart Saving Strategies",
       description: "Discover effective saving techniques and understand different types of savings accounts and their benefits.",
       features: ["High-yield savings accounts", "Automated saving systems", "Short & long-term goals", "Compound interest basics"],
-      duration: "3 weeks",
+
       level: "Beginner",
       color: "from-secondary to-secondary-light"
     },
@@ -29,7 +29,7 @@ const Programs = () => {
       title: "Investment Fundamentals",
       description: "Get introduced to investing concepts, risk management, and building a diversified portfolio.",
       features: ["Stock market basics", "ETFs and mutual funds", "Risk assessment", "Portfolio diversification"],
-      duration: "6 weeks",
+
       level: "Intermediate",
       color: "from-accent to-secondary"
     },
@@ -38,7 +38,7 @@ const Programs = () => {
       title: "Credit & Debt Management",
       description: "Understand credit scores, responsible credit card use, and strategies for managing and avoiding debt.",
       features: ["Credit score basics", "Credit card responsibility", "Debt repayment strategies", "Building credit history"],
-      duration: "4 weeks",
+
       level: "Intermediate",
       color: "from-primary to-accent"
     },
@@ -47,7 +47,7 @@ const Programs = () => {
       title: "Financial Planning",
       description: "Learn about insurance, taxes, and long-term financial planning for major life events.",
       features: ["Insurance fundamentals", "Tax basics", "Retirement planning", "Major purchase planning"],
-      duration: "5 weeks",
+
       level: "Advanced",
       color: "from-secondary to-primary"
     },
@@ -56,7 +56,7 @@ const Programs = () => {
       title: "Financial Literacy Workshops",
       description: "Interactive group sessions with real-world scenarios and hands-on financial decision-making exercises.",
       features: ["Interactive games", "Real-world scenarios", "Peer-to-peer learning", "Q&A sessions"],
-      duration: "Ongoing",
+
       level: "All Levels",
       color: "from-accent to-primary-light"
     }
@@ -128,10 +128,6 @@ const Programs = () => {
 
                   {/* Program meta */}
                   <div className="flex items-center gap-4 mb-4">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary">
-                      <Clock className="w-4 h-4 mr-1" />
-                      {program.duration}
-                    </span>
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-secondary/10 text-secondary">
                       <Target className="w-4 h-4 mr-1" />
                       {program.level}
@@ -157,12 +153,14 @@ const Programs = () => {
                     ))}
                   </ul>
 
-                  <Button 
-                    variant="outline" 
-                    className="w-full group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all duration-300"
-                  >
-                    Learn More
-                  </Button>
+                  <Link to="/contact">
+                    <Button 
+                      variant="outline" 
+                      className="w-full group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all duration-300"
+                    >
+                      Learn More
+                    </Button>
+                  </Link>
                 </div>
               </div>
             ))}

@@ -18,8 +18,11 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary-light shadow-lg hover:shadow-xl",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        hero: "bg-secondary text-secondary-foreground hover:bg-secondary-light shadow-2xl hover:shadow-[0_0_40px_hsl(var(--secondary)/0.3)] transform hover:scale-105 font-semibold",
-        premium: "bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:from-primary-light hover:to-secondary-light shadow-2xl hover:shadow-[0_0_40px_hsl(var(--secondary)/0.3)] transform hover:scale-105 font-semibold",
+        hero: "bg-secondary text-secondary-foreground hover:bg-secondary-light shadow-2xl hover:shadow-[0_0_45px_hsl(var(--secondary)/0.35)] transform hover:scale-105 font-semibold transition-all duration-300",
+        premium: "bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:from-primary-light hover:to-secondary-light shadow-2xl hover:shadow-[0_0_45px_hsl(var(--secondary)/0.35)] transform hover:scale-105 font-semibold transition-all duration-300",
+        playful: "bg-gradient-to-r from-accent to-accent-coral text-accent-foreground hover:from-secondary-light hover:to-accent-coral shadow-lg hover:shadow-[0_0_30px_hsl(var(--accent-coral)/0.25)] transform hover:scale-105 font-medium transition-all duration-300",
+        soft: "bg-primary-soft text-primary-foreground hover:bg-primary-light shadow-md hover:shadow-[0_0_25px_hsl(var(--primary-soft)/0.2)] transform hover:scale-102 transition-all duration-300",
+        coral: "bg-accent-coral text-accent-coral-foreground hover:bg-accent shadow-lg hover:shadow-[0_0_30px_hsl(var(--accent-coral)/0.3)] transform hover:scale-105 font-medium transition-all duration-300",
       },
       size: {
         default: "h-10 px-4 py-2",
