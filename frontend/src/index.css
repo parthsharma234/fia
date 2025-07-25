@@ -397,6 +397,22 @@ All colors MUST be HSL.
   }
 }
 
+/* Additional bounce-in animation for statistics */
+@keyframes bounceInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 @keyframes slideInBottom {
   from {
     opacity: 0;
