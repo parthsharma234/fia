@@ -1,0 +1,179 @@
+{
+  "chapters": [
+    {
+      "id": "connecticut",
+      "name": "Connecticut",
+      "state": "Connecticut",
+      "school": "Farmington High School",
+      "description": "Our founding chapter, led by passionate students at Farmington High School",
+      "image": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600&h=400&fit=crop",
+      "established": "2022",
+      "members": 15,
+      "studentsServed": 200,
+      "events": [
+        {
+          "title": "Financial Literacy Workshop",
+          "date": "2024-02-15",
+          "description": "Introduction to budgeting and saving for high school students",
+          "attendees": 45
+        },
+        {
+          "title": "Investment Basics Seminar",
+          "date": "2024-03-10",
+          "description": "Understanding stocks, bonds, and mutual funds",
+          "attendees": 32
+        },
+        {
+          "title": "Career Day: Finance Edition",
+          "date": "2024-04-20",
+          "description": "Local finance professionals share their career journeys",
+          "attendees": 78
+        }
+      ]
+    },
+    {
+      "id": "south-carolina",
+      "name": "South Carolina",
+      "state": "South Carolina",
+      "school": "Ridge View High School",
+      "description": "Empowering students at Ridge View High School and beyond",
+      "image": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&h=400&fit=crop",
+      "established": "2023",
+      "members": 12,
+      "studentsServed": 85,
+      "events": [
+        {
+          "title": "Money Management 101",
+          "date": "2024-01-25",
+          "description": "Basic financial planning for teenagers",
+          "attendees": 28
+        },
+        {
+          "title": "Entrepreneurship Workshop",
+          "date": "2024-03-05",
+          "description": "Starting your first business as a student",
+          "attendees": 22
+        }
+      ]
+    },
+    {
+      "id": "massachusetts",
+      "name": "Massachusetts",
+      "state": "Massachusetts",
+      "school": "Acton-Boxborough Regional High School",
+      "description": "Serving the Greater Boston area from Acton-Boxborough Regional High School",
+      "image": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop",
+      "established": "2023",
+      "members": 10,
+      "studentsServed": 65,
+      "events": [
+        {
+          "title": "College Financial Planning",
+          "date": "2024-02-28",
+          "description": "Managing finances in college and understanding student loans",
+          "attendees": 35
+        },
+        {
+          "title": "Digital Banking Workshop",
+          "date": "2024-04-10",
+          "description": "Safe online banking and digital payment systems",
+          "attendees": 30
+        }
+      ]
+    },
+    {
+      "id": "iowa",
+      "name": "Iowa",
+      "state": "Iowa",
+      "school": "Waukee High School",
+      "description": "Bringing financial literacy to Waukee High School and surrounding communities",
+      "image": "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=600&h=400&fit=crop",
+      "established": "2023",
+      "members": 8,
+      "studentsServed": 45,
+      "events": [
+        {
+          "title": "Budgeting Bootcamp",
+          "date": "2024-03-15",
+          "description": "Hands-on budgeting exercises for real-world scenarios",
+          "attendees": 25
+        },
+        {
+          "title": "Community Finance Fair",
+          "date": "2024-05-01",
+          "description": "Interactive booths covering various financial topics",
+          "attendees": 40
+        }
+      ]
+    },
+    {
+      "id": "new-jersey",
+      "name": "New Jersey",
+      "state": "New Jersey",
+      "school": "Manasquan High School",
+      "description": "Empowering students at Manasquan High School and across New Jersey",
+      "image": "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=600&h=400&fit=crop",
+      "established": "2024",
+      "members": 6,
+      "studentsServed": 30,
+      "events": [
+        {
+          "title": "Credit Score Workshop",
+          "date": "2024-04-12",
+          "description": "Understanding credit scores and building credit responsibly",
+          "attendees": 18
+        },
+        {
+          "title": "Tax Preparation Basics",
+          "date": "2024-04-25",
+          "description": "Introduction to filing taxes and understanding deductions",
+          "attendees": 15
+        }
+      ]
+    },
+    {
+      "id": "georgia",
+      "name": "Georgia",
+      "state": "Georgia",
+      "school": "South Forsyth High School",
+      "description": "Innovation in financial literacy at South Forsyth High School",
+      "image": "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&h=400&fit=crop",
+      "established": "2024",
+      "members": 5,
+      "studentsServed": 25,
+      "events": [
+        {
+          "title": "Financial Technology Fair",
+          "date": "2024-05-10",
+          "description": "Exploring fintech apps and digital financial tools",
+          "attendees": 20
+        }
+      ]
+    },
+    {
+      "id": "texas",
+      "name": "Texas",
+      "state": "Texas",
+      "school": "Cinco Ranch High School",
+      "description": "Spreading financial knowledge at Cinco Ranch High School in Katy",
+      "image": "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=600&h=400&fit=crop",
+      "established": "2024",
+      "members": 7,
+      "studentsServed": 35,
+      "events": [
+        {
+          "title": "Investment Club Launch",
+          "date": "2024-05-15",
+          "description": "Starting an investment club for interested students",
+          "attendees": 12
+        },
+        {
+          "title": "Financial Literacy Game Day",
+          "date": "2024-06-01",
+          "description": "Interactive games and competitions about finance",
+          "attendees": 28
+        }
+      ]
+    }
+  ]
+}

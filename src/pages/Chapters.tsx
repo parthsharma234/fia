@@ -3,76 +3,16 @@ import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, MapPin, Users, Calendar, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import chaptersData from '@/data/chapters.json';
 
 const Chapters = () => {
-  const chapters = [
-    {
-      state: "Connecticut",
-      slug: "connecticut",
-      city: "Hartford",
-      established: "2022",
-      members: 15,
-      studentsServed: 200,
-      description: "Our founding chapter in Connecticut, serving students across the greater Hartford area with comprehensive financial literacy programs.",
-      image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600&h=400&fit=crop",
-      status: "Active"
-    },
-    {
-      state: "California",
-      slug: "california",
-      city: "Los Angeles",
-      established: "2023",
-      members: 12,
-      studentsServed: 85,
-      description: "Expanding financial education access to diverse communities in the Los Angeles area through culturally responsive programming.",
-      image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&h=400&fit=crop",
-      status: "Active"
-    },
-    {
-      state: "Texas",
-      slug: "texas",
-      city: "Austin",
-      established: "2023",
-      members: 10,
-      studentsServed: 45,
-      description: "Bringing innovative financial literacy education to Texas students through partnerships with local high schools and community centers.",
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop",
-      status: "Active"
-    },
-    {
-      state: "Florida",
-      slug: "florida",
-      city: "Miami",
-      established: "2024",
-      members: 8,
-      studentsServed: 30,
-      description: "Our newest chapter focusing on bilingual financial education to serve Miami's diverse student population.",
-      image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=600&h=400&fit=crop",
-      status: "Growing"
-    },
-    {
-      state: "New York",
-      slug: "new-york",
-      city: "New York City",
-      established: "2024",
-      members: 6,
-      studentsServed: 25,
-      description: "Launching in the nation's largest city to reach underserved communities with essential financial education.",
-      image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=600&h=400&fit=crop",
-      status: "New"
-    },
-    {
-      state: "International",
-      slug: "international",
-      city: "Toronto, Canada",
-      established: "2024",
-      members: 5,
-      studentsServed: 15,
-      description: "Our first international chapter, adapting our curriculum for Canadian students and financial systems.",
-      image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600&h=400&fit=crop",
-      status: "New"
-    }
-  ];
+  const chapters = chaptersData.chapters.map(chapter => ({
+    ...chapter,
+    slug: chapter.id,
+    city: chapter.school,
+    status: chapter.established === "2024" ? "New" : 
+            chapter.established === "2023" ? "Growing" : "Active"
+  }));
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -186,7 +126,7 @@ const Chapters = () => {
                       </div>
                     </div>
 
-                    <Link to={`/chapters/${chapter.slug}`}>
+                    <Link to={`/chapters/${chapter.id}`}>
                       <Button 
                         variant="outline" 
                         className="w-full group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all duration-300"
