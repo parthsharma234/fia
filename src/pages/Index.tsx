@@ -1,6 +1,5 @@
 import Navigation from '@/components/Navigation';
 import Hero from '@/components/Hero';
-import StorytellingSection from '@/components/StorytellingSection';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Users, BookOpen, TrendingUp } from 'lucide-react';
@@ -32,7 +31,6 @@ const Index = () => {
     <div className="min-h-screen">
       <Navigation />
       <Hero />
-      <StorytellingSection />
       
       {/* Quick Overview Section */}
       <section className="py-20 bg-muted/30">

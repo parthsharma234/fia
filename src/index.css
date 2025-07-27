@@ -257,10 +257,6 @@ All colors MUST be HSL.
     animation: bounceIn 0.8s ease-out;
   }
   
-  .animate-bounce-in-scale {
-    animation: bounceInScale 0.6s ease-out;
-  }
-  
   .animate-slide-in-bottom {
     animation: slideInBottom 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
@@ -309,33 +305,6 @@ All colors MUST be HSL.
   .reveal-scale.revealed {
     opacity: 1;
     transform: scale(1);
-  }
-
-  /* Apple-style storytelling animations */
-  .storytelling-fade-in {
-    opacity: 0;
-    transform: translateY(40px) scale(0.95);
-    transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-  
-  .storytelling-fade-in.revealed {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  
-  .parallax-bg {
-    transform: translateZ(0);
-    will-change: transform;
-    transition: transform 0.1s ease-out;
-  }
-  
-  .text-shadow-soft {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .backdrop-blur-subtle {
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
   }
 }
 
@@ -394,22 +363,6 @@ All colors MUST be HSL.
   }
   70% {
     transform: scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Additional bounce-in animation for statistics */
-@keyframes bounceInScale {
-  0% {
-    opacity: 0;
-    transform: scale(0.5);
-  }
-  60% {
-    opacity: 1;
-    transform: scale(1.1);
   }
   100% {
     opacity: 1;
