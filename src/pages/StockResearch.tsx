@@ -1,12 +1,12 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import StockResearch from '@/components/StockResearch';
+import RealStockResearch from '@/components/RealStockResearch';
 
 const StockResearchPage = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      <StockResearch />
+      <RealStockResearch />
       <Footer />
     </div>
   );

@@ -12,24 +12,24 @@ const AppleStyleStorySection = () => {
     {
       id: 0,
       title: "The Crisis",
-      subtitle: "Financial illiteracy affects 2 out of 3 Americans",
-      description: "In a world where financial decisions shape our future, most people lack the basic knowledge to make informed choices about money.",
-      stats: "66% of Americans can't pass a basic financial literacy test",
+      subtitle: "Only 57% of American adults are financially literate",
+      description: "In a world where financial decisions shape our future, most people lack the basic knowledge to make informed choices about money, credit, and investing.",
+      stats: "2 out of 3 Americans can't pass a basic financial literacy test",
       visual: "crisis"
     },
     {
       id: 1,
       title: "The Youth Gap",
       subtitle: "Only 21 states require financial education",
-      description: "Young people graduate without understanding budgeting, investing, or credit - leaving them vulnerable to debt and poor financial decisions.",
-      stats: "57% of adults are financially illiterate",
+      description: "Young people graduate without understanding budgeting, investing, or credit - leaving them vulnerable to debt and poor financial decisions that can last decades.",
+      stats: "43% of students receive zero financial education in school",
       visual: "youth"
     },
     {
       id: 2,
       title: "Middle School Matters",
       subtitle: "Ages 11-14 are critical for financial habits",
-      description: "Research shows that financial habits are formed by age 7, but middle school is when we can still make a lasting impact on money mindset.",
+      description: "Research shows that financial habits are largely formed by age 7, but middle school is our last chance to make a lasting impact on money mindset and behavior.",
       stats: "Financial habits are 80% formed by age 14",
       visual: "middle"
     },
@@ -37,181 +37,156 @@ const AppleStyleStorySection = () => {
       id: 3,
       title: "Our Solution",
       subtitle: "Peer-to-peer financial education that works",
-      description: "Students teaching students creates authentic connections and real understanding. Our approach makes financial literacy engaging and accessible.",
-      stats: "85% improvement in financial confidence",
+      description: "Students teaching students creates authentic connections and real understanding. Our approach makes financial literacy engaging, relatable, and accessible to all.",
+      stats: "85% improvement in financial confidence after our programs",
       visual: "solution"
     }
   ];
 
-  // WebGL visualization
+  // WebGL particle system
   const initWebGL = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-    if (!gl) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-    // Set canvas size
     const updateCanvasSize = () => {
       const dpr = window.devicePixelRatio || 1;
       const rect = canvas.getBoundingClientRect();
       canvas.width = rect.width * dpr;
       canvas.height = rect.height * dpr;
-      gl.viewport(0, 0, canvas.width, canvas.height);
+      ctx.scale(dpr, dpr);
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = rect.height + 'px';
     };
 
     updateCanvasSize();
     window.addEventListener('resize', updateCanvasSize);
 
-    // Vertex shader
-    const vertexShaderSource = `
-      attribute vec2 a_position;
-      attribute vec2 a_texCoord;
-      varying vec2 v_texCoord;
-      uniform float u_time;
-      uniform float u_progress;
-      
-      void main() {
-        vec2 pos = a_position;
-        
-        // Add wave effect based on progress
-        pos.y += sin(pos.x * 3.14159 + u_time * 2.0) * 0.1 * u_progress;
-        
-        gl_Position = vec4(pos, 0.0, 1.0);
-        v_texCoord = a_texCoord;
-      }
-    `;
+    const particles: Array<{
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+      opacity: number;
+      hue: number;
+    }> = [];
 
-    // Fragment shader
-    const fragmentShaderSource = `
-      precision mediump float;
-      varying vec2 v_texCoord;
-      uniform float u_time;
-      uniform float u_progress;
-      uniform float u_section;
-      
-      vec3 getColor(float section) {
-        if (section < 1.0) {
-          // Crisis - Red gradient
-          return mix(vec3(0.8, 0.2, 0.2), vec3(1.0, 0.4, 0.2), section);
-        } else if (section < 2.0) {
-          // Youth - Orange to Yellow
-          return mix(vec3(1.0, 0.4, 0.2), vec3(1.0, 0.8, 0.2), section - 1.0);
-        } else if (section < 3.0) {
-          // Middle School - Blue gradient
-          return mix(vec3(1.0, 0.8, 0.2), vec3(0.2, 0.6, 1.0), section - 2.0);
-        } else {
-          // Solution - Green gradient
-          return mix(vec3(0.2, 0.6, 1.0), vec3(0.2, 0.8, 0.4), section - 3.0);
-        }
-      }
-      
-      void main() {
-        vec2 uv = v_texCoord;
-        
-        // Create flowing particles effect
-        float noise = sin(uv.x * 10.0 + u_time) * cos(uv.y * 8.0 + u_time * 0.5) * 0.5 + 0.5;
-        
-        // Add circular patterns
-        float dist = length(uv - 0.5);
-        float circle = sin(dist * 20.0 - u_time * 3.0) * 0.5 + 0.5;
-        
-        // Combine effects
-        float intensity = (noise * 0.7 + circle * 0.3) * u_progress;
-        
-        vec3 color = getColor(u_section) * intensity;
-        
-        // Add glow effect
-        color += vec3(0.1, 0.1, 0.2) * (1.0 - dist) * u_progress;
-        
-        gl_FragColor = vec4(color, 0.8);
-      }
-    `;
-
-    // Create shader
-    const createShader = (gl: WebGLRenderingContext, type: number, source: string) => {
-      const shader = gl.createShader(type);
-      if (!shader) return null;
-      
-      gl.shaderSource(shader, source);
-      gl.compileShader(shader);
-      
-      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        console.error('Shader compile error:', gl.getShaderInfoLog(shader));
-        gl.deleteShader(shader);
-        return null;
-      }
-      
-      return shader;
-    };
-
-    const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
-    const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
-
-    if (!vertexShader || !fragmentShader) return;
-
-    // Create program
-    const program = gl.createProgram();
-    if (!program) return;
-
-    gl.attachShader(program, vertexShader);
-    gl.attachShader(program, fragmentShader);
-    gl.linkProgram(program);
-
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      console.error('Program link error:', gl.getProgramInfoLog(program));
-      return;
+    // Initialize particles
+    for (let i = 0; i < 100; i++) {
+      particles.push({
+        x: Math.random() * canvas.offsetWidth,
+        y: Math.random() * canvas.offsetHeight,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        size: Math.random() * 3 + 1,
+        opacity: Math.random() * 0.5 + 0.1,
+        hue: Math.random() * 60 + 200 // Blue to purple range
+      });
     }
 
-    // Get attribute and uniform locations
-    const positionLocation = gl.getAttribLocation(program, 'a_position');
-    const texCoordLocation = gl.getAttribLocation(program, 'a_texCoord');
-    const timeLocation = gl.getUniformLocation(program, 'u_time');
-    const progressLocation = gl.getUniformLocation(program, 'u_progress');
-    const sectionLocation = gl.getUniformLocation(program, 'u_section');
-
-    // Create buffers
-    const positionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-      -1, -1,  1, -1,  -1, 1,
-      -1, 1,   1, -1,   1, 1
-    ]), gl.STATIC_DRAW);
-
-    const texCoordBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-      0, 0,  1, 0,  0, 1,
-      0, 1,  1, 0,  1, 1
-    ]), gl.STATIC_DRAW);
-
-    // Animation loop
     const animate = (time: number) => {
-      gl.clearColor(0, 0, 0, 0);
-      gl.clear(gl.COLOR_BUFFER_BIT);
+      ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
       
-      gl.useProgram(program);
+      // Update section-based colors
+      const sectionColors = [
+        { hue: 0, sat: 70 }, // Red for crisis
+        { hue: 30, sat: 80 }, // Orange for youth gap
+        { hue: 220, sat: 70 }, // Blue for middle school
+        { hue: 120, sat: 60 } // Green for solution
+      ];
       
-      // Set uniforms
-      gl.uniform1f(timeLocation, time * 0.001);
-      gl.uniform1f(progressLocation, scrollProgress);
-      gl.uniform1f(sectionLocation, currentSection);
+      const currentColor = sectionColors[currentSection];
+      const nextColor = sectionColors[Math.min(currentSection + 1, sectionColors.length - 1)];
+      const sectionProgress = (scrollProgress * sections.length) % 1;
       
-      // Set up attributes
-      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-      gl.enableVertexAttribArray(positionLocation);
-      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-      
-      gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
-      gl.enableVertexAttribArray(texCoordLocation);
-      gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
-      
-      // Enable blending
-      gl.enable(gl.BLEND);
-      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-      
-      // Draw
-      gl.drawArrays(gl.TRIANGLES, 0, 6);
+      // Interpolate colors
+      const hue = currentColor.hue + (nextColor.hue - currentColor.hue) * sectionProgress;
+      const sat = currentColor.sat + (nextColor.sat - currentColor.sat) * sectionProgress;
+
+      // Update and draw particles
+      particles.forEach((particle, index) => {
+        // Update position
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        
+        // Wrap around edges
+        if (particle.x < 0) particle.x = canvas.offsetWidth;
+        if (particle.x > canvas.offsetWidth) particle.x = 0;
+        if (particle.y < 0) particle.y = canvas.offsetHeight;
+        if (particle.y > canvas.offsetHeight) particle.y = 0;
+        
+        // Add some wave motion based on scroll
+        const waveX = Math.sin(time * 0.001 + index * 0.1) * 20 * scrollProgress;
+        const waveY = Math.cos(time * 0.001 + index * 0.1) * 10 * scrollProgress;
+        
+        // Draw particle
+        const alpha = particle.opacity * (0.3 + scrollProgress * 0.7);
+        ctx.fillStyle = `hsla(${hue}, ${sat}%, 70%, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(
+          particle.x + waveX, 
+          particle.y + waveY, 
+          particle.size * (0.5 + scrollProgress * 0.5), 
+          0, 
+          Math.PI * 2
+        );
+        ctx.fill();
+        
+        // Draw connections
+        particles.forEach((otherParticle, otherIndex) => {
+          if (otherIndex <= index) return;
+          
+          const dx = particle.x - otherParticle.x;
+          const dy = particle.y - otherParticle.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 100) {
+            const connectionAlpha = (1 - distance / 100) * 0.1 * scrollProgress;
+            ctx.strokeStyle = `hsla(${hue}, ${sat}%, 70%, ${connectionAlpha})`;
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(particle.x + waveX, particle.y + waveY);
+            ctx.lineTo(otherParticle.x, otherParticle.y);
+            ctx.stroke();
+          }
+        });
+      });
+
+      // Add floating geometric shapes
+      for (let i = 0; i < 5; i++) {
+        const shapeTime = time * 0.0005 + i * 2;
+        const x = canvas.offsetWidth * 0.2 + Math.sin(shapeTime) * canvas.offsetWidth * 0.6;
+        const y = canvas.offsetHeight * 0.2 + Math.cos(shapeTime * 0.7) * canvas.offsetHeight * 0.6;
+        const size = 30 + Math.sin(shapeTime * 2) * 20;
+        const rotation = shapeTime;
+        
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(rotation);
+        
+        const shapeAlpha = 0.05 + Math.sin(shapeTime) * 0.05;
+        ctx.fillStyle = `hsla(${hue}, ${sat}%, 80%, ${shapeAlpha * scrollProgress})`;
+        
+        if (i % 2 === 0) {
+          // Triangle
+          ctx.beginPath();
+          ctx.moveTo(0, -size);
+          ctx.lineTo(size * 0.866, size * 0.5);
+          ctx.lineTo(-size * 0.866, size * 0.5);
+          ctx.closePath();
+          ctx.fill();
+        } else {
+          // Circle
+          ctx.beginPath();
+          ctx.arc(0, 0, size * 0.6, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        
+        ctx.restore();
+      }
       
       animationRef.current = requestAnimationFrame(animate);
     };
@@ -224,46 +199,56 @@ const AppleStyleStorySection = () => {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [scrollProgress, currentSection]);
+  }, [scrollProgress, currentSection, sections.length]);
 
   useEffect(() => {
     const cleanup = initWebGL();
     return cleanup;
   }, [initWebGL]);
 
-  // Scroll handling
+  // Scroll handling with smooth section transitions
   useEffect(() => {
+    let ticking = false;
+    
     const handleScroll = () => {
-      if (!containerRef.current) return;
-
-      const rect = containerRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
+      if (ticking || !containerRef.current) return;
       
-      if (rect.top <= 0 && rect.bottom >= viewportHeight) {
-        const progress = Math.abs(rect.top) / (rect.height - viewportHeight);
-        const clampedProgress = Math.max(0, Math.min(1, progress));
+      ticking = true;
+      
+      requestAnimationFrame(() => {
+        const rect = containerRef.current!.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
         
-        setScrollProgress(clampedProgress);
+        if (rect.top <= 0 && rect.bottom >= viewportHeight) {
+          const progress = Math.abs(rect.top) / (rect.height - viewportHeight);
+          const clampedProgress = Math.max(0, Math.min(1, progress));
+          
+          setScrollProgress(clampedProgress);
+          
+          // Smooth section transitions
+          const sectionProgress = clampedProgress * (sections.length - 1);
+          const newSection = Math.round(sectionProgress);
+          setCurrentSection(Math.max(0, Math.min(sections.length - 1, newSection)));
+        }
         
-        // Update current section
-        const sectionProgress = clampedProgress * (sections.length - 1);
-        const newSection = Math.floor(sectionProgress);
-        setCurrentSection(Math.max(0, Math.min(sections.length - 1, newSection)));
-      }
+        ticking = false;
+      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial call
+    handleScroll();
     
     return () => window.removeEventListener('scroll', handleScroll);
   }, [sections.length]);
 
   const currentSectionData = sections[currentSection];
+  const sectionTransition = (scrollProgress * sections.length) % 1;
 
   return (
     <section 
       ref={containerRef}
-      className="relative h-[400vh] bg-black text-white overflow-hidden"
+      className="relative bg-black text-white overflow-hidden"
+      style={{ height: `${sections.length * 100}vh` }}
     >
       {/* Sticky container */}
       <div className="sticky top-0 h-screen flex items-center justify-center">
@@ -274,80 +259,148 @@ const AppleStyleStorySection = () => {
           style={{ mixBlendMode: 'screen' }}
         />
         
+        {/* Gradient overlay for depth */}
+        <div 
+          className="absolute inset-0 opacity-30"
+          style={{
+            background: `radial-gradient(circle at 50% 50%, 
+              hsla(${200 + currentSection * 60}, 70%, 50%, 0.3) 0%, 
+              transparent 70%)`
+          }}
+        />
+        
         {/* Content */}
-        <div className="relative z-10 max-w-4xl mx-auto px-8 text-center">
+        <div className="relative z-10 max-w-5xl mx-auto px-8 text-center">
           {/* Section indicator */}
-          <div className="mb-8">
-            <div className="flex justify-center space-x-2 mb-4">
+          <div className="mb-12">
+            <div className="flex justify-center space-x-3 mb-6">
               {sections.map((_, index) => (
                 <div
                   key={index}
-                  className={`h-1 rounded-full transition-all duration-500 ${
-                    index === currentSection ? 'w-12 bg-white' : 'w-3 bg-white/30'
+                  className={`h-1 rounded-full transition-all duration-700 ${
+                    index === currentSection 
+                      ? 'w-16 bg-white shadow-lg' 
+                      : index < currentSection 
+                        ? 'w-8 bg-white/60' 
+                        : 'w-4 bg-white/20'
                   }`}
                 />
               ))}
             </div>
-            <p className="text-white/60 text-sm font-medium tracking-wider uppercase">
+            <p className="text-white/50 text-sm font-medium tracking-[0.2em] uppercase">
               {String(currentSection + 1).padStart(2, '0')} / {String(sections.length).padStart(2, '0')}
             </p>
           </div>
 
-          {/* Main content */}
+          {/* Main content with enhanced animations */}
           <div 
             className="transition-all duration-1000 ease-out"
             style={{
-              transform: `translateY(${Math.sin(scrollProgress * Math.PI * 2) * 10}px)`,
+              transform: `translateY(${Math.sin(scrollProgress * Math.PI) * 15}px) scale(${0.95 + scrollProgress * 0.05})`,
               opacity: 1
             }}
           >
-            <h1 className="text-6xl md:text-8xl font-bold mb-6 leading-tight">
+            <h1 
+              className="text-5xl md:text-8xl lg:text-9xl font-bold mb-8 leading-[0.9]"
+              style={{
+                background: `linear-gradient(135deg, 
+                  hsl(${200 + currentSection * 60}, 70%, 80%) 0%, 
+                  hsl(${220 + currentSection * 40}, 80%, 90%) 50%, 
+                  white 100%)`,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                textShadow: '0 0 40px rgba(255,255,255,0.1)'
+              }}
+            >
               {currentSectionData.title}
             </h1>
             
-            <h2 className="text-2xl md:text-3xl font-light mb-8 text-white/80">
+            <h2 className="text-2xl md:text-4xl font-light mb-10 text-white/80 max-w-4xl mx-auto leading-relaxed">
               {currentSectionData.subtitle}
             </h2>
             
-            <p className="text-xl md:text-2xl leading-relaxed mb-12 max-w-3xl mx-auto text-white/70">
+            <p className="text-lg md:text-2xl leading-relaxed mb-16 max-w-4xl mx-auto text-white/60 font-light">
               {currentSectionData.description}
             </p>
 
-            {/* Stats */}
-            <div className="inline-flex items-center px-8 py-4 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
-              <div className="w-3 h-3 bg-white rounded-full mr-4 animate-pulse" />
-              <span className="text-lg font-semibold">
-                {currentSectionData.stats}
-              </span>
-            </div>
-          </div>
-
-          {/* Scroll indicator */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-            <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
+            {/* Enhanced stats display */}
+            <div 
+              className="inline-flex items-center px-10 py-6 rounded-full backdrop-blur-xl border border-white/10 relative overflow-hidden"
+              style={{
+                background: `linear-gradient(135deg, 
+                  rgba(255,255,255,0.05) 0%, 
+                  rgba(255,255,255,0.1) 50%, 
+                  rgba(255,255,255,0.05) 100%)`,
+                boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'
+              }}
+            >
+              <div className="flex items-center gap-4">
+                <div 
+                  className="w-4 h-4 rounded-full animate-pulse"
+                  style={{
+                    background: `hsl(${200 + currentSection * 60}, 70%, 60%)`,
+                    boxShadow: `0 0 20px hsl(${200 + currentSection * 60}, 70%, 60%)`
+                  }}
+                />
+                <span className="text-xl md:text-2xl font-semibold tracking-wide">
+                  {currentSectionData.stats}
+                </span>
+              </div>
+              
+              {/* Animated background */}
               <div 
-                className="w-1 bg-white/60 rounded-full mt-2 transition-all duration-300"
-                style={{ 
-                  height: `${12 + scrollProgress * 8}px`,
-                  opacity: 0.6 + scrollProgress * 0.4 
+                className="absolute inset-0 opacity-20"
+                style={{
+                  background: `linear-gradient(90deg, 
+                    transparent 0%, 
+                    hsl(${200 + currentSection * 60}, 70%, 60%) 50%, 
+                    transparent 100%)`,
+                  transform: `translateX(${-100 + scrollProgress * 200}%)`
                 }}
               />
             </div>
           </div>
+
+          {/* Enhanced scroll indicator */}
+          <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
+            <div className="w-8 h-14 border-2 border-white/20 rounded-full flex justify-center backdrop-blur-sm">
+              <div 
+                className="w-1.5 bg-white/60 rounded-full mt-3 transition-all duration-500"
+                style={{ 
+                  height: `${16 + Math.sin(scrollProgress * Math.PI * 4) * 4}px`,
+                  opacity: 0.4 + Math.sin(scrollProgress * Math.PI * 2) * 0.3,
+                  boxShadow: '0 0 10px rgba(255,255,255,0.5)'
+                }}
+              />
+            </div>
+            <p className="text-white/30 text-xs mt-3 tracking-wider">SCROLL</p>
+          </div>
         </div>
 
-        {/* Floating elements */}
-        <div className="absolute inset-0 pointer-events-none">
-          {Array.from({ length: 20 }, (_, i) => (
+        {/* Floating elements with physics */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {Array.from({ length: 30 }, (_, i) => (
             <div
               key={i}
-              className="absolute w-2 h-2 bg-white/20 rounded-full"
+              className="absolute rounded-full"
               style={{
-                left: `${10 + (i % 5) * 20}%`,
-                top: `${20 + Math.floor(i / 5) * 20}%`,
-                transform: `translate(${Math.sin(scrollProgress * Math.PI * 2 + i) * 50}px, ${Math.cos(scrollProgress * Math.PI * 2 + i) * 30}px) scale(${0.5 + Math.sin(scrollProgress * Math.PI * 4 + i) * 0.5})`,
-                opacity: 0.3 + Math.sin(scrollProgress * Math.PI * 3 + i) * 0.3,
-                transition: 'transform 0.1s ease-out'
+                width: `${4 + (i % 3) * 2}px`,
+                height: `${4 + (i % 3) * 2}px`,
+                left: `${5 + (i % 6) * 15}%`,
+                top: `${10 + Math.floor(i / 6) * 15}%`,
+                background: `hsl(${200 + currentSection * 60 + i * 10}, 70%, 70%)`,
+                transform: `
+                  translate(
+                    ${Math.sin(scrollProgress * Math.PI * 2 + i * 0.5) * 100}px, 
+                    ${Math.cos(scrollProgress * Math.PI * 1.5 + i * 0.3) * 60}px
+                  ) 
+                  scale(${0.3 + Math.sin(scrollProgress * Math.PI * 3 + i) * 0.7})
+                  rotate(${scrollProgress * 360 + i * 30}deg)
+                `,
+                opacity: 0.1 + Math.sin(scrollProgress * Math.PI * 2 + i) * 0.2,
+                transition: 'transform 0.1s ease-out',
+                boxShadow: `0 0 20px hsl(${200 + currentSection * 60 + i * 10}, 70%, 70%)`
               }}
             />
           ))}
