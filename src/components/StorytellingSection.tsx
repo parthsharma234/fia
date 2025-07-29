@@ -124,7 +124,7 @@ const StorytellingSection = () => {
       const radius = 100 + Math.sin(time + i * 0.2) * 50;
       const x = canvas.offsetWidth * 0.5 + Math.cos(angle) * radius;
       const y = canvas.offsetHeight * 0.5 + Math.sin(angle) * radius * 0.5;
-      const size = 1 + Math.sin(time + i) * 2 + velocity * 5;
+      const size = Math.max(0.5, 1 + Math.sin(time + i) * 2 + velocity * 5);
       const opacity = 0.2 + Math.sin(time + i * 0.3) * 0.3 + velocity * 0.5;
       
       ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(opacity, 0.8)})`;
@@ -274,7 +274,8 @@ const StorytellingSection = () => {
     >
       <div 
         ref={scrollRef}
-        className="min-h-[600vh] relative"
+        className="h-[400vh] relative"
+        style={{ height: `${stories.length * 100}vh` }}
       >
         {/* Sticky content container */}
         <div className="sticky top-0 h-screen">

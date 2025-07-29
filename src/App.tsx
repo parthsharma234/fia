@@ -11,6 +11,7 @@ import Team from "./pages/Team";
 import Chapters from "./pages/Chapters";
 import ChapterDetail from "./pages/ChapterDetail";
 import Contact from "./pages/Contact";
+import StockResearch from "./pages/StockResearch";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollTo";
 
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/chapters" element={<Chapters />} />
           <Route path="/chapters/:state" element={<ChapterDetail />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/stock-research" element={<StockResearch />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
