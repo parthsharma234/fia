@@ -209,33 +209,37 @@ const StorytellingSection = () => {
         const viewportHeight = window.innerHeight;
         const scrollHeight = rect.height;
         
-        const rawProgress = Math.max(0, Math.min(1, 
-          (viewportHeight - rect.top) / (viewportHeight + scrollHeight)
-        ));
-        
-        // Calculate scroll velocity
-        const now = Date.now();
-        const deltaTime = now - lastScrollTime.current;
-        const deltaProgress = rawProgress - scrollProgress;
-        scrollVelocity.current = Math.abs(deltaProgress) / (deltaTime || 1) * 1000;
-        lastScrollTime.current = now;
-        
-        setScrollProgress(rawProgress);
-        
-        // Enhanced story progression with momentum
-        const storyFloat = rawProgress * (stories.length - 0.1);
-        const targetStory = Math.max(0, Math.min(stories.length - 1, Math.floor(storyFloat)));
-        
-        if (targetStory !== currentStory && !isScrollLocked) {
-          // Add momentum-based story switching
-          if (scrollVelocity.current > 0.5) {
-            smoothScrollToStory(targetStory);
-          } else {
-            setCurrentStory(targetStory);
+        // Only calculate progress when the section is in view
+        if (rect.top <= 0 && rect.bottom >= viewportHeight) {
+          const rawProgress = Math.max(0, Math.min(1, 
+            Math.abs(rect.top) / (scrollHeight - viewportHeight)
+          ));
+          
+          // Calculate scroll velocity
+          const now = Date.now();
+          const deltaTime = now - lastScrollTime.current;
+          const deltaProgress = rawProgress - scrollProgress;
+          scrollVelocity.current = Math.abs(deltaProgress) / (deltaTime || 1) * 1000;
+          lastScrollTime.current = now;
+          
+          setScrollProgress(rawProgress);
+          
+          // Enhanced story progression with momentum
+          const storyFloat = rawProgress * (stories.length - 0.1);
+          const targetStory = Math.max(0, Math.min(stories.length - 1, Math.floor(storyFloat)));
+          
+          if (targetStory !== currentStory && !isScrollLocked) {
+            // Add momentum-based story switching
+            if (scrollVelocity.current > 0.5) {
+              smoothScrollToStory(targetStory);
+            } else {
+              setCurrentStory(targetStory);
+            }
           }
-        }
 
-        updateCanvas(rawProgress, Math.min(scrollVelocity.current, 2));
+          updateCanvas(rawProgress, Math.min(scrollVelocity.current, 2));
+        }
+        
         ticking = false;
       });
     };
