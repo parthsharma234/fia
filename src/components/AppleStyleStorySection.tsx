@@ -247,11 +247,11 @@ const AppleStyleStorySection = () => {
   return (
     <section 
       ref={containerRef}
-      className="relative bg-black text-white overflow-hidden z-0"
+      className="relative bg-black text-white overflow-hidden"
       style={{ height: `${sections.length * 100}vh` }}
     >
       {/* Sticky container */}
-      <div className="sticky top-0 h-screen flex items-center justify-center z-0">
+      <div className="sticky top-0 h-screen flex items-center justify-center">
         {/* WebGL Canvas Background */}
         <canvas 
           ref={canvasRef}
@@ -270,7 +270,7 @@ const AppleStyleStorySection = () => {
         />
         
         {/* Content */}
-        <div className="relative z-10 max-w-5xl mx-auto px-8 text-center pointer-events-none">
+        <div className="relative z-10 max-w-5xl mx-auto px-8 text-center">
           {/* Section indicator */}
           <div className="mb-12">
             <div className="flex justify-center space-x-3 mb-6">
@@ -379,7 +379,7 @@ const AppleStyleStorySection = () => {
         </div>
 
         {/* Floating elements with physics */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {Array.from({ length: 30 }, (_, i) => (
             <div
               key={i}

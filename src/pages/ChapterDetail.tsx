@@ -105,6 +105,96 @@ const ChapterDetail = () => {
         </div>
       </section>
 
+      {/* Team Section */}
+      <section className="py-20 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+              Meet Our Team
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              The passionate student leaders driving financial literacy education in {chapter.state}
+            </p>
+          </div>
+
+          {chapter.team && chapter.team.length > 0 && (
+            <div className="space-y-12">
+              {/* Executive Team */}
+              <div>
+                <h3 className="text-2xl font-bold text-foreground mb-8 text-center">Executive Leadership</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {chapter.team.filter(member => member.role === 'exec').map((member, index) => (
+                    <div 
+                      key={member.name}
+                      className="group transition-all duration-300 hover:scale-105"
+                    >
+                      <div className="card-gradient p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 h-full border border-border/50 text-center">
+                        <div className="mb-6">
+                          <div className="w-32 h-32 mx-auto bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-4xl font-bold text-white shadow-lg group-hover:shadow-xl transition-all duration-300">
+                            {member.name.split(' ').map(n => n[0]).join('')}
+                          </div>
+                        </div>
+
+                        <h3 className="text-2xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
+                          {member.name}
+                        </h3>
+                        
+                        <div className="mb-4">
+                          <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-primary/10 text-primary">
+                            {member.title}
+                          </span>
+                        </div>
+                        
+                        <p className="text-muted-foreground leading-relaxed text-sm">
+                          {member.description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Team Members */}
+              {chapter.team.filter(member => member.role === 'team').length > 0 && (
+                <div>
+                  <h3 className="text-2xl font-bold text-foreground mb-8 text-center">Team Members</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {chapter.team.filter(member => member.role === 'team').map((member, index) => (
+                      <div 
+                        key={member.name}
+                        className="group transition-all duration-300 hover:scale-105"
+                      >
+                        <div className="card-gradient p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 h-full border border-border/50 text-center">
+                          <div className="mb-4">
+                            <div className="w-20 h-20 mx-auto bg-gradient-to-br from-secondary to-accent rounded-full flex items-center justify-center text-2xl font-bold text-white shadow-lg group-hover:shadow-xl transition-all duration-300">
+                              {member.name.split(' ').map(n => n[0]).join('')}
+                            </div>
+                          </div>
+
+                          <h4 className="text-lg font-bold text-foreground mb-1 group-hover:text-secondary transition-colors duration-300">
+                            {member.name}
+                          </h4>
+                          
+                          <div className="mb-3">
+                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-secondary/10 text-secondary">
+                              {member.title}
+                            </span>
+                          </div>
+                          
+                          <p className="text-muted-foreground leading-relaxed text-xs">
+                            {member.description}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* Events Section */}
       <section 
         ref={eventsRef}

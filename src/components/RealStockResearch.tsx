@@ -8,39 +8,62 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 
-// Expanded stock database with more companies
+// Expanded stock database with more companies kids would recognize
 const stockDatabase = [
-  // Technology
-  { symbol: 'AAPL', name: 'Apple Inc.', kidName: 'The iPhone Company', category: 'Technology', sector: 'Consumer Electronics', difficulty: 'Beginner', logo: '🍎', color: '#007AFF' },
-  { symbol: 'GOOGL', name: 'Alphabet Inc.', kidName: 'Google', category: 'Technology', sector: 'Internet Services', difficulty: 'Intermediate', logo: '🔍', color: '#4285F4' },
-  { symbol: 'MSFT', name: 'Microsoft Corporation', kidName: 'Microsoft', category: 'Technology', sector: 'Software', difficulty: 'Intermediate', logo: '💻', color: '#00A1F1' },
-  { symbol: 'AMZN', name: 'Amazon.com Inc.', kidName: 'Amazon', category: 'Technology', sector: 'E-commerce', difficulty: 'Intermediate', logo: '📦', color: '#FF9900' },
-  { symbol: 'META', name: 'Meta Platforms Inc.', kidName: 'Facebook & Instagram', category: 'Technology', sector: 'Social Media', difficulty: 'Intermediate', logo: '📱', color: '#1877F2' },
-  { symbol: 'TSLA', name: 'Tesla Inc.', kidName: 'The Electric Car Company', category: 'Technology', sector: 'Electric Vehicles', difficulty: 'Advanced', logo: '⚡', color: '#CC0000' },
-  { symbol: 'NVDA', name: 'NVIDIA Corporation', kidName: 'Gaming Graphics', category: 'Technology', sector: 'Semiconductors', difficulty: 'Advanced', logo: '🎮', color: '#76B900' },
+  // Technology & Social Media
+  { symbol: 'AAPL', name: 'Apple Inc.', kidName: 'iPhone & iPad Maker', category: 'Technology', sector: 'Consumer Electronics', logo: '🍎', color: '#007AFF' },
+  { symbol: 'GOOGL', name: 'Alphabet Inc.', kidName: 'Google & YouTube', category: 'Technology', sector: 'Internet Services', logo: '🔍', color: '#4285F4' },
+  { symbol: 'MSFT', name: 'Microsoft Corporation', kidName: 'Xbox & Windows', category: 'Technology', sector: 'Software', logo: '💻', color: '#00A1F1' },
+  { symbol: 'AMZN', name: 'Amazon.com Inc.', kidName: 'Amazon Shopping', category: 'Technology', sector: 'E-commerce', logo: '📦', color: '#FF9900' },
+  { symbol: 'META', name: 'Meta Platforms Inc.', kidName: 'Facebook & Instagram', category: 'Technology', sector: 'Social Media', logo: '📱', color: '#1877F2' },
+  { symbol: 'TSLA', name: 'Tesla Inc.', kidName: 'Electric Cars & SpaceX', category: 'Automotive', sector: 'Electric Vehicles', logo: '⚡', color: '#CC0000' },
+  { symbol: 'NVDA', name: 'NVIDIA Corporation', kidName: 'Gaming Graphics Cards', category: 'Technology', sector: 'Semiconductors', logo: '🎮', color: '#76B900' },
+  { symbol: 'SNAP', name: 'Snap Inc.', kidName: 'Snapchat', category: 'Technology', sector: 'Social Media', logo: '👻', color: '#FFFC00' },
+  { symbol: 'TWTR', name: 'Twitter Inc.', kidName: 'Twitter/X', category: 'Technology', sector: 'Social Media', logo: '🐦', color: '#1DA1F2' },
   
   // Entertainment & Media
-  { symbol: 'DIS', name: 'The Walt Disney Company', kidName: 'Disney', category: 'Entertainment', sector: 'Media & Entertainment', difficulty: 'Beginner', logo: '🏰', color: '#0066CC' },
-  { symbol: 'NFLX', name: 'Netflix Inc.', kidName: 'Netflix', category: 'Entertainment', sector: 'Streaming', difficulty: 'Beginner', logo: '📺', color: '#E50914' },
-  { symbol: 'SPOT', name: 'Spotify Technology S.A.', kidName: 'Spotify Music', category: 'Entertainment', sector: 'Music Streaming', difficulty: 'Intermediate', logo: '🎵', color: '#1DB954' },
-  
-  // Consumer Goods
-  { symbol: 'NKE', name: 'Nike Inc.', kidName: 'Nike Shoes', category: 'Consumer', sector: 'Apparel', difficulty: 'Beginner', logo: '👟', color: '#FF6600' },
-  { symbol: 'SBUX', name: 'Starbucks Corporation', kidName: 'Starbucks Coffee', category: 'Consumer', sector: 'Restaurants', difficulty: 'Beginner', logo: '☕', color: '#00704A' },
-  { symbol: 'MCD', name: 'McDonald\'s Corporation', kidName: 'McDonald\'s', category: 'Consumer', sector: 'Fast Food', difficulty: 'Beginner', logo: '🍟', color: '#FFC72C' },
-  { symbol: 'KO', name: 'The Coca-Cola Company', kidName: 'Coca-Cola', category: 'Consumer', sector: 'Beverages', difficulty: 'Beginner', logo: '🥤', color: '#F40009' },
-  
-  // Financial
-  { symbol: 'V', name: 'Visa Inc.', kidName: 'Visa Credit Cards', category: 'Financial', sector: 'Payment Processing', difficulty: 'Intermediate', logo: '💳', color: '#1A1F71' },
-  { symbol: 'JPM', name: 'JPMorgan Chase & Co.', kidName: 'Chase Bank', category: 'Financial', sector: 'Banking', difficulty: 'Advanced', logo: '🏦', color: '#117ACA' },
+  { symbol: 'DIS', name: 'The Walt Disney Company', kidName: 'Disney Movies & Parks', category: 'Entertainment', sector: 'Media & Entertainment', logo: '🏰', color: '#0066CC' },
+  { symbol: 'NFLX', name: 'Netflix Inc.', kidName: 'Netflix Streaming', category: 'Entertainment', sector: 'Streaming', logo: '📺', color: '#E50914' },
+  { symbol: 'SPOT', name: 'Spotify Technology S.A.', kidName: 'Spotify Music', category: 'Entertainment', sector: 'Music Streaming', logo: '🎵', color: '#1DB954' },
+  { symbol: 'WBD', name: 'Warner Bros. Discovery', kidName: 'HBO Max & DC Movies', category: 'Entertainment', sector: 'Media', logo: '🎬', color: '#B535F6' },
   
   // Gaming
-  { symbol: 'RBLX', name: 'Roblox Corporation', kidName: 'Roblox Games', category: 'Gaming', sector: 'Gaming Platform', difficulty: 'Beginner', logo: '🎮', color: '#00A2FF' },
-  { symbol: 'EA', name: 'Electronic Arts Inc.', kidName: 'EA Sports Games', category: 'Gaming', sector: 'Video Games', difficulty: 'Intermediate', logo: '🏈', color: '#FF6600' },
+  { symbol: 'RBLX', name: 'Roblox Corporation', kidName: 'Roblox Games', category: 'Gaming', sector: 'Gaming Platform', logo: '🎮', color: '#00A2FF' },
+  { symbol: 'EA', name: 'Electronic Arts Inc.', kidName: 'FIFA & Madden Games', category: 'Gaming', sector: 'Video Games', logo: '🏈', color: '#FF6600' },
+  { symbol: 'ATVI', name: 'Activision Blizzard', kidName: 'Call of Duty & Candy Crush', category: 'Gaming', sector: 'Video Games', logo: '🎯', color: '#F99500' },
+  { symbol: 'TTWO', name: 'Take-Two Interactive', kidName: 'Grand Theft Auto & NBA 2K', category: 'Gaming', sector: 'Video Games', logo: '🏀', color: '#FF6B35' },
   
-  // Retail
-  { symbol: 'WMT', name: 'Walmart Inc.', kidName: 'Walmart Stores', category: 'Retail', sector: 'Discount Stores', difficulty: 'Beginner', logo: '🛒', color: '#004C91' },
-  { symbol: 'TGT', name: 'Target Corporation', kidName: 'Target Stores', category: 'Retail', sector: 'Department Stores', difficulty: 'Beginner', logo: '🎯', color: '#CC0000' }
+  // Food & Beverages
+  { symbol: 'MCD', name: 'McDonald\'s Corporation', kidName: 'McDonald\'s Fast Food', category: 'Food & Beverage', sector: 'Fast Food', logo: '🍟', color: '#FFC72C' },
+  { symbol: 'SBUX', name: 'Starbucks Corporation', kidName: 'Starbucks Coffee', category: 'Food & Beverage', sector: 'Coffee', logo: '☕', color: '#00704A' },
+  { symbol: 'KO', name: 'The Coca-Cola Company', kidName: 'Coca-Cola Drinks', category: 'Food & Beverage', sector: 'Beverages', logo: '🥤', color: '#F40009' },
+  { symbol: 'PEP', name: 'PepsiCo Inc.', kidName: 'Pepsi & Doritos', category: 'Food & Beverage', sector: 'Beverages & Snacks', logo: '🥤', color: '#004B93' },
+  { symbol: 'YUM', name: 'Yum! Brands Inc.', kidName: 'KFC, Taco Bell & Pizza Hut', category: 'Food & Beverage', sector: 'Fast Food', logo: '🍕', color: '#E31837' },
+  
+  // Retail & Fashion
+  { symbol: 'NKE', name: 'Nike Inc.', kidName: 'Nike Shoes & Sports', category: 'Retail & Fashion', sector: 'Apparel', logo: '👟', color: '#FF6600' },
+  { symbol: 'ADDYY', name: 'Adidas AG', kidName: 'Adidas Sports Gear', category: 'Retail & Fashion', sector: 'Apparel', logo: '👟', color: '#000000' },
+  { symbol: 'WMT', name: 'Walmart Inc.', kidName: 'Walmart Stores', category: 'Retail & Fashion', sector: 'Discount Stores', logo: '🛒', color: '#004C91' },
+  { symbol: 'TGT', name: 'Target Corporation', kidName: 'Target Stores', category: 'Retail & Fashion', sector: 'Department Stores', logo: '🎯', color: '#CC0000' },
+  { symbol: 'COST', name: 'Costco Wholesale', kidName: 'Costco Bulk Shopping', category: 'Retail & Fashion', sector: 'Warehouse Clubs', logo: '🏪', color: '#E31837' },
+  
+  // Transportation
+  { symbol: 'UBER', name: 'Uber Technologies', kidName: 'Uber Rides & Food Delivery', category: 'Transportation', sector: 'Ride Sharing', logo: '🚗', color: '#000000' },
+  { symbol: 'LYFT', name: 'Lyft Inc.', kidName: 'Lyft Rides', category: 'Transportation', sector: 'Ride Sharing', logo: '🚗', color: '#FF00BF' },
+  { symbol: 'AAL', name: 'American Airlines', kidName: 'American Airlines', category: 'Transportation', sector: 'Airlines', logo: '✈️', color: '#C8102E' },
+  
+  // Financial Services
+  { symbol: 'V', name: 'Visa Inc.', kidName: 'Visa Credit Cards', category: 'Financial', sector: 'Payment Processing', logo: '💳', color: '#1A1F71' },
+  { symbol: 'MA', name: 'Mastercard Inc.', kidName: 'Mastercard Credit Cards', category: 'Financial', sector: 'Payment Processing', logo: '💳', color: '#EB001B' },
+  { symbol: 'PYPL', name: 'PayPal Holdings', kidName: 'PayPal Online Payments', category: 'Financial', sector: 'Digital Payments', logo: '💰', color: '#0070BA' },
+  
+  // Health & Beauty
+  { symbol: 'JNJ', name: 'Johnson & Johnson', kidName: 'Band-Aids & Baby Products', category: 'Health & Beauty', sector: 'Healthcare', logo: '🏥', color: '#D51920' },
+  { symbol: 'PG', name: 'Procter & Gamble', kidName: 'Tide, Crest & Pampers', category: 'Health & Beauty', sector: 'Consumer Goods', logo: '🧴', color: '#003DA5' },
+  
+  // Toys & Education
+  { symbol: 'MAT', name: 'Mattel Inc.', kidName: 'Barbie & Hot Wheels', category: 'Toys & Education', sector: 'Toys', logo: '🪆', color: '#E22B8A' },
+  { symbol: 'HAS', name: 'Hasbro Inc.', kidName: 'Monopoly & Transformers', category: 'Toys & Education', sector: 'Toys', logo: '🎲', color: '#0066CC' }
 ];
 
 interface StockData {
@@ -76,9 +99,8 @@ const RealStockResearch = () => {
   const [loading, setLoading] = useState<Record<string, boolean>>({});
   const [error, setError] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState(new Date());
-  const [displayedStocks, setDisplayedStocks] = useState(12);
+  const [displayedStocks, setDisplayedStocks] = useState(20);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
 
   // Generate realistic stock data
   const generateRealisticStockData = useCallback((symbol: string): StockData => {
@@ -89,7 +111,9 @@ const RealStockResearch = () => {
     const basePrices: Record<string, number> = {
       'AAPL': 190, 'GOOGL': 140, 'MSFT': 380, 'AMZN': 145, 'META': 320, 'TSLA': 250, 'NVDA': 450,
       'DIS': 95, 'NFLX': 450, 'SPOT': 180, 'NKE': 110, 'SBUX': 95, 'MCD': 280, 'KO': 60,
-      'V': 240, 'JPM': 150, 'RBLX': 45, 'EA': 130, 'WMT': 160, 'TGT': 150
+      'V': 240, 'JPM': 150, 'RBLX': 45, 'EA': 130, 'WMT': 160, 'TGT': 150, 'SNAP': 12,
+      'PEP': 170, 'UBER': 65, 'LYFT': 15, 'PYPL': 75, 'MA': 400, 'JNJ': 160, 'PG': 155,
+      'MAT': 20, 'HAS': 55, 'YUM': 135, 'COST': 550, 'AAL': 15, 'ATVI': 95, 'TTWO': 150
     };
     
     const basePrice = basePrices[symbol] || 100;
@@ -119,21 +143,41 @@ const RealStockResearch = () => {
     const generateEvents = (symbol: string) => {
       const eventTemplates: Record<string, any> = {
         'AAPL': [
-          { title: 'New iPhone Launch', description: 'Apple announced the latest iPhone with new features', kidExplanation: 'When Apple releases a new iPhone, lots of people want to buy it!', impact: 'positive' },
-          { title: 'App Store Changes', description: 'New App Store policies announced', kidExplanation: 'Changes to the App Store can affect how much money Apple makes.', impact: 'neutral' }
+          { title: 'New iPhone 15 Launch', description: 'Apple unveiled the iPhone 15 with USB-C and improved cameras', kidExplanation: 'When Apple releases a new iPhone, millions of people want to buy it, which makes the company more money!', impact: 'positive' },
+          { title: 'App Store Policy Changes', description: 'Apple announced new App Store commission structure', kidExplanation: 'Changes to how Apple charges app developers can affect how much money they make from the App Store.', impact: 'neutral' },
+          { title: 'Record Holiday Sales', description: 'Apple reported strong iPhone and Mac sales during holiday season', kidExplanation: 'During holidays, people buy more Apple products as gifts, making Apple earn more money.', impact: 'positive' }
         ],
         'DIS': [
-          { title: 'New Movie Release', description: 'Disney released a blockbuster movie', kidExplanation: 'Popular Disney movies bring more visitors to parks!', impact: 'positive' },
-          { title: 'Theme Park Expansion', description: 'Disney announced new park attractions', kidExplanation: 'New rides make people more excited to visit Disney parks.', impact: 'positive' }
+          { title: 'Guardians of the Galaxy 3 Success', description: 'Disney\'s latest Marvel movie broke box office records', kidExplanation: 'When Disney movies are super popular, more people go to theaters and buy Disney merchandise!', impact: 'positive' },
+          { title: 'Disney+ Subscriber Growth', description: 'Disney+ added 5 million new subscribers this quarter', kidExplanation: 'More people signing up for Disney+ means more monthly money for Disney.', impact: 'positive' },
+          { title: 'Theme Park Expansion', description: 'Disney announced new attractions at Disney World', kidExplanation: 'New rides and attractions make people more excited to visit Disney parks and spend money.', impact: 'positive' }
         ],
         'RBLX': [
-          { title: 'New Game Features', description: 'Roblox added exciting new building tools', kidExplanation: 'Cool new features make more kids want to play Roblox!', impact: 'positive' },
-          { title: 'Creator Program Expansion', description: 'More ways for creators to earn money', kidExplanation: 'When game creators can make more money, they make better games.', impact: 'positive' }
+          { title: 'New Creator Tools Launch', description: 'Roblox introduced advanced building and scripting tools', kidExplanation: 'Better tools help creators make cooler games, which brings more players to Roblox!', impact: 'positive' },
+          { title: 'Partnership with Nike', description: 'Nike opened a virtual store in Roblox metaverse', kidExplanation: 'When big brands like Nike join Roblox, it shows that Roblox is becoming really important.', impact: 'positive' },
+          { title: 'Safety Features Update', description: 'Roblox enhanced parental controls and safety measures', kidExplanation: 'Better safety features make parents more comfortable letting their kids play Roblox.', impact: 'positive' }
+        ],
+        'NFLX': [
+          { title: 'Stranger Things 4 Breaks Records', description: 'Netflix\'s hit show became the most-watched series ever', kidExplanation: 'Popular shows keep people subscribed to Netflix and attract new viewers!', impact: 'positive' },
+          { title: 'Password Sharing Crackdown', description: 'Netflix started charging for password sharing', kidExplanation: 'Netflix wants people who share passwords to pay for their own accounts to make more money.', impact: 'neutral' },
+          { title: 'Ad-Supported Tier Launch', description: 'Netflix introduced cheaper plan with advertisements', kidExplanation: 'A cheaper option with ads helps more people afford Netflix while companies pay for advertising.', impact: 'positive' }
+        ],
+        'TSLA': [
+          { title: 'Model Y Price Cut', description: 'Tesla reduced prices on popular Model Y SUV', kidExplanation: 'Lower prices make Tesla cars more affordable, so more people might buy them!', impact: 'positive' },
+          { title: 'Supercharger Network Expansion', description: 'Tesla opened charging stations to other car brands', kidExplanation: 'Letting other cars use Tesla chargers creates a new way for Tesla to make money.', impact: 'positive' },
+          { title: 'Full Self-Driving Update', description: 'Tesla released new autonomous driving features', kidExplanation: 'Better self-driving technology makes Tesla cars more special and valuable.', impact: 'positive' }
+        ],
+        'MCD': [
+          { title: 'McPlant Burger Expansion', description: 'McDonald\'s expanded plant-based burger to more locations', kidExplanation: 'New menu items can attract customers who want healthier or different food options.', impact: 'positive' },
+          { title: 'Mobile App Promotions', description: 'McDonald\'s increased digital deals and rewards', kidExplanation: 'Apps with special deals encourage people to order more often and spend more money.', impact: 'positive' },
+          { title: 'Supply Chain Challenges', description: 'McDonald\'s faced ingredient shortages in some regions', kidExplanation: 'When restaurants can\'t get ingredients, they might make less money temporarily.', impact: 'negative' }
         ]
       };
 
       const templates = eventTemplates[symbol] || [
-        { title: 'Quarterly Earnings', description: 'Company reported quarterly results', kidExplanation: 'Companies tell everyone how much money they made every few months.', impact: 'neutral' }
+        { title: 'Quarterly Earnings Report', description: 'Company reported quarterly financial results', kidExplanation: 'Every few months, companies tell everyone how much money they made and spent.', impact: 'neutral' },
+        { title: 'New Product Launch', description: 'Company introduced new products or services', kidExplanation: 'New products can help companies make more money if customers like them.', impact: 'positive' },
+        { title: 'Market Expansion', description: 'Company expanded to new markets or regions', kidExplanation: 'Selling products in new places can help companies reach more customers.', impact: 'positive' }
       ];
 
       return templates.slice(0, 3).map((template, index) => {
@@ -152,7 +196,8 @@ const RealStockResearch = () => {
 
     const marketCaps: Record<string, string> = {
       'AAPL': '3.0T', 'GOOGL': '1.7T', 'MSFT': '2.8T', 'AMZN': '1.5T', 'META': '800B', 'TSLA': '790B',
-      'DIS': '175B', 'NFLX': '210B', 'SPOT': '30B', 'NKE': '180B', 'SBUX': '110B', 'MCD': '210B'
+      'DIS': '175B', 'NFLX': '210B', 'SPOT': '30B', 'NKE': '180B', 'SBUX': '110B', 'MCD': '210B',
+      'RBLX': '25B', 'UBER': '85B', 'SNAP': '18B', 'V': '500B', 'MA': '380B', 'PYPL': '85B'
     };
 
     return {
@@ -160,7 +205,7 @@ const RealStockResearch = () => {
       price: Number((basePrice + change).toFixed(2)),
       change: Number(change.toFixed(2)),
       changePercent: Number(changePercent.toFixed(2)),
-      marketCap: marketCaps[symbol] || '100B',
+      marketCap: marketCaps[symbol] || '50B',
       volume: `${(Math.random() * 50 + 10).toFixed(1)}M`,
       high52Week: Number((basePrice * 1.4).toFixed(2)),
       low52Week: Number((basePrice * 0.6).toFixed(2)),
@@ -204,17 +249,16 @@ const RealStockResearch = () => {
     const matchesSearch = searchTerm === '' || 
       stock.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       stock.kidName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      stock.symbol.toLowerCase().includes(searchTerm.toLowerCase());
+      stock.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      stock.sector.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesCategory = selectedCategory === 'all' || stock.category === selectedCategory;
-    const matchesDifficulty = selectedDifficulty === 'all' || stock.difficulty === selectedDifficulty;
     
-    return matchesSearch && matchesCategory && matchesDifficulty;
+    return matchesSearch && matchesCategory;
   });
 
   const displayedStocksList = filteredStocks.slice(0, displayedStocks);
   const categories = [...new Set(stockDatabase.map(s => s.category))];
-  const difficulties = [...new Set(stockDatabase.map(s => s.difficulty))];
 
   const formatPrice = (price: number) => `$${price.toFixed(2)}`;
   const formatChange = (change: number) => change >= 0 ? `+${change.toFixed(2)}` : change.toFixed(2);
@@ -409,7 +453,7 @@ const RealStockResearch = () => {
             Kid-Friendly Stock Explorer
           </h1>
           <p className="text-xl text-muted-foreground max-w-4xl mx-auto mb-8 leading-relaxed">
-            Search and explore stocks from companies you know and love! Learn how businesses work and see real stock prices.
+            Discover stocks from companies you know and love! Search for your favorite brands and learn how they work as businesses.
           </p>
         </div>
 
@@ -419,37 +463,31 @@ const RealStockResearch = () => {
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
             <Input
               type="text"
-              placeholder="Search for companies like Apple, Disney, Netflix..."
+              placeholder="Search for Apple, Disney, Netflix, Roblox, Nike..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-12 h-14 text-lg rounded-2xl border-2 border-primary/20 focus:border-primary shadow-lg"
             />
           </div>
 
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="All Categories" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                {categories.map(category => (
-                  <SelectItem key={category} value={category}>{category}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="All Levels" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Levels</SelectItem>
-                {difficulties.map(difficulty => (
-                  <SelectItem key={difficulty} value={difficulty}>{difficulty}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Button
+              variant={selectedCategory === 'all' ? 'default' : 'outline'}
+              onClick={() => setSelectedCategory('all')}
+              className="rounded-full"
+            >
+              All Categories
+            </Button>
+            {categories.map(category => (
+              <Button
+                key={category}
+                variant={selectedCategory === category ? 'default' : 'outline'}
+                onClick={() => setSelectedCategory(category)}
+                className="rounded-full"
+              >
+                {category}
+              </Button>
+            ))}
           </div>
         </div>
 
@@ -490,7 +528,7 @@ const RealStockResearch = () => {
                       </div>
                     </div>
                     <Badge variant="secondary" className="text-xs">
-                      {stock.difficulty}
+                      {stock.category}
                     </Badge>
                   </div>
                 </CardHeader>
@@ -528,7 +566,7 @@ const RealStockResearch = () => {
                       </div>
                       
                       <div className="flex items-center justify-between pt-2 border-t">
-                        <span className="text-xs text-muted-foreground">{stock.category}</span>
+                        <span className="text-xs text-muted-foreground">{stock.sector}</span>
                         <Button variant="ghost" size="sm" className="text-primary">
                           Explore →
                         </Button>
@@ -556,7 +594,7 @@ const RealStockResearch = () => {
             <Button 
               variant="outline" 
               size="lg"
-              onClick={() => setDisplayedStocks(prev => prev + 12)}
+              onClick={() => setDisplayedStocks(prev => prev + 20)}
               className="hover-scale"
             >
               <Plus className="h-5 w-5 mr-2" />
@@ -570,7 +608,7 @@ const RealStockResearch = () => {
           <div className="text-center py-16">
             <div className="text-6xl mb-4">🔍</div>
             <h3 className="text-2xl font-bold mb-4">No companies found</h3>
-            <p className="text-muted-foreground text-lg">Try adjusting your search or filters!</p>
+            <p className="text-muted-foreground text-lg">Try searching for different companies or adjusting your category filter!</p>
           </div>
         )}
       </div>
