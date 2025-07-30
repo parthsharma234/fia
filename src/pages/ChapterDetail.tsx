@@ -117,13 +117,13 @@ const ChapterDetail = () => {
             </p>
           </div>
 
-          {chapter.team && chapter.team.length > 0 && (
+          {(chapter as any).team && (chapter as any).team.length > 0 && (
             <div className="space-y-12">
               {/* Executive Team */}
               <div>
                 <h3 className="text-2xl font-bold text-foreground mb-8 text-center">Executive Leadership</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {chapter.team.filter(member => member.role === 'exec').map((member, index) => (
+                  {(chapter as any).team.filter((member: any) => member.role === 'exec').map((member: any, index: number) => (
                     <div 
                       key={member.name}
                       className="group transition-all duration-300 hover:scale-105"
@@ -155,11 +155,11 @@ const ChapterDetail = () => {
               </div>
 
               {/* Team Members */}
-              {chapter.team.filter(member => member.role === 'team').length > 0 && (
+              {(chapter as any).team.filter((member: any) => member.role === 'team').length > 0 && (
                 <div>
                   <h3 className="text-2xl font-bold text-foreground mb-8 text-center">Team Members</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {chapter.team.filter(member => member.role === 'team').map((member, index) => (
+                    {(chapter as any).team.filter((member: any) => member.role === 'team').map((member: any, index: number) => (
                       <div 
                         key={member.name}
                         className="group transition-all duration-300 hover:scale-105"
