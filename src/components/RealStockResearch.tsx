@@ -1,86 +1,46 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Search, TrendingUp, TrendingDown, DollarSign, Building2, Calendar, BarChart3, Activity, RefreshCw, ArrowLeft, ExternalLink, AlertCircle, Lightbulb, Star } from 'lucide-react';
+import { Search, TrendingUp, TrendingDown, DollarSign, Building2, Calendar, BarChart3, Activity, RefreshCw, ArrowLeft, ExternalLink, AlertCircle, Lightbulb, Star, Plus, Filter } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 
-// Kid-friendly stock data with real companies
-const kidFriendlyStocks = [
-  {
-    symbol: 'AAPL',
-    name: 'Apple Inc.',
-    kidName: 'The iPhone Company',
-    description: 'Makes iPhones, iPads, Mac computers, and the App Store',
-    category: 'Technology',
-    whyKidsKnow: 'You probably use an iPhone or iPad every day!',
-    funFact: 'Apple was started in a garage by two friends who wanted to make computers easier to use.',
-    color: '#007AFF',
-    logo: '🍎',
-    difficulty: 'Beginner'
-  },
-  {
-    symbol: 'DIS',
-    name: 'The Walt Disney Company',
-    kidName: 'Disney',
-    description: 'Creates movies, runs theme parks, and owns Disney+',
-    category: 'Entertainment',
-    whyKidsKnow: 'Disney makes your favorite movies and cartoons!',
-    funFact: 'Walt Disney was told he "lacked imagination" before creating Mickey Mouse.',
-    color: '#0066CC',
-    logo: '🏰',
-    difficulty: 'Beginner'
-  },
-  {
-    symbol: 'TSLA',
-    name: 'Tesla Inc.',
-    kidName: 'The Electric Car Company',
-    description: 'Makes electric cars and solar panels',
-    category: 'Transportation',
-    whyKidsKnow: 'Tesla cars can drive themselves and help save the planet!',
-    funFact: 'Tesla cars can get software updates just like your phone or tablet.',
-    color: '#CC0000',
-    logo: '⚡',
-    difficulty: 'Intermediate'
-  },
-  {
-    symbol: 'NFLX',
-    name: 'Netflix Inc.',
-    kidName: 'Netflix',
-    description: 'Streaming service for movies and TV shows',
-    category: 'Entertainment',
-    whyKidsKnow: 'Where you watch your favorite shows and movies!',
-    funFact: 'Netflix started by mailing DVDs to people before streaming existed.',
-    color: '#E50914',
-    logo: '📺',
-    difficulty: 'Beginner'
-  },
-  {
-    symbol: 'GOOGL',
-    name: 'Alphabet Inc.',
-    kidName: 'Google',
-    description: 'Runs Google search, YouTube, and Android phones',
-    category: 'Technology',
-    whyKidsKnow: 'You use Google to search for everything and watch YouTube!',
-    funFact: 'Google processes over 8.5 billion searches every single day.',
-    color: '#4285F4',
-    logo: '🔍',
-    difficulty: 'Intermediate'
-  },
-  {
-    symbol: 'AMZN',
-    name: 'Amazon.com Inc.',
-    kidName: 'Amazon',
-    description: 'Online shopping and delivers packages to your door',
-    category: 'E-commerce',
-    whyKidsKnow: 'Amazon delivers packages to your house super fast!',
-    funFact: 'Amazon started as just a bookstore in someone\'s garage.',
-    color: '#FF9900',
-    logo: '📦',
-    difficulty: 'Intermediate'
-  }
+// Expanded stock database with more companies
+const stockDatabase = [
+  // Technology
+  { symbol: 'AAPL', name: 'Apple Inc.', kidName: 'The iPhone Company', category: 'Technology', sector: 'Consumer Electronics', difficulty: 'Beginner', logo: '🍎', color: '#007AFF' },
+  { symbol: 'GOOGL', name: 'Alphabet Inc.', kidName: 'Google', category: 'Technology', sector: 'Internet Services', difficulty: 'Intermediate', logo: '🔍', color: '#4285F4' },
+  { symbol: 'MSFT', name: 'Microsoft Corporation', kidName: 'Microsoft', category: 'Technology', sector: 'Software', difficulty: 'Intermediate', logo: '💻', color: '#00A1F1' },
+  { symbol: 'AMZN', name: 'Amazon.com Inc.', kidName: 'Amazon', category: 'Technology', sector: 'E-commerce', difficulty: 'Intermediate', logo: '📦', color: '#FF9900' },
+  { symbol: 'META', name: 'Meta Platforms Inc.', kidName: 'Facebook & Instagram', category: 'Technology', sector: 'Social Media', difficulty: 'Intermediate', logo: '📱', color: '#1877F2' },
+  { symbol: 'TSLA', name: 'Tesla Inc.', kidName: 'The Electric Car Company', category: 'Technology', sector: 'Electric Vehicles', difficulty: 'Advanced', logo: '⚡', color: '#CC0000' },
+  { symbol: 'NVDA', name: 'NVIDIA Corporation', kidName: 'Gaming Graphics', category: 'Technology', sector: 'Semiconductors', difficulty: 'Advanced', logo: '🎮', color: '#76B900' },
+  
+  // Entertainment & Media
+  { symbol: 'DIS', name: 'The Walt Disney Company', kidName: 'Disney', category: 'Entertainment', sector: 'Media & Entertainment', difficulty: 'Beginner', logo: '🏰', color: '#0066CC' },
+  { symbol: 'NFLX', name: 'Netflix Inc.', kidName: 'Netflix', category: 'Entertainment', sector: 'Streaming', difficulty: 'Beginner', logo: '📺', color: '#E50914' },
+  { symbol: 'SPOT', name: 'Spotify Technology S.A.', kidName: 'Spotify Music', category: 'Entertainment', sector: 'Music Streaming', difficulty: 'Intermediate', logo: '🎵', color: '#1DB954' },
+  
+  // Consumer Goods
+  { symbol: 'NKE', name: 'Nike Inc.', kidName: 'Nike Shoes', category: 'Consumer', sector: 'Apparel', difficulty: 'Beginner', logo: '👟', color: '#FF6600' },
+  { symbol: 'SBUX', name: 'Starbucks Corporation', kidName: 'Starbucks Coffee', category: 'Consumer', sector: 'Restaurants', difficulty: 'Beginner', logo: '☕', color: '#00704A' },
+  { symbol: 'MCD', name: 'McDonald\'s Corporation', kidName: 'McDonald\'s', category: 'Consumer', sector: 'Fast Food', difficulty: 'Beginner', logo: '🍟', color: '#FFC72C' },
+  { symbol: 'KO', name: 'The Coca-Cola Company', kidName: 'Coca-Cola', category: 'Consumer', sector: 'Beverages', difficulty: 'Beginner', logo: '🥤', color: '#F40009' },
+  
+  // Financial
+  { symbol: 'V', name: 'Visa Inc.', kidName: 'Visa Credit Cards', category: 'Financial', sector: 'Payment Processing', difficulty: 'Intermediate', logo: '💳', color: '#1A1F71' },
+  { symbol: 'JPM', name: 'JPMorgan Chase & Co.', kidName: 'Chase Bank', category: 'Financial', sector: 'Banking', difficulty: 'Advanced', logo: '🏦', color: '#117ACA' },
+  
+  // Gaming
+  { symbol: 'RBLX', name: 'Roblox Corporation', kidName: 'Roblox Games', category: 'Gaming', sector: 'Gaming Platform', difficulty: 'Beginner', logo: '🎮', color: '#00A2FF' },
+  { symbol: 'EA', name: 'Electronic Arts Inc.', kidName: 'EA Sports Games', category: 'Gaming', sector: 'Video Games', difficulty: 'Intermediate', logo: '🏈', color: '#FF6600' },
+  
+  // Retail
+  { symbol: 'WMT', name: 'Walmart Inc.', kidName: 'Walmart Stores', category: 'Retail', sector: 'Discount Stores', difficulty: 'Beginner', logo: '🛒', color: '#004C91' },
+  { symbol: 'TGT', name: 'Target Corporation', kidName: 'Target Stores', category: 'Retail', sector: 'Department Stores', difficulty: 'Beginner', logo: '🎯', color: '#CC0000' }
 ];
 
 interface StockData {
@@ -116,24 +76,27 @@ const RealStockResearch = () => {
   const [loading, setLoading] = useState<Record<string, boolean>>({});
   const [error, setError] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState(new Date());
+  const [displayedStocks, setDisplayedStocks] = useState(12);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
 
-  // Generate realistic stock data (simulating real API)
+  // Generate realistic stock data
   const generateRealisticStockData = useCallback((symbol: string): StockData => {
+    const stockInfo = stockDatabase.find(s => s.symbol === symbol);
+    if (!stockInfo) throw new Error('Stock not found');
+
     // Base prices for realistic ranges
     const basePrices: Record<string, number> = {
-      'AAPL': 190,
-      'DIS': 95,
-      'TSLA': 250,
-      'NFLX': 450,
-      'GOOGL': 140,
-      'AMZN': 145
+      'AAPL': 190, 'GOOGL': 140, 'MSFT': 380, 'AMZN': 145, 'META': 320, 'TSLA': 250, 'NVDA': 450,
+      'DIS': 95, 'NFLX': 450, 'SPOT': 180, 'NKE': 110, 'SBUX': 95, 'MCD': 280, 'KO': 60,
+      'V': 240, 'JPM': 150, 'RBLX': 45, 'EA': 130, 'WMT': 160, 'TGT': 150
     };
     
     const basePrice = basePrices[symbol] || 100;
-    const change = (Math.random() - 0.5) * 8; // More realistic daily changes
+    const change = (Math.random() - 0.5) * 8;
     const changePercent = (change / basePrice) * 100;
     
-    // Generate realistic chart data for the last 30 days
+    // Generate chart data
     const chartData = [];
     let currentPrice = basePrice;
     
@@ -141,141 +104,55 @@ const RealStockResearch = () => {
       const date = new Date();
       date.setDate(date.getDate() - i);
       
-      // Add realistic price movement with some trend
-      const dailyChange = (Math.random() - 0.5) * 0.06; // 6% max daily change
-      const trendFactor = Math.sin(i * 0.1) * 0.02; // Add some trend
+      const dailyChange = (Math.random() - 0.5) * 0.06;
+      const trendFactor = Math.sin(i * 0.1) * 0.02;
       currentPrice = currentPrice * (1 + dailyChange + trendFactor);
       
       chartData.push({
         date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
         price: Number(currentPrice.toFixed(2)),
-        volume: Math.random() * 15 + 5 // 5-20M volume
+        volume: Math.random() * 15 + 5
       });
     }
 
-    // Generate kid-friendly key events
-    const eventTemplates: Record<string, Array<{
-      title: string;
-      description: string;
-      kidExplanation: string;
-      impact: 'positive' | 'negative' | 'neutral';
-    }>> = {
-      'AAPL': [
-        {
-          title: 'New iPhone Launch',
-          description: 'Apple announced the latest iPhone with new features',
-          kidExplanation: 'When Apple releases a new iPhone, lots of people want to buy it, which can make the stock price go up!',
-          impact: 'positive'
-        },
-        {
-          title: 'App Store Changes',
-          description: 'New App Store policies announced',
-          kidExplanation: 'Changes to the App Store can affect how much money Apple makes from apps.',
-          impact: 'neutral'
-        }
-      ],
-      'DIS': [
-        {
-          title: 'New Movie Release',
-          description: 'Disney released a blockbuster movie',
-          kidExplanation: 'When Disney movies are super popular, more people visit Disney parks and buy Disney stuff!',
-          impact: 'positive'
-        },
-        {
-          title: 'Theme Park Attendance',
-          description: 'Disney parks saw increased visitor numbers',
-          kidExplanation: 'More people visiting Disney parks means Disney makes more money from tickets and food.',
-          impact: 'positive'
-        }
-      ],
-      'TSLA': [
-        {
-          title: 'Electric Vehicle Sales',
-          description: 'Tesla reported strong quarterly vehicle deliveries',
-          kidExplanation: 'When Tesla sells more cars, the company makes more money, which investors like!',
-          impact: 'positive'
-        },
-        {
-          title: 'Autopilot Update',
-          description: 'New self-driving features released',
-          kidExplanation: 'Cool new features make Tesla cars more attractive to buyers.',
-          impact: 'positive'
-        }
-      ],
-      'NFLX': [
-        {
-          title: 'Hit Series Launch',
-          description: 'Netflix released a popular new series',
-          kidExplanation: 'When Netflix has shows everyone wants to watch, more people subscribe!',
-          impact: 'positive'
-        },
-        {
-          title: 'Subscriber Growth',
-          description: 'Netflix added millions of new subscribers',
-          kidExplanation: 'More subscribers means Netflix makes more money every month.',
-          impact: 'positive'
-        }
-      ],
-      'GOOGL': [
-        {
-          title: 'AI Technology Breakthrough',
-          description: 'Google announced new AI capabilities',
-          kidExplanation: 'Google\'s smart AI helps them make better products that people want to use.',
-          impact: 'positive'
-        },
-        {
-          title: 'YouTube Creator Program',
-          description: 'New features for YouTube creators',
-          kidExplanation: 'When YouTube creators are happy, they make more videos, and more people watch ads!',
-          impact: 'positive'
-        }
-      ],
-      'AMZN': [
-        {
-          title: 'Prime Day Success',
-          description: 'Amazon Prime Day broke sales records',
-          kidExplanation: 'When Amazon has big sales events, they sell tons of stuff and make lots of money!',
-          impact: 'positive'
-        },
-        {
-          title: 'Faster Delivery',
-          description: 'Amazon improved delivery speeds',
-          kidExplanation: 'When Amazon delivers packages faster, more people want to shop there.',
-          impact: 'positive'
-        }
-      ]
+    // Generate key events based on company
+    const generateEvents = (symbol: string) => {
+      const eventTemplates: Record<string, any> = {
+        'AAPL': [
+          { title: 'New iPhone Launch', description: 'Apple announced the latest iPhone with new features', kidExplanation: 'When Apple releases a new iPhone, lots of people want to buy it!', impact: 'positive' },
+          { title: 'App Store Changes', description: 'New App Store policies announced', kidExplanation: 'Changes to the App Store can affect how much money Apple makes.', impact: 'neutral' }
+        ],
+        'DIS': [
+          { title: 'New Movie Release', description: 'Disney released a blockbuster movie', kidExplanation: 'Popular Disney movies bring more visitors to parks!', impact: 'positive' },
+          { title: 'Theme Park Expansion', description: 'Disney announced new park attractions', kidExplanation: 'New rides make people more excited to visit Disney parks.', impact: 'positive' }
+        ],
+        'RBLX': [
+          { title: 'New Game Features', description: 'Roblox added exciting new building tools', kidExplanation: 'Cool new features make more kids want to play Roblox!', impact: 'positive' },
+          { title: 'Creator Program Expansion', description: 'More ways for creators to earn money', kidExplanation: 'When game creators can make more money, they make better games.', impact: 'positive' }
+        ]
+      };
+
+      const templates = eventTemplates[symbol] || [
+        { title: 'Quarterly Earnings', description: 'Company reported quarterly results', kidExplanation: 'Companies tell everyone how much money they made every few months.', impact: 'neutral' }
+      ];
+
+      return templates.slice(0, 3).map((template, index) => {
+        const eventDate = new Date();
+        eventDate.setDate(eventDate.getDate() - (index + 1) * 7);
+        
+        return {
+          date: eventDate.toLocaleDateString(),
+          title: template.title,
+          description: template.description,
+          kidExplanation: template.kidExplanation,
+          impact: template.impact
+        };
+      });
     };
 
-    const stockEvents = eventTemplates[symbol] || [
-      {
-        title: 'Quarterly Earnings',
-        description: 'Company reported quarterly results',
-        kidExplanation: 'Every few months, companies tell everyone how much money they made.',
-        impact: 'neutral' as const
-      }
-    ];
-
-    const keyEvents = stockEvents.slice(0, 3).map((template, index) => {
-      const eventDate = new Date();
-      eventDate.setDate(eventDate.getDate() - (index + 1) * 7);
-      
-      return {
-        date: eventDate.toLocaleDateString(),
-        title: template.title,
-        description: template.description,
-        kidExplanation: template.kidExplanation,
-        impact: template.impact
-      };
-    });
-
-    // Realistic market cap calculations
     const marketCaps: Record<string, string> = {
-      'AAPL': '3.0T',
-      'DIS': '175B',
-      'TSLA': '790B',
-      'NFLX': '210B',
-      'GOOGL': '1.7T',
-      'AMZN': '1.5T'
+      'AAPL': '3.0T', 'GOOGL': '1.7T', 'MSFT': '2.8T', 'AMZN': '1.5T', 'META': '800B', 'TSLA': '790B',
+      'DIS': '175B', 'NFLX': '210B', 'SPOT': '30B', 'NKE': '180B', 'SBUX': '110B', 'MCD': '210B'
     };
 
     return {
@@ -291,27 +168,21 @@ const RealStockResearch = () => {
       dividend: Number((Math.random() * 2).toFixed(2)),
       lastUpdated: new Date(),
       chartData,
-      keyEvents
+      keyEvents: generateEvents(symbol)
     };
   }, []);
 
-  // Fetch stock data (simulating real API calls)
+  // Fetch stock data
   const fetchStockData = useCallback(async (symbol: string) => {
     if (stockData[symbol] && Date.now() - stockData[symbol].lastUpdated.getTime() < 60000) {
-      return; // Don't refetch if data is less than 1 minute old
+      return;
     }
     
     setLoading(prev => ({ ...prev, [symbol]: true }));
     setError(null);
 
     try {
-      // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 400));
-      
-      // In a real app, you would use a stock API like:
-      // const response = await fetch(`https://api.polygon.io/v2/aggs/ticker/${symbol}/prev?apikey=YOUR_API_KEY`);
-      // const data = await response.json();
-      
       const mockData = generateRealisticStockData(symbol);
       
       setStockData(prev => ({
@@ -321,51 +192,43 @@ const RealStockResearch = () => {
       
       setLastUpdate(new Date());
     } catch (err) {
-      setError('Oops! We couldn\'t get the latest stock info. Please try again.');
+      setError('Could not fetch stock data. Please try again.');
       console.error('Error fetching stock data:', err);
     } finally {
       setLoading(prev => ({ ...prev, [symbol]: false }));
     }
   }, [stockData, generateRealisticStockData]);
 
-  // Auto-refresh data every 2 minutes
-  useEffect(() => {
-    const interval = setInterval(() => {
-      Object.keys(stockData).forEach(symbol => {
-        fetchStockData(symbol);
-      });
-    }, 120000); // 2 minutes
+  // Filter stocks based on search and filters
+  const filteredStocks = stockDatabase.filter(stock => {
+    const matchesSearch = searchTerm === '' || 
+      stock.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      stock.kidName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      stock.symbol.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesCategory = selectedCategory === 'all' || stock.category === selectedCategory;
+    const matchesDifficulty = selectedDifficulty === 'all' || stock.difficulty === selectedDifficulty;
+    
+    return matchesSearch && matchesCategory && matchesDifficulty;
+  });
 
-    return () => clearInterval(interval);
-  }, [stockData, fetchStockData]);
-
-  // Load initial data
-  useEffect(() => {
-    kidFriendlyStocks.forEach(stock => {
-      fetchStockData(stock.symbol);
-    });
-  }, [fetchStockData]);
-
-  const filteredStocks = kidFriendlyStocks.filter(stock =>
-    stock.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    stock.kidName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    stock.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const displayedStocksList = filteredStocks.slice(0, displayedStocks);
+  const categories = [...new Set(stockDatabase.map(s => s.category))];
+  const difficulties = [...new Set(stockDatabase.map(s => s.difficulty))];
 
   const formatPrice = (price: number) => `$${price.toFixed(2)}`;
   const formatChange = (change: number) => change >= 0 ? `+${change.toFixed(2)}` : change.toFixed(2);
   const formatPercent = (percent: number) => `${percent >= 0 ? '+' : ''}${percent.toFixed(2)}%`;
 
   if (selectedStock) {
-    const stockInfo = kidFriendlyStocks.find(s => s.symbol === selectedStock);
+    const stockInfo = stockDatabase.find(s => s.symbol === selectedStock);
     const data = stockData[selectedStock];
     
     if (!stockInfo) return null;
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/5 py-12">
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/5 py-12 pt-32">
         <div className="container mx-auto px-4">
-          {/* Back button */}
           <Button
             variant="outline"
             onClick={() => setSelectedStock(null)}
@@ -378,12 +241,8 @@ const RealStockResearch = () => {
           {loading[selectedStock] ? (
             <div className="flex items-center justify-center h-64">
               <div className="text-center">
-                <div className="relative">
-                  <RefreshCw className="h-12 w-12 animate-spin mx-auto mb-4 text-primary" />
-                  <div className="absolute inset-0 h-12 w-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin mx-auto"></div>
-                </div>
-                <p className="text-lg font-medium">Getting the latest stock info...</p>
-                <p className="text-sm text-muted-foreground">This might take a moment</p>
+                <RefreshCw className="h-12 w-12 animate-spin mx-auto mb-4 text-primary" />
+                <p className="text-lg font-medium">Loading stock data...</p>
               </div>
             </div>
           ) : data ? (
@@ -411,17 +270,12 @@ const RealStockResearch = () => {
                           </Badge>
                         </CardTitle>
                         <p className="text-xl text-muted-foreground">{stockInfo.name} ({stockInfo.symbol})</p>
-                        <div className="flex items-center gap-2 mt-2">
-                          <Star className="h-4 w-4 text-yellow-500" />
-                          <span className="text-sm font-medium">{stockInfo.difficulty} Level</span>
-                        </div>
                       </div>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent className="pt-8">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {/* Price Display */}
                     <div className="text-center p-8 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-2xl border border-primary/20">
                       <div className="text-5xl font-bold mb-3" style={{ color: stockInfo.color }}>
                         {formatPrice(data.price)}
@@ -430,45 +284,32 @@ const RealStockResearch = () => {
                         {data.change >= 0 ? <TrendingUp className="h-8 w-8" /> : <TrendingDown className="h-8 w-8" />}
                         <span>{formatChange(data.change)} ({formatPercent(data.changePercent)})</span>
                       </div>
-                      <p className="text-sm text-muted-foreground mt-2">
-                        Updated: {data.lastUpdated.toLocaleTimeString()}
-                      </p>
                     </div>
                     
-                    {/* Key Stats */}
                     <div className="space-y-4">
                       <h4 className="font-bold text-lg mb-4">📊 Key Numbers</h4>
                       <div className="space-y-3">
                         <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
-                          <span className="font-medium">Company Size:</span>
+                          <span className="font-medium">Market Cap:</span>
                           <span className="font-bold text-primary">{data.marketCap}</span>
                         </div>
                         <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
-                          <span className="font-medium">Daily Trading:</span>
+                          <span className="font-medium">Volume:</span>
                           <span className="font-bold text-secondary">{data.volume}</span>
-                        </div>
-                        <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
-                          <span className="font-medium">P/E Ratio:</span>
-                          <span className="font-bold text-accent">{data.peRatio}</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* 52-Week Range */}
                     <div className="space-y-4">
-                      <h4 className="font-bold text-lg mb-4">📈 This Year's Range</h4>
+                      <h4 className="font-bold text-lg mb-4">📈 Price Range</h4>
                       <div className="space-y-3">
                         <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg border border-green-200">
-                          <span className="font-medium">Highest Price:</span>
+                          <span className="font-medium">52W High:</span>
                           <span className="font-bold text-green-600">{formatPrice(data.high52Week)}</span>
                         </div>
                         <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg border border-red-200">
-                          <span className="font-medium">Lowest Price:</span>
+                          <span className="font-medium">52W Low:</span>
                           <span className="font-bold text-red-600">{formatPrice(data.low52Week)}</span>
-                        </div>
-                        <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg border border-blue-200">
-                          <span className="font-medium">Current Price:</span>
-                          <span className="font-bold text-blue-600">{formatPrice(data.price)}</span>
                         </div>
                       </div>
                     </div>
@@ -476,44 +317,26 @@ const RealStockResearch = () => {
                 </CardContent>
               </Card>
 
+              {/* Chart and Events */}
               <Tabs defaultValue="chart" className="w-full">
-                <TabsList className="grid w-full grid-cols-3 h-14 text-lg">
+                <TabsList className="grid w-full grid-cols-2 h-14 text-lg">
                   <TabsTrigger value="chart" className="text-lg">📈 Price Chart</TabsTrigger>
-                  <TabsTrigger value="events" className="text-lg">📰 What's Happening</TabsTrigger>
-                  <TabsTrigger value="learn" className="text-lg">🎓 Learn More</TabsTrigger>
+                  <TabsTrigger value="events" className="text-lg">📰 Recent News</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="chart" className="space-y-6">
                   <Card className="shadow-lg">
                     <CardHeader>
-                      <CardTitle className="text-2xl">30-Day Price Journey</CardTitle>
-                      <p className="text-muted-foreground">See how the stock price has changed over the last month</p>
+                      <CardTitle className="text-2xl">30-Day Price Chart</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="h-96">
                         <ResponsiveContainer width="100%" height="100%">
                           <AreaChart data={data.chartData}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                            <XAxis 
-                              dataKey="date" 
-                              tick={{ fontSize: 12 }}
-                              stroke="#666"
-                            />
-                            <YAxis 
-                              domain={['dataMin - 5', 'dataMax + 5']} 
-                              tick={{ fontSize: 12 }}
-                              stroke="#666"
-                            />
-                            <Tooltip 
-                              formatter={(value: any) => [formatPrice(value), 'Stock Price']}
-                              labelStyle={{ color: 'black', fontWeight: 'bold' }}
-                              contentStyle={{ 
-                                backgroundColor: 'white', 
-                                border: '2px solid #e0e0e0',
-                                borderRadius: '12px',
-                                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-                              }}
-                            />
+                            <XAxis dataKey="date" tick={{ fontSize: 12 }} />
+                            <YAxis domain={['dataMin - 5', 'dataMax + 5']} tick={{ fontSize: 12 }} />
+                            <Tooltip formatter={(value: any) => [formatPrice(value), 'Price']} />
                             <Area 
                               type="monotone" 
                               dataKey="price" 
@@ -524,26 +347,14 @@ const RealStockResearch = () => {
                           </AreaChart>
                         </ResponsiveContainer>
                       </div>
-                      
-                      <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                        <h4 className="font-semibold mb-2 flex items-center gap-2">
-                          <Lightbulb className="h-5 w-5 text-blue-600" />
-                          Reading the Chart
-                        </h4>
-                        <p className="text-sm text-blue-800">
-                          This chart shows how the stock price changed each day. When the line goes up, the stock got more expensive. 
-                          When it goes down, it got cheaper. The colored area helps you see the overall trend!
-                        </p>
-                      </div>
                     </CardContent>
                   </Card>
                 </TabsContent>
 
                 <TabsContent value="events" className="space-y-6">
                   <div className="grid gap-6">
-                    <h3 className="text-2xl font-bold">Recent News & Events</h3>
                     {data.keyEvents.map((event, index) => (
-                      <Card key={index} className={`border-l-4 shadow-lg hover:shadow-xl transition-all duration-300 ${
+                      <Card key={index} className={`border-l-4 shadow-lg ${
                         event.impact === 'positive' ? 'border-l-green-500 bg-green-50/50' :
                         event.impact === 'negative' ? 'border-l-red-500 bg-red-50/50' :
                         'border-l-blue-500 bg-blue-50/50'
@@ -554,26 +365,17 @@ const RealStockResearch = () => {
                               <div className="flex items-center gap-3 mb-3">
                                 <Calendar className="h-5 w-5 text-muted-foreground" />
                                 <span className="text-sm font-medium text-muted-foreground">{event.date}</span>
-                                <Badge 
-                                  variant={event.impact === 'positive' ? 'default' : event.impact === 'negative' ? 'destructive' : 'secondary'}
-                                  className="text-xs font-semibold"
-                                >
+                                <Badge variant={event.impact === 'positive' ? 'default' : event.impact === 'negative' ? 'destructive' : 'secondary'}>
                                   {event.impact === 'positive' ? '📈 Good News' : event.impact === 'negative' ? '📉 Challenging' : '📊 Neutral'}
                                 </Badge>
                               </div>
                               <h4 className="font-bold text-xl mb-3">{event.title}</h4>
-                              <p className="text-muted-foreground mb-4 text-lg">{event.description}</p>
+                              <p className="text-muted-foreground mb-4">{event.description}</p>
                               
-                              <div className="bg-white p-4 rounded-lg border border-gray-200">
-                                <h5 className="font-semibold text-primary mb-2 flex items-center gap-2">
-                                  <span className="text-lg">🤔</span>
-                                  Why This Matters
-                                </h5>
+                              <div className="bg-white p-4 rounded-lg border">
+                                <h5 className="font-semibold text-primary mb-2">🤔 Why This Matters</h5>
                                 <p className="text-gray-700">{event.kidExplanation}</p>
                               </div>
-                            </div>
-                            <div className="text-4xl ml-6">
-                              {event.impact === 'positive' ? '🎉' : event.impact === 'negative' ? '😟' : '🤷‍♂️'}
                             </div>
                           </div>
                         </CardContent>
@@ -581,83 +383,13 @@ const RealStockResearch = () => {
                     ))}
                   </div>
                 </TabsContent>
-
-                <TabsContent value="learn" className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Card className="border-2 border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
-                      <CardHeader className="bg-blue-50">
-                        <CardTitle className="flex items-center gap-3 text-xl">
-                          <span className="text-2xl">💡</span>
-                          Why You Know This Company
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="pt-6">
-                        <p className="text-lg leading-relaxed">{stockInfo.whyKidsKnow}</p>
-                      </CardContent>
-                    </Card>
-
-                    <Card className="border-2 border-green-200 shadow-lg hover:shadow-xl transition-all duration-300">
-                      <CardHeader className="bg-green-50">
-                        <CardTitle className="flex items-center gap-3 text-xl">
-                          <span className="text-2xl">🤯</span>
-                          Amazing Fun Fact
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="pt-6">
-                        <p className="text-lg leading-relaxed">{stockInfo.funFact}</p>
-                      </CardContent>
-                    </Card>
-
-                    <Card className="border-2 border-purple-200 md:col-span-2 shadow-lg">
-                      <CardHeader className="bg-purple-50">
-                        <CardTitle className="flex items-center gap-3 text-xl">
-                          <Building2 className="h-6 w-6 text-purple-600" />
-                          What This Company Actually Does
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="pt-6">
-                        <p className="text-lg mb-6 leading-relaxed">{stockInfo.description}</p>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="bg-purple-50 p-6 rounded-xl border border-purple-200">
-                            <h4 className="font-bold mb-3 flex items-center gap-2 text-lg">
-                              <AlertCircle className="h-5 w-5 text-purple-600" />
-                              Stock Basics
-                            </h4>
-                            <p className="text-sm text-gray-700 leading-relaxed">
-                              When you buy a stock, you're buying a tiny piece of the company. 
-                              If the company does well and makes money, your stock might become more valuable!
-                            </p>
-                          </div>
-                          
-                          <div className="bg-yellow-50 p-6 rounded-xl border border-yellow-200">
-                            <h4 className="font-bold mb-3 flex items-center gap-2 text-lg">
-                              <span className="text-lg">⚠️</span>
-                              Remember
-                            </h4>
-                            <p className="text-sm text-gray-700 leading-relaxed">
-                              Stock prices go up and down every day. That's normal! 
-                              Smart investors think about the long term, not just today's price.
-                            </p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </TabsContent>
               </Tabs>
             </div>
           ) : (
             <div className="text-center py-16">
               <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-6" />
-              <h3 className="text-2xl font-bold mb-4">Oops! Something went wrong</h3>
-              <p className="text-muted-foreground mb-6 text-lg">We couldn't load the stock data right now. Don't worry, this happens sometimes!</p>
-              <Button 
-                onClick={() => fetchStockData(selectedStock)} 
-                variant="premium"
-                size="lg"
-                className="hover-glow"
-              >
+              <h3 className="text-2xl font-bold mb-4">Could not load stock data</h3>
+              <Button onClick={() => fetchStockData(selectedStock)} variant="premium" size="lg">
                 <RefreshCw className="h-5 w-5 mr-2" />
                 Try Again
               </Button>
@@ -669,7 +401,7 @@ const RealStockResearch = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/5 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/5 py-12 pt-32">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12 animate-fade-in">
@@ -677,39 +409,60 @@ const RealStockResearch = () => {
             Kid-Friendly Stock Explorer
           </h1>
           <p className="text-xl text-muted-foreground max-w-4xl mx-auto mb-8 leading-relaxed">
-            Learn about companies you know and love! Click on any stock to see real-time prices, charts, and discover fun facts about how these businesses work.
+            Search and explore stocks from companies you know and love! Learn how businesses work and see real stock prices.
           </p>
-          
-          {/* Live update indicator */}
-          <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground mb-8">
-            <div className="flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full border border-green-200">
-              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="font-medium text-green-700">Live Stock Data</span>
-            </div>
-            <div className="flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-full border border-blue-200">
-              <Calendar className="h-4 w-4 text-blue-600" />
-              <span className="font-medium text-blue-700">Updated: {lastUpdate.toLocaleTimeString()}</span>
-            </div>
-          </div>
         </div>
 
-        {/* Search */}
-        <div className="mb-12">
-          <div className="relative max-w-lg mx-auto">
+        {/* Search and Filters */}
+        <div className="mb-12 space-y-6">
+          <div className="relative max-w-2xl mx-auto">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
             <Input
               type="text"
-              placeholder="Search for companies you know..."
+              placeholder="Search for companies like Apple, Disney, Netflix..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-12 h-14 text-lg rounded-2xl border-2 border-primary/20 focus:border-primary shadow-lg"
             />
           </div>
+
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+              <SelectTrigger className="w-48">
+                <SelectValue placeholder="All Categories" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Categories</SelectItem>
+                {categories.map(category => (
+                  <SelectItem key={category} value={category}>{category}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
+              <SelectTrigger className="w-48">
+                <SelectValue placeholder="All Levels" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Levels</SelectItem>
+                {difficulties.map(difficulty => (
+                  <SelectItem key={difficulty} value={difficulty}>{difficulty}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* Results count */}
+        <div className="text-center mb-8">
+          <p className="text-muted-foreground">
+            Showing {displayedStocksList.length} of {filteredStocks.length} companies
+          </p>
         </div>
 
         {/* Stock Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredStocks.map((stock, index) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {displayedStocksList.map((stock, index) => {
             const data = stockData[stock.symbol];
             const isLoading = loading[stock.symbol];
             
@@ -717,101 +470,78 @@ const RealStockResearch = () => {
               <Card 
                 key={stock.symbol} 
                 className="hover-scale cursor-pointer transition-all duration-300 hover:shadow-2xl border-2 hover:border-primary/50 group overflow-hidden"
-                onClick={() => setSelectedStock(stock.symbol)}
-                style={{ animationDelay: `${index * 100}ms` }}
+                onClick={() => {
+                  setSelectedStock(stock.symbol);
+                  if (!data) fetchStockData(stock.symbol);
+                }}
               >
-                <CardHeader className="pb-4 relative overflow-hidden">
-                  {/* Background gradient */}
-                  <div 
-                    className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-300"
-                    style={{ background: `linear-gradient(135deg, ${stock.color}, ${stock.color}80)` }}
-                  />
-                  
-                  <div className="relative z-10">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-4">
-                        <div 
-                          className="text-4xl p-3 rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300"
-                          style={{ backgroundColor: `${stock.color}20` }}
-                        >
-                          {stock.logo}
-                        </div>
-                        <div>
-                          <CardTitle className="text-xl font-bold flex items-center gap-2">
-                            {stock.symbol}
-                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                          </CardTitle>
-                          <p className="text-sm text-muted-foreground font-medium">{stock.kidName}</p>
-                        </div>
-                      </div>
-                      <Badge 
-                        variant="secondary" 
-                        className="text-xs font-semibold"
-                        style={{ backgroundColor: `${stock.color}20`, color: stock.color }}
+                <CardHeader className="pb-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div 
+                        className="text-3xl p-2 rounded-xl shadow-lg"
+                        style={{ backgroundColor: `${stock.color}20` }}
                       >
-                        {stock.difficulty}
-                      </Badge>
+                        {stock.logo}
+                      </div>
+                      <div>
+                        <CardTitle className="text-lg font-bold">{stock.symbol}</CardTitle>
+                        <p className="text-sm text-muted-foreground">{stock.kidName}</p>
+                      </div>
                     </div>
+                    <Badge variant="secondary" className="text-xs">
+                      {stock.difficulty}
+                    </Badge>
                   </div>
                 </CardHeader>
                 
                 <CardContent className="pt-0">
                   {isLoading ? (
-                    <div className="text-center py-8">
-                      <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-3 text-primary" />
-                      <p className="text-sm text-muted-foreground">Loading stock data...</p>
+                    <div className="text-center py-4">
+                      <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-2 text-primary" />
+                      <p className="text-sm text-muted-foreground">Loading...</p>
                     </div>
                   ) : data ? (
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-3xl font-bold" style={{ color: stock.color }}>
+                        <span className="text-2xl font-bold" style={{ color: stock.color }}>
                           {formatPrice(data.price)}
                         </span>
-                        <div className={`flex items-center gap-2 font-semibold ${data.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                          {data.change >= 0 ? <TrendingUp className="h-5 w-5" /> : <TrendingDown className="h-5 w-5" />}
-                          <span className="text-lg">
-                            {formatChange(data.change)} ({formatPercent(data.changePercent)})
-                          </span>
+                        <div className={`flex items-center gap-1 text-sm font-semibold ${data.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          {data.change >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+                          <span>{formatPercent(data.changePercent)}</span>
                         </div>
                       </div>
                       
-                      {/* Mini chart */}
-                      <div className="h-16 -mx-2">
+                      <div className="h-12 -mx-2">
                         <ResponsiveContainer width="100%" height="100%">
                           <LineChart data={data.chartData.slice(-7)}>
                             <Line 
                               type="monotone" 
                               dataKey="price" 
                               stroke={stock.color} 
-                              strokeWidth={3}
+                              strokeWidth={2}
                               dot={false}
                             />
                           </LineChart>
                         </ResponsiveContainer>
                       </div>
                       
-                      <p className="text-muted-foreground leading-relaxed">
-                        {stock.whyKidsKnow}
-                      </p>
-                      
-                      <div className="flex items-center justify-between pt-2 border-t border-border/50">
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <DollarSign className="h-4 w-4" />
-                          <span>Market Cap: {data.marketCap}</span>
-                        </div>
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          className="text-primary hover:text-primary-foreground hover:bg-primary"
-                        >
+                      <div className="flex items-center justify-between pt-2 border-t">
+                        <span className="text-xs text-muted-foreground">{stock.category}</span>
+                        <Button variant="ghost" size="sm" className="text-primary">
                           Explore →
                         </Button>
                       </div>
                     </div>
                   ) : (
-                    <div className="text-center py-8">
-                      <AlertCircle className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
-                      <p className="text-sm text-muted-foreground">Click to load data</p>
+                    <div className="text-center py-4">
+                      <Button variant="outline" size="sm" onClick={(e) => {
+                        e.stopPropagation();
+                        fetchStockData(stock.symbol);
+                      }}>
+                        Load Data
+                      </Button>
                     </div>
                   )}
                 </CardContent>
@@ -820,45 +550,29 @@ const RealStockResearch = () => {
           })}
         </div>
 
-        {/* No Results */}
-        {filteredStocks.length === 0 && (
-          <div className="text-center py-16 animate-fade-in">
-            <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-2xl font-bold mb-4">No companies found</h3>
-            <p className="text-muted-foreground text-lg">Try searching for something else! Maybe "Apple" or "Disney"?</p>
+        {/* Load More Button */}
+        {displayedStocks < filteredStocks.length && (
+          <div className="text-center mt-12">
+            <Button 
+              variant="outline" 
+              size="lg"
+              onClick={() => setDisplayedStocks(prev => prev + 12)}
+              className="hover-scale"
+            >
+              <Plus className="h-5 w-5 mr-2" />
+              Load More Companies ({filteredStocks.length - displayedStocks} remaining)
+            </Button>
           </div>
         )}
 
-        {/* Educational Footer */}
-        <div className="mt-16 text-center">
-          <Card className="max-w-4xl mx-auto border-2 border-primary/20 shadow-xl">
-            <CardContent className="pt-8">
-              <h3 className="text-2xl font-bold mb-4 flex items-center justify-center gap-3">
-                <span className="text-3xl">🎓</span>
-                Learning About Stocks
-              </h3>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                Stocks represent ownership in companies you know and use every day. When you buy a stock, 
-                you become a tiny owner of that company! As the company grows and makes money, 
-                your stock can become more valuable.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                  <h4 className="font-bold text-blue-800 mb-2">📈 Price Changes</h4>
-                  <p className="text-sm text-blue-700">Stock prices go up and down based on how well the company is doing and what investors think about its future.</p>
-                </div>
-                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                  <h4 className="font-bold text-green-800 mb-2">💰 Making Money</h4>
-                  <p className="text-sm text-green-700">You can make money if the stock price goes up, or if the company pays dividends (sharing profits with owners).</p>
-                </div>
-                <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                  <h4 className="font-bold text-purple-800 mb-2">⚠️ Risks</h4>
-                  <p className="text-sm text-purple-700">Stock prices can also go down, which means you might lose money. That's why it's important to learn before investing!</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        {/* No Results */}
+        {filteredStocks.length === 0 && (
+          <div className="text-center py-16">
+            <div className="text-6xl mb-4">🔍</div>
+            <h3 className="text-2xl font-bold mb-4">No companies found</h3>
+            <p className="text-muted-foreground text-lg">Try adjusting your search or filters!</p>
+          </div>
+        )}
       </div>
     </div>
   );
