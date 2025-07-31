@@ -323,10 +323,13 @@ const EntrepreneurshipGame = () => {
             </div>
 
             <Button 
-              onClick={() => setGameStarted(true)}
-              variant="premium" 
+              onClick={() => {
+                console.log('Start button clicked!');
+                setGameStarted(true);
+              }}
+              variant="default" 
               size="lg" 
-              className="text-lg px-8 py-4 hover-glow"
+              className="text-lg px-8 py-4 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white shadow-lg hover:shadow-xl transition-all duration-300"
             >
               Start Your Business Journey
               <ArrowRight className="ml-2 w-5 h-5" />

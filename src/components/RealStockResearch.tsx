@@ -47,7 +47,7 @@ const RealStockResearch = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [displayCount, setDisplayCount] = useState(20);
+  const [displayCount, setDisplayCount] = useState(100);
   const [activeTab, setActiveTab] = useState('overview');
 
   // 100 Popular stocks that kids would recognize
@@ -648,7 +648,10 @@ const RealStockResearch = () => {
               type="text"
               placeholder="Search for companies you know..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                console.log('Search changed:', e.target.value);
+                setSearchTerm(e.target.value);
+              }}
               className="pl-10 py-3 text-lg"
             />
           </div>
@@ -659,7 +662,10 @@ const RealStockResearch = () => {
                 key={category}
                 variant={selectedCategory === category ? "default" : "outline"}
                 size="sm"
-                onClick={() => setSelectedCategory(category)}
+                onClick={() => {
+                  console.log('Category clicked:', category);
+                  setSelectedCategory(category);
+                }}
                 className="transition-all duration-300 hover:scale-105"
               >
                 {category}
@@ -674,7 +680,10 @@ const RealStockResearch = () => {
             <Card 
               key={stock.symbol} 
               className="cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 professional-card"
-              onClick={() => handleStockClick(stock)}
+              onClick={() => {
+                console.log('Stock clicked:', stock.symbol);
+                handleStockClick(stock);
+              }}
             >
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
@@ -725,12 +734,32 @@ const RealStockResearch = () => {
         {filteredStocks.length > displayCount && (
           <div className="text-center">
             <Button 
-              onClick={() => setDisplayCount(prev => prev + 20)}
+              onClick={() => {
+                console.log('Load more clicked!');
+                setDisplayCount(prev => prev + 20);
+              }}
               variant="outline"
               size="lg"
               className="hover:bg-primary hover:text-primary-foreground transition-all duration-300"
             >
-              Load More Companies
+              Load More Companies ({filteredStocks.length - displayCount} remaining)
+            </Button>
+          </div>
+        )}
+
+        {/* Show All Button when showing all stocks */}
+        {displayCount >= filteredStocks.length && filteredStocks.length > 20 && (
+          <div className="text-center">
+            <Button 
+              onClick={() => {
+                console.log('Show less clicked!');
+                setDisplayCount(20);
+              }}
+              variant="outline"
+              size="lg"
+              className="hover:bg-primary hover:text-primary-foreground transition-all duration-300"
+            >
+              Show Less Companies
             </Button>
           </div>
         )}
