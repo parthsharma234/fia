@@ -91,6 +91,26 @@
       "established": "2023",
       "members": 8,
       "studentsServed": 45,
+      "team": [
+        {
+          "name": "Parth Sharma",
+          "title": "Chapter President",
+          "role": "exec",
+          "description": "Leading financial literacy education initiatives across Iowa and building partnerships with local schools."
+        },
+        {
+          "name": "Riley Johnson",
+          "title": "Program Coordinator",
+          "role": "team",
+          "description": "Organizes workshops and manages student outreach programs."
+        },
+        {
+          "name": "Alex Chen",
+          "title": "Community Liaison",
+          "role": "team",
+          "description": "Builds relationships with local businesses and community organizations."
+        }
+      ],
       "events": [
         {
           "title": "Budgeting Bootcamp",
@@ -116,6 +136,20 @@
       "established": "2024",
       "members": 6,
       "studentsServed": 30,
+      "team": [
+        {
+          "name": "Jessica Martinez",
+          "title": "Chapter Lead",
+          "role": "exec",
+          "description": "Pioneering financial education programs in New Jersey high schools."
+        },
+        {
+          "name": "Michael Brown",
+          "title": "Workshop Facilitator",
+          "role": "team",
+          "description": "Leads interactive financial literacy sessions for students."
+        }
+      ],
       "events": [
         {
           "title": "Credit Score Workshop",
@@ -141,6 +175,20 @@
       "established": "2024",
       "members": 5,
       "studentsServed": 25,
+      "team": [
+        {
+          "name": "Taylor Kim",
+          "title": "Innovation Director",
+          "role": "exec",
+          "description": "Developing cutting-edge financial education tools and digital resources."
+        },
+        {
+          "name": "Jordan Davis",
+          "title": "Tech Coordinator",
+          "role": "team",
+          "description": "Manages digital platforms and online learning resources."
+        }
+      ],
       "events": [
         {
           "title": "Financial Technology Fair",
@@ -160,6 +208,26 @@
       "established": "2024",
       "members": 7,
       "studentsServed": 35,
+      "team": [
+        {
+          "name": "Sofia Rodriguez",
+          "title": "Regional Director",
+          "role": "exec",
+          "description": "Expanding financial literacy programs across Texas and building state-wide partnerships."
+        },
+        {
+          "name": "Cameron Wilson",
+          "title": "Student Engagement Lead",
+          "role": "team",
+          "description": "Creates engaging content and activities for student workshops."
+        },
+        {
+          "name": "Maya Patel",
+          "title": "Partnership Coordinator",
+          "role": "team",
+          "description": "Develops relationships with schools and educational organizations."
+        }
+      ],
       "events": [
         {
           "title": "Investment Club Launch",

@@ -13,6 +13,7 @@ import ChapterDetail from "./pages/ChapterDetail";
 import Contact from "./pages/Contact";
 import StockResearch from "./pages/StockResearch";
 import NotFound from "./pages/NotFound";
+import EntrepreneurshipGame from "./pages/EntrepreneurshipGame";
 import ScrollToTop from "./components/ScrollTo";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/chapters/:state" element={<ChapterDetail />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/stock-research" element={<StockResearch />} />
+          <Route path="/entrepreneurship-game" element={<EntrepreneurshipGame />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

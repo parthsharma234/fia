@@ -26,6 +26,7 @@ const Navigation = () => {
     { name: 'Team', href: '/team' },
     { name: 'Chapters', href: '/chapters' },
     { name: 'Stock Research', href: '/stock-research' },
+    { name: 'Entrepreneur Game', href: '/entrepreneurship-game' },
   ];
 
   return (
