@@ -50,60 +50,148 @@ const RealStockResearch = () => {
   const [displayCount, setDisplayCount] = useState(20);
   const [activeTab, setActiveTab] = useState('overview');
 
-  // Popular stocks that kids would recognize
+  // 100 Popular stocks that kids would recognize
   const popularStocks = [
+    // Technology Giants
     { symbol: 'AAPL', name: 'Apple Inc.', kidFriendlyName: 'iPhone & iPad Maker', sector: 'Technology' },
     { symbol: 'GOOGL', name: 'Alphabet Inc.', kidFriendlyName: 'Google & YouTube', sector: 'Technology' },
     { symbol: 'MSFT', name: 'Microsoft Corporation', kidFriendlyName: 'Xbox & Windows', sector: 'Technology' },
     { symbol: 'AMZN', name: 'Amazon.com Inc.', kidFriendlyName: 'Online Shopping Giant', sector: 'Consumer Discretionary' },
     { symbol: 'TSLA', name: 'Tesla Inc.', kidFriendlyName: 'Electric Cars', sector: 'Consumer Discretionary' },
     { symbol: 'META', name: 'Meta Platforms Inc.', kidFriendlyName: 'Facebook & Instagram', sector: 'Technology' },
+    { symbol: 'NVDA', name: 'NVIDIA Corporation', kidFriendlyName: 'Gaming Graphics Cards', sector: 'Technology' },
+    { symbol: 'AMD', name: 'Advanced Micro Devices Inc.', kidFriendlyName: 'Computer Chips', sector: 'Technology' },
+    { symbol: 'INTC', name: 'Intel Corporation', kidFriendlyName: 'Computer Processors', sector: 'Technology' },
+    { symbol: 'ADBE', name: 'Adobe Inc.', kidFriendlyName: 'Photoshop & Creative Software', sector: 'Technology' },
+    
+    // Entertainment & Media
     { symbol: 'NFLX', name: 'Netflix Inc.', kidFriendlyName: 'Movie & TV Streaming', sector: 'Entertainment' },
     { symbol: 'DIS', name: 'The Walt Disney Company', kidFriendlyName: 'Disney Movies & Parks', sector: 'Entertainment' },
+    { symbol: 'SPOT', name: 'Spotify Technology S.A.', kidFriendlyName: 'Music Streaming', sector: 'Entertainment' },
+    { symbol: 'RBLX', name: 'Roblox Corporation', kidFriendlyName: 'Online Gaming Platform', sector: 'Entertainment' },
+    { symbol: 'EA', name: 'Electronic Arts Inc.', kidFriendlyName: 'Video Game Maker', sector: 'Entertainment' },
+    { symbol: 'ATVI', name: 'Activision Blizzard Inc.', kidFriendlyName: 'Call of Duty Games', sector: 'Entertainment' },
+    { symbol: 'TTWO', name: 'Take-Two Interactive Software Inc.', kidFriendlyName: 'Grand Theft Auto Games', sector: 'Entertainment' },
+    { symbol: 'WBD', name: 'Warner Bros. Discovery Inc.', kidFriendlyName: 'Movies & TV Shows', sector: 'Entertainment' },
+    { symbol: 'PARA', name: 'Paramount Global', kidFriendlyName: 'Movies & TV Network', sector: 'Entertainment' },
+    { symbol: 'ROKU', name: 'Roku Inc.', kidFriendlyName: 'TV Streaming Device', sector: 'Technology' },
+    
+    // Social Media & Apps
+    { symbol: 'SNAP', name: 'Snap Inc.', kidFriendlyName: 'Snapchat App', sector: 'Technology' },
+    { symbol: 'PINS', name: 'Pinterest Inc.', kidFriendlyName: 'Photo Sharing App', sector: 'Technology' },
+    { symbol: 'ZM', name: 'Zoom Video Communications Inc.', kidFriendlyName: 'Video Calling App', sector: 'Technology' },
+    { symbol: 'UBER', name: 'Uber Technologies Inc.', kidFriendlyName: 'Ride Sharing App', sector: 'Technology' },
+    { symbol: 'LYFT', name: 'Lyft Inc.', kidFriendlyName: 'Ride Sharing Service', sector: 'Technology' },
+    { symbol: 'ABNB', name: 'Airbnb Inc.', kidFriendlyName: 'Home Rental App', sector: 'Consumer Discretionary' },
+    { symbol: 'DASH', name: 'DoorDash Inc.', kidFriendlyName: 'Food Delivery App', sector: 'Consumer Discretionary' },
+    { symbol: 'GRUB', name: 'Grubhub Inc.', kidFriendlyName: 'Restaurant Delivery', sector: 'Consumer Discretionary' },
+    
+    // Retail & Consumer
     { symbol: 'NKE', name: 'Nike Inc.', kidFriendlyName: 'Sports Shoes & Clothes', sector: 'Consumer Discretionary' },
+    { symbol: 'ADDYY', name: 'Adidas AG', kidFriendlyName: 'Sports Brand', sector: 'Consumer Discretionary' },
+    { symbol: 'LULU', name: 'Lululemon Athletica Inc.', kidFriendlyName: 'Yoga & Sports Clothes', sector: 'Consumer Discretionary' },
+    { symbol: 'UAA', name: 'Under Armour Inc.', kidFriendlyName: 'Sports Apparel', sector: 'Consumer Discretionary' },
     { symbol: 'MCD', name: 'McDonald\'s Corporation', kidFriendlyName: 'Fast Food Restaurant', sector: 'Consumer Discretionary' },
     { symbol: 'SBUX', name: 'Starbucks Corporation', kidFriendlyName: 'Coffee Shop', sector: 'Consumer Discretionary' },
-    { symbol: 'KO', name: 'The Coca-Cola Company', kidFriendlyName: 'Coca-Cola Drinks', sector: 'Consumer Staples' },
-    { symbol: 'PEP', name: 'PepsiCo Inc.', kidFriendlyName: 'Pepsi & Snacks', sector: 'Consumer Staples' },
+    { symbol: 'CMG', name: 'Chipotle Mexican Grill Inc.', kidFriendlyName: 'Burrito Restaurant', sector: 'Consumer Discretionary' },
+    { symbol: 'YUM', name: 'Yum! Brands Inc.', kidFriendlyName: 'KFC, Taco Bell & Pizza Hut', sector: 'Consumer Discretionary' },
+    { symbol: 'DNKN', name: 'Dunkin\' Brands Group Inc.', kidFriendlyName: 'Donut & Coffee Shop', sector: 'Consumer Discretionary' },
+    
+    // Major Retailers
     { symbol: 'WMT', name: 'Walmart Inc.', kidFriendlyName: 'Big Store Chain', sector: 'Consumer Staples' },
     { symbol: 'TGT', name: 'Target Corporation', kidFriendlyName: 'Target Stores', sector: 'Consumer Discretionary' },
     { symbol: 'COST', name: 'Costco Wholesale Corporation', kidFriendlyName: 'Bulk Shopping Store', sector: 'Consumer Staples' },
     { symbol: 'HD', name: 'The Home Depot Inc.', kidFriendlyName: 'Home Improvement Store', sector: 'Consumer Discretionary' },
     { symbol: 'LOW', name: 'Lowe\'s Companies Inc.', kidFriendlyName: 'Home & Garden Store', sector: 'Consumer Discretionary' },
-    { symbol: 'ADBE', name: 'Adobe Inc.', kidFriendlyName: 'Photoshop & Creative Software', sector: 'Technology' },
-    { symbol: 'CRM', name: 'Salesforce Inc.', kidFriendlyName: 'Business Software', sector: 'Technology' },
-    { symbol: 'NVDA', name: 'NVIDIA Corporation', kidFriendlyName: 'Gaming Graphics Cards', sector: 'Technology' },
-    { symbol: 'AMD', name: 'Advanced Micro Devices Inc.', kidFriendlyName: 'Computer Chips', sector: 'Technology' },
-    { symbol: 'INTC', name: 'Intel Corporation', kidFriendlyName: 'Computer Processors', sector: 'Technology' },
-    { symbol: 'ORCL', name: 'Oracle Corporation', kidFriendlyName: 'Database Software', sector: 'Technology' },
-    { symbol: 'IBM', name: 'International Business Machines Corporation', kidFriendlyName: 'Business Technology', sector: 'Technology' },
-    { symbol: 'CSCO', name: 'Cisco Systems Inc.', kidFriendlyName: 'Internet Equipment', sector: 'Technology' },
+    { symbol: 'BBY', name: 'Best Buy Co. Inc.', kidFriendlyName: 'Electronics Store', sector: 'Consumer Discretionary' },
+    { symbol: 'ETSY', name: 'Etsy Inc.', kidFriendlyName: 'Handmade Crafts Store', sector: 'Consumer Discretionary' },
+    { symbol: 'SHOP', name: 'Shopify Inc.', kidFriendlyName: 'Online Store Builder', sector: 'Technology' },
+    
+    // Food & Beverages
+    { symbol: 'KO', name: 'The Coca-Cola Company', kidFriendlyName: 'Coca-Cola Drinks', sector: 'Consumer Staples' },
+    { symbol: 'PEP', name: 'PepsiCo Inc.', kidFriendlyName: 'Pepsi & Snacks', sector: 'Consumer Staples' },
+    { symbol: 'MNST', name: 'Monster Beverage Corporation', kidFriendlyName: 'Energy Drinks', sector: 'Consumer Staples' },
+    { symbol: 'KDP', name: 'Keurig Dr Pepper Inc.', kidFriendlyName: 'Coffee & Soft Drinks', sector: 'Consumer Staples' },
+    { symbol: 'HSY', name: 'The Hershey Company', kidFriendlyName: 'Chocolate & Candy', sector: 'Consumer Staples' },
+    { symbol: 'GIS', name: 'General Mills Inc.', kidFriendlyName: 'Cereal & Food', sector: 'Consumer Staples' },
+    { symbol: 'K', name: 'Kellogg Company', kidFriendlyName: 'Cereal & Snacks', sector: 'Consumer Staples' },
+    
+    // Financial Services
     { symbol: 'V', name: 'Visa Inc.', kidFriendlyName: 'Credit Card Payments', sector: 'Financial Services' },
     { symbol: 'MA', name: 'Mastercard Incorporated', kidFriendlyName: 'Credit Card Company', sector: 'Financial Services' },
     { symbol: 'PYPL', name: 'PayPal Holdings Inc.', kidFriendlyName: 'Online Payments', sector: 'Financial Services' },
     { symbol: 'SQ', name: 'Block Inc.', kidFriendlyName: 'Square Payment Systems', sector: 'Financial Services' },
-    { symbol: 'SPOT', name: 'Spotify Technology S.A.', kidFriendlyName: 'Music Streaming', sector: 'Entertainment' },
-    { symbol: 'UBER', name: 'Uber Technologies Inc.', kidFriendlyName: 'Ride Sharing App', sector: 'Technology' },
-    { symbol: 'LYFT', name: 'Lyft Inc.', kidFriendlyName: 'Ride Sharing Service', sector: 'Technology' },
-    { symbol: 'ABNB', name: 'Airbnb Inc.', kidFriendlyName: 'Home Rental App', sector: 'Consumer Discretionary' },
-    { symbol: 'TWTR', name: 'Twitter Inc.', kidFriendlyName: 'Social Media Platform', sector: 'Technology' },
-    { symbol: 'SNAP', name: 'Snap Inc.', kidFriendlyName: 'Snapchat App', sector: 'Technology' },
-    { symbol: 'ZM', name: 'Zoom Video Communications Inc.', kidFriendlyName: 'Video Calling App', sector: 'Technology' },
-    { symbol: 'ROKU', name: 'Roku Inc.', kidFriendlyName: 'TV Streaming Device', sector: 'Technology' },
-    { symbol: 'PINS', name: 'Pinterest Inc.', kidFriendlyName: 'Photo Sharing App', sector: 'Technology' },
-    { symbol: 'ETSY', name: 'Etsy Inc.', kidFriendlyName: 'Handmade Crafts Store', sector: 'Consumer Discretionary' },
-    { symbol: 'SHOP', name: 'Shopify Inc.', kidFriendlyName: 'Online Store Builder', sector: 'Technology' },
-    { symbol: 'SQ', name: 'Block Inc.', kidFriendlyName: 'Cash App & Payments', sector: 'Financial Services' },
-    { symbol: 'RBLX', name: 'Roblox Corporation', kidFriendlyName: 'Online Gaming Platform', sector: 'Entertainment' },
-    { symbol: 'EA', name: 'Electronic Arts Inc.', kidFriendlyName: 'Video Game Maker', sector: 'Entertainment' },
-    { symbol: 'ATVI', name: 'Activision Blizzard Inc.', kidFriendlyName: 'Call of Duty Games', sector: 'Entertainment' },
-    { symbol: 'TTWO', name: 'Take-Two Interactive Software Inc.', kidFriendlyName: 'Grand Theft Auto Games', sector: 'Entertainment' },
-    { symbol: 'U', name: 'Unity Software Inc.', kidFriendlyName: 'Game Development Software', sector: 'Technology' },
-    { symbol: 'DKNG', name: 'DraftKings Inc.', kidFriendlyName: 'Sports Betting App', sector: 'Entertainment' },
-    { symbol: 'PENN', name: 'Penn Entertainment Inc.', kidFriendlyName: 'Gaming & Entertainment', sector: 'Entertainment' },
-    { symbol: 'MGM', name: 'MGM Resorts International', kidFriendlyName: 'Casino & Hotels', sector: 'Entertainment' },
-    { symbol: 'LVS', name: 'Las Vegas Sands Corp.', kidFriendlyName: 'Las Vegas Casinos', sector: 'Entertainment' },
-    { symbol: 'WYNN', name: 'Wynn Resorts Limited', kidFriendlyName: 'Luxury Casino Resorts', sector: 'Entertainment' }
+    { symbol: 'AXP', name: 'American Express Company', kidFriendlyName: 'Credit Cards', sector: 'Financial Services' },
+    { symbol: 'JPM', name: 'JPMorgan Chase & Co.', kidFriendlyName: 'Big Bank', sector: 'Financial Services' },
+    { symbol: 'BAC', name: 'Bank of America Corporation', kidFriendlyName: 'Major Bank', sector: 'Financial Services' },
+    
+    // Healthcare & Biotech
+    { symbol: 'JNJ', name: 'Johnson & Johnson', kidFriendlyName: 'Band-Aids & Medicine', sector: 'Healthcare' },
+    { symbol: 'PFE', name: 'Pfizer Inc.', kidFriendlyName: 'Medicine & Vaccines', sector: 'Healthcare' },
+    { symbol: 'MRNA', name: 'Moderna Inc.', kidFriendlyName: 'COVID Vaccine Company', sector: 'Healthcare' },
+    { symbol: 'ABBV', name: 'AbbVie Inc.', kidFriendlyName: 'Medicine Company', sector: 'Healthcare' },
+    { symbol: 'TMO', name: 'Thermo Fisher Scientific Inc.', kidFriendlyName: 'Science Equipment', sector: 'Healthcare' },
+    
+    // Automotive
+    { symbol: 'F', name: 'Ford Motor Company', kidFriendlyName: 'Ford Cars & Trucks', sector: 'Consumer Discretionary' },
+    { symbol: 'GM', name: 'General Motors Company', kidFriendlyName: 'Chevy & Cadillac Cars', sector: 'Consumer Discretionary' },
+    { symbol: 'RIVN', name: 'Rivian Automotive Inc.', kidFriendlyName: 'Electric Trucks', sector: 'Consumer Discretionary' },
+    { symbol: 'LCID', name: 'Lucid Group Inc.', kidFriendlyName: 'Luxury Electric Cars', sector: 'Consumer Discretionary' },
+    
+    // Airlines & Travel
+    { symbol: 'AAL', name: 'American Airlines Group Inc.', kidFriendlyName: 'Airline Company', sector: 'Transportation' },
+    { symbol: 'DAL', name: 'Delta Air Lines Inc.', kidFriendlyName: 'Delta Airlines', sector: 'Transportation' },
+    { symbol: 'UAL', name: 'United Airlines Holdings Inc.', kidFriendlyName: 'United Airlines', sector: 'Transportation' },
+    { symbol: 'CCL', name: 'Carnival Corporation', kidFriendlyName: 'Cruise Ships', sector: 'Consumer Discretionary' },
+    { symbol: 'MAR', name: 'Marriott International Inc.', kidFriendlyName: 'Hotels', sector: 'Consumer Discretionary' },
+    
+    // Energy & Utilities
+    { symbol: 'XOM', name: 'Exxon Mobil Corporation', kidFriendlyName: 'Oil & Gas Company', sector: 'Energy' },
+    { symbol: 'CVX', name: 'Chevron Corporation', kidFriendlyName: 'Gas Stations', sector: 'Energy' },
+    { symbol: 'ENPH', name: 'Enphase Energy Inc.', kidFriendlyName: 'Solar Power Equipment', sector: 'Energy' },
+    { symbol: 'NEE', name: 'NextEra Energy Inc.', kidFriendlyName: 'Clean Energy Company', sector: 'Energy' },
+    
+    // Telecom & Internet
+    { symbol: 'VZ', name: 'Verizon Communications Inc.', kidFriendlyName: 'Cell Phone Service', sector: 'Technology' },
+    { symbol: 'T', name: 'AT&T Inc.', kidFriendlyName: 'Phone & Internet', sector: 'Technology' },
+    { symbol: 'CMCSA', name: 'Comcast Corporation', kidFriendlyName: 'Cable TV & Internet', sector: 'Technology' },
+    { symbol: 'CHTR', name: 'Charter Communications Inc.', kidFriendlyName: 'Internet Provider', sector: 'Technology' },
+    
+    // Cloud & Software
+    { symbol: 'CRM', name: 'Salesforce Inc.', kidFriendlyName: 'Business Software', sector: 'Technology' },
+    { symbol: 'ORCL', name: 'Oracle Corporation', kidFriendlyName: 'Database Software', sector: 'Technology' },
+    { symbol: 'IBM', name: 'International Business Machines Corporation', kidFriendlyName: 'Business Technology', sector: 'Technology' },
+    { symbol: 'CSCO', name: 'Cisco Systems Inc.', kidFriendlyName: 'Internet Equipment', sector: 'Technology' },
+    { symbol: 'NOW', name: 'ServiceNow Inc.', kidFriendlyName: 'Business Software', sector: 'Technology' },
+    { symbol: 'SNOW', name: 'Snowflake Inc.', kidFriendlyName: 'Cloud Computing', sector: 'Technology' },
+    { symbol: 'CRM', name: 'Salesforce Inc.', kidFriendlyName: 'Customer Management', sector: 'Technology' },
+    
+    // Semiconductors
+    { symbol: 'TSM', name: 'Taiwan Semiconductor Manufacturing Company', kidFriendlyName: 'Chip Maker', sector: 'Technology' },
+    { symbol: 'AVGO', name: 'Broadcom Inc.', kidFriendlyName: 'Computer Chips', sector: 'Technology' },
+    { symbol: 'QCOM', name: 'QUALCOMM Incorporated', kidFriendlyName: 'Phone Chips', sector: 'Technology' },
+    { symbol: 'TXN', name: 'Texas Instruments Incorporated', kidFriendlyName: 'Calculator Company', sector: 'Technology' },
+    { symbol: 'AMAT', name: 'Applied Materials Inc.', kidFriendlyName: 'Chip Making Equipment', sector: 'Technology' },
+    
+    // Real Estate & Construction
+    { symbol: 'PLD', name: 'Prologis Inc.', kidFriendlyName: 'Warehouse Buildings', sector: 'Real Estate' },
+    { symbol: 'AMT', name: 'American Tower Corporation', kidFriendlyName: 'Cell Phone Towers', sector: 'Real Estate' },
+    { symbol: 'CCI', name: 'Crown Castle International Corp.', kidFriendlyName: 'Communication Towers', sector: 'Real Estate' },
+    
+    // Industrials
+    { symbol: 'CAT', name: 'Caterpillar Inc.', kidFriendlyName: 'Construction Equipment', sector: 'Industrials' },
+    { symbol: 'BA', name: 'The Boeing Company', kidFriendlyName: 'Airplane Maker', sector: 'Industrials' },
+    { symbol: 'DE', name: 'Deere & Company', kidFriendlyName: 'Farm Equipment', sector: 'Industrials' },
+    { symbol: 'UPS', name: 'United Parcel Service Inc.', kidFriendlyName: 'Package Delivery', sector: 'Industrials' },
+    { symbol: 'FDX', name: 'FedEx Corporation', kidFriendlyName: 'Shipping Company', sector: 'Industrials' },
+    
+    // Miscellaneous
+    { symbol: 'WBA', name: 'Walgreens Boots Alliance Inc.', kidFriendlyName: 'Pharmacy Store', sector: 'Healthcare' },
+    { symbol: 'CVS', name: 'CVS Health Corporation', kidFriendlyName: 'Pharmacy & Health', sector: 'Healthcare' },
+    { symbol: 'COIN', name: 'Coinbase Global Inc.', kidFriendlyName: 'Cryptocurrency Exchange', sector: 'Financial Services' },
+    { symbol: 'HOOD', name: 'Robinhood Markets Inc.', kidFriendlyName: 'Stock Trading App', sector: 'Financial Services' },
+    { symbol: 'ZG', name: 'Zillow Group Inc.', kidFriendlyName: 'Home Search Website', sector: 'Technology' },
+    { symbol: 'PTON', name: 'Peloton Interactive Inc.', kidFriendlyName: 'Exercise Bikes', sector: 'Consumer Discretionary' }
   ];
 
   const categories = [

@@ -610,28 +610,383 @@ const EntrepreneurshipGame = () => {
                 </Card>
               </TabsContent>
 
-              {/* Additional steps would continue here... */}
+              {/* Step 3: Launch */}
               <TabsContent value="step-3">
                 <Card>
                   <CardHeader>
                     <CardTitle>🚀 Launch Your Product!</CardTitle>
                     <p className="text-muted-foreground">
-                      Time to go to market! How will you launch your product?
+                      Time to go to market! Choose your launch strategy carefully.
                     </p>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-center py-8">
-                      <div className="text-6xl mb-4">🎉</div>
-                      <h3 className="text-2xl font-bold mb-4">Congratulations!</h3>
-                      <p className="text-muted-foreground mb-6">
-                        You've successfully launched {gameState.productName}!
-                      </p>
-                      <Button 
-                        onClick={() => setGameState(prev => ({ ...prev, currentStep: 4, completedSteps: [...prev.completedSteps, 3] }))}
-                        variant="premium"
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <Button
+                        variant="outline"
+                        className="p-6 h-auto text-left"
+                        onClick={() => handleBudgetDecision(
+                          'Grand launch event',
+                          100,
+                          { customers: 30, satisfaction: 15, revenue: 150 }
+                        )}
                       >
-                        Continue Growing Your Business
+                        <div>
+                          <div className="font-semibold mb-2">🎉 Grand Launch Event</div>
+                          <div className="text-sm text-muted-foreground mb-2">
+                            Cost: $100 | +30 Customers, +15 Satisfaction, +$150 Revenue
+                          </div>
+                          <p className="text-xs">Host a big party to announce your product</p>
+                        </div>
                       </Button>
+
+                      <Button
+                        variant="outline"
+                        className="p-6 h-auto text-left"
+                        onClick={() => handleBudgetDecision(
+                          'Soft launch to friends and family',
+                          25,
+                          { customers: 15, satisfaction: 10, revenue: 75 }
+                        )}
+                      >
+                        <div>
+                          <div className="font-semibold mb-2">👥 Soft Launch</div>
+                          <div className="text-sm text-muted-foreground mb-2">
+                            Cost: $25 | +15 Customers, +10 Satisfaction, +$75 Revenue
+                          </div>
+                          <p className="text-xs">Start small with people you know</p>
+                        </div>
+                      </Button>
+
+                      <Button
+                        variant="outline"
+                        className="p-6 h-auto text-left"
+                        onClick={() => handleBudgetDecision(
+                          'Online-only launch',
+                          50,
+                          { customers: 40, satisfaction: 8, revenue: 100 }
+                        )}
+                      >
+                        <div>
+                          <div className="font-semibold mb-2">💻 Online Launch</div>
+                          <div className="text-sm text-muted-foreground mb-2">
+                            Cost: $50 | +40 Customers, +8 Satisfaction, +$100 Revenue
+                          </div>
+                          <p className="text-xs">Launch through social media and websites</p>
+                        </div>
+                      </Button>
+
+                      <Button
+                        variant="outline"
+                        className="p-6 h-auto text-left"
+                        onClick={() => handleBudgetDecision(
+                          'Partner with influencer',
+                          150,
+                          { customers: 60, satisfaction: 12, revenue: 200 }
+                        )}
+                      >
+                        <div>
+                          <div className="font-semibold mb-2">🌟 Influencer Partnership</div>
+                          <div className="text-sm text-muted-foreground mb-2">
+                            Cost: $150 | +60 Customers, +12 Satisfaction, +$200 Revenue
+                          </div>
+                          <p className="text-xs">Team up with a popular social media star</p>
+                        </div>
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* Step 4: Grow */}
+              <TabsContent value="step-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>📈 Grow Your Business</CardTitle>
+                    <p className="text-muted-foreground">
+                      Your business is running! How will you handle growth challenges?
+                    </p>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <Button
+                          variant="outline"
+                          className="p-6 h-auto text-left"
+                          onClick={() => handleBudgetDecision(
+                            'Hire more employees',
+                            200,
+                            { customers: 20, satisfaction: 25, revenue: 100 }
+                          )}
+                        >
+                          <div>
+                            <div className="font-semibold mb-2">👥 Hire Team Members</div>
+                            <div className="text-sm text-muted-foreground mb-2">
+                              Cost: $200 | +20 Customers, +25 Satisfaction, +$100 Revenue
+                            </div>
+                            <p className="text-xs">Get help to serve customers better</p>
+                          </div>
+                        </Button>
+
+                        <Button
+                          variant="outline"
+                          className="p-6 h-auto text-left"
+                          onClick={() => handleBudgetDecision(
+                            'Expand to new markets',
+                            150,
+                            { customers: 50, satisfaction: -5, revenue: 200 }
+                          )}
+                        >
+                          <div>
+                            <div className="font-semibold mb-2">🌍 Expand Markets</div>
+                            <div className="text-sm text-muted-foreground mb-2">
+                              Cost: $150 | +50 Customers, -5 Satisfaction, +$200 Revenue
+                            </div>
+                            <p className="text-xs">Sell in new cities or countries</p>
+                          </div>
+                        </Button>
+
+                        <Button
+                          variant="outline"
+                          className="p-6 h-auto text-left"
+                          onClick={() => handleBudgetDecision(
+                            'Improve product quality',
+                            100,
+                            { customers: 10, satisfaction: 30, revenue: 50 }
+                          )}
+                        >
+                          <div>
+                            <div className="font-semibold mb-2">⚡ Improve Quality</div>
+                            <div className="text-sm text-muted-foreground mb-2">
+                              Cost: $100 | +10 Customers, +30 Satisfaction, +$50 Revenue
+                            </div>
+                            <p className="text-xs">Make your product even better</p>
+                          </div>
+                        </Button>
+
+                        <Button
+                          variant="outline"
+                          className="p-6 h-auto text-left"
+                          onClick={() => handleBudgetDecision(
+                            'Launch loyalty program',
+                            75,
+                            { customers: 25, satisfaction: 20, revenue: 125 }
+                          )}
+                        >
+                          <div>
+                            <div className="font-semibold mb-2">💎 Loyalty Program</div>
+                            <div className="text-sm text-muted-foreground mb-2">
+                              Cost: $75 | +25 Customers, +20 Satisfaction, +$125 Revenue
+                            </div>
+                            <p className="text-xs">Reward your best customers</p>
+                          </div>
+                        </Button>
+                      </div>
+
+                      <div className="text-center pt-4">
+                        <Button 
+                          onClick={() => setGameState(prev => ({ ...prev, currentStep: 5, completedSteps: [...prev.completedSteps, 4] }))}
+                          variant="default"
+                          size="lg"
+                        >
+                          Ready for Investor Pitch
+                          <ArrowRight className="ml-2 w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* Step 5: Pitch to Investors */}
+              <TabsContent value="step-5">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>💼 Pitch to Investors</CardTitle>
+                    <p className="text-muted-foreground">
+                      Present your business to potential investors. Show them why they should invest!
+                    </p>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-6">
+                      <div className="card-gradient p-6 rounded-xl">
+                        <h3 className="text-xl font-bold mb-4">Your Business Summary</h3>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                          <div>
+                            <div className="text-2xl font-bold text-green-600">${gameState.revenue}</div>
+                            <div className="text-sm text-muted-foreground">Total Revenue</div>
+                          </div>
+                          <div>
+                            <div className="text-2xl font-bold text-blue-600">{gameState.customers}</div>
+                            <div className="text-sm text-muted-foreground">Customers</div>
+                          </div>
+                          <div>
+                            <div className="text-2xl font-bold text-purple-600">{gameState.satisfaction}%</div>
+                            <div className="text-sm text-muted-foreground">Satisfaction</div>
+                          </div>
+                          <div>
+                            <div className="text-2xl font-bold text-orange-600">${gameState.budget}</div>
+                            <div className="text-sm text-muted-foreground">Remaining Budget</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <Button
+                          variant="outline"
+                          className="p-6 h-auto text-left"
+                          onClick={() => {
+                            const investorInterest = (gameState.revenue * 0.3) + (gameState.customers * 2) + (gameState.satisfaction * 1.5);
+                            const investment = Math.round(investorInterest * 10);
+                            setGameState(prev => ({ 
+                              ...prev, 
+                              budget: prev.budget + investment,
+                              revenue: prev.revenue + investment * 0.5,
+                              currentStep: 6,
+                              completedSteps: [...prev.completedSteps, 5],
+                              decisions: [...prev.decisions, {
+                                step: 5,
+                                decision: `Secured $${investment} investment!`,
+                                impact: 'Game Complete!',
+                                cost: 0
+                              }]
+                            }));
+                          }}
+                        >
+                          <div>
+                            <div className="font-semibold mb-2">🎯 Conservative Pitch</div>
+                            <p className="text-xs">Focus on steady growth and reliability</p>
+                          </div>
+                        </Button>
+
+                        <Button
+                          variant="outline"
+                          className="p-6 h-auto text-left"
+                          onClick={() => {
+                            const investorInterest = (gameState.revenue * 0.5) + (gameState.customers * 3) + (gameState.satisfaction * 2);
+                            const investment = Math.round(investorInterest * 15);
+                            setGameState(prev => ({ 
+                              ...prev, 
+                              budget: prev.budget + investment,
+                              revenue: prev.revenue + investment * 0.7,
+                              currentStep: 6,
+                              completedSteps: [...prev.completedSteps, 5],
+                              decisions: [...prev.decisions, {
+                                step: 5,
+                                decision: `Secured $${investment} investment!`,
+                                impact: 'Game Complete!',
+                                cost: 0
+                              }]
+                            }));
+                          }}
+                        >
+                          <div>
+                            <div className="font-semibold mb-2">🚀 Ambitious Pitch</div>
+                            <p className="text-xs">Promise big returns and rapid expansion</p>
+                          </div>
+                        </Button>
+
+                        <Button
+                          variant="outline"
+                          className="p-6 h-auto text-left"
+                          onClick={() => {
+                            const investorInterest = (gameState.revenue * 0.4) + (gameState.customers * 2.5) + (gameState.satisfaction * 3);
+                            const investment = Math.round(investorInterest * 12);
+                            setGameState(prev => ({ 
+                              ...prev, 
+                              budget: prev.budget + investment,
+                              revenue: prev.revenue + investment * 0.6,
+                              currentStep: 6,
+                              completedSteps: [...prev.completedSteps, 5],
+                              decisions: [...prev.decisions, {
+                                step: 5,
+                                decision: `Secured $${investment} investment!`,
+                                impact: 'Game Complete!',
+                                cost: 0
+                              }]
+                            }));
+                          }}
+                        >
+                          <div>
+                            <div className="font-semibold mb-2">💡 Innovation Pitch</div>
+                            <p className="text-xs">Emphasize unique features and technology</p>
+                          </div>
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* Step 6: Game Complete */}
+              <TabsContent value="step-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-center">🎉 Congratulations!</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center space-y-6">
+                      <div className="text-6xl mb-4">🏆</div>
+                      <h2 className="text-3xl font-bold">You Built a Successful Business!</h2>
+                      <p className="text-xl text-muted-foreground">
+                        {gameState.productName} is now a thriving company!
+                      </p>
+                      
+                      <div className="card-gradient p-6 rounded-xl">
+                        <h3 className="text-xl font-bold mb-4">Final Results</h3>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          <div className="text-center">
+                            <div className="text-3xl font-bold text-green-600">${gameState.revenue}</div>
+                            <div className="text-sm text-muted-foreground">Revenue</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-3xl font-bold text-blue-600">{gameState.customers}</div>
+                            <div className="text-sm text-muted-foreground">Customers</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-3xl font-bold text-purple-600">{gameState.satisfaction}%</div>
+                            <div className="text-sm text-muted-foreground">Satisfaction</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-3xl font-bold text-primary">{calculateScore()}</div>
+                            <div className="text-sm text-muted-foreground">Final Score</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className={`text-2xl font-bold ${getScoreRating(calculateScore()).color}`}>
+                        {getScoreRating(calculateScore()).icon} {getScoreRating(calculateScore()).rating}
+                      </div>
+
+                      <div className="space-y-2">
+                        <Button 
+                          onClick={() => {
+                            setGameState({
+                              currentStep: 0,
+                              industry: '',
+                              productName: '',
+                              budget: 500,
+                              revenue: 0,
+                              customers: 0,
+                              satisfaction: 50,
+                              marketShare: 0,
+                              decisions: [],
+                              events: [],
+                              completedSteps: []
+                            });
+                          }}
+                          variant="default"
+                          size="lg"
+                        >
+                          Start New Business
+                        </Button>
+                        <Button 
+                          onClick={() => setGameStarted(false)}
+                          variant="outline"
+                          size="lg"
+                        >
+                          Back to Menu
+                        </Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
