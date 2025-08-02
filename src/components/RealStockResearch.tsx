@@ -4,358 +4,201 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Search, TrendingUp, TrendingDown, DollarSign, BarChart3, Calendar, Clock, ArrowLeft, ExternalLink } from 'lucide-react';
+import { Search, TrendingUp, TrendingDown, DollarSign, BarChart3, Calendar, Clock, ArrowLeft, ExternalLink, Loader2, RefreshCw, AlertCircle } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { stockApi, FinnhubQuote, FinnhubProfile, FinnhubNews, FinnhubCandle } from '@/services/stockApi';
+import { popularStocks, getStocksByCategory, searchStocks, getUniqueCategories, PopularStock } from '@/data/popularStocks';
 
-interface StockData {
-  symbol: string;
-  name: string;
-  kidFriendlyName: string;
-  price: number;
-  change: number;
-  changePercent: number;
-  marketCap: string;
-  volume: string;
-  high52Week: number;
-  low52Week: number;
-  sector: string;
-  industry: string;
-  description: string;
-  logo?: string;
-  lastUpdated: string;
-  chartData: Array<{
+interface EnhancedStockData extends PopularStock {
+  quote?: FinnhubQuote;
+  profile?: FinnhubProfile;
+  news?: FinnhubNews[];
+  chartData?: Array<{
     date: string;
     price: number;
     volume: number;
   }>;
-  recentNews: Array<{
-    title: string;
-    summary: string;
-    source: string;
-    publishedAt: string;
-    url: string;
-    sentiment: 'positive' | 'negative' | 'neutral';
-    whyItMatters: string;
-  }>;
+  lastUpdated?: string;
+  loading?: boolean;
+  error?: string;
 }
 
 const RealStockResearch = () => {
-  const [stocks, setStocks] = useState<StockData[]>([]);
-  const [filteredStocks, setFilteredStocks] = useState<StockData[]>([]);
-  const [selectedStock, setSelectedStock] = useState<StockData | null>(null);
+  const [stocks, setStocks] = useState<EnhancedStockData[]>([]);
+  const [filteredStocks, setFilteredStocks] = useState<EnhancedStockData[]>([]);
+  const [selectedStock, setSelectedStock] = useState<EnhancedStockData | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [displayCount, setDisplayCount] = useState(100);
+  const [displayCount, setDisplayCount] = useState(20);
   const [activeTab, setActiveTab] = useState('overview');
+  const [loadingStockDetail, setLoadingStockDetail] = useState(false);
 
-  // 100 Popular stocks that kids would recognize
-  const popularStocks = [
-    // Technology Giants
-    { symbol: 'AAPL', name: 'Apple Inc.', kidFriendlyName: 'iPhone & iPad Maker', sector: 'Technology' },
-    { symbol: 'GOOGL', name: 'Alphabet Inc.', kidFriendlyName: 'Google & YouTube', sector: 'Technology' },
-    { symbol: 'MSFT', name: 'Microsoft Corporation', kidFriendlyName: 'Xbox & Windows', sector: 'Technology' },
-    { symbol: 'AMZN', name: 'Amazon.com Inc.', kidFriendlyName: 'Online Shopping Giant', sector: 'Consumer Discretionary' },
-    { symbol: 'TSLA', name: 'Tesla Inc.', kidFriendlyName: 'Electric Cars', sector: 'Consumer Discretionary' },
-    { symbol: 'META', name: 'Meta Platforms Inc.', kidFriendlyName: 'Facebook & Instagram', sector: 'Technology' },
-    { symbol: 'NVDA', name: 'NVIDIA Corporation', kidFriendlyName: 'Gaming Graphics Cards', sector: 'Technology' },
-    { symbol: 'AMD', name: 'Advanced Micro Devices Inc.', kidFriendlyName: 'Computer Chips', sector: 'Technology' },
-    { symbol: 'INTC', name: 'Intel Corporation', kidFriendlyName: 'Computer Processors', sector: 'Technology' },
-    { symbol: 'ADBE', name: 'Adobe Inc.', kidFriendlyName: 'Photoshop & Creative Software', sector: 'Technology' },
-    
-    // Entertainment & Media
-    { symbol: 'NFLX', name: 'Netflix Inc.', kidFriendlyName: 'Movie & TV Streaming', sector: 'Entertainment' },
-    { symbol: 'DIS', name: 'The Walt Disney Company', kidFriendlyName: 'Disney Movies & Parks', sector: 'Entertainment' },
-    { symbol: 'SPOT', name: 'Spotify Technology S.A.', kidFriendlyName: 'Music Streaming', sector: 'Entertainment' },
-    { symbol: 'RBLX', name: 'Roblox Corporation', kidFriendlyName: 'Online Gaming Platform', sector: 'Entertainment' },
-    { symbol: 'EA', name: 'Electronic Arts Inc.', kidFriendlyName: 'Video Game Maker', sector: 'Entertainment' },
-    { symbol: 'ATVI', name: 'Activision Blizzard Inc.', kidFriendlyName: 'Call of Duty Games', sector: 'Entertainment' },
-    { symbol: 'TTWO', name: 'Take-Two Interactive Software Inc.', kidFriendlyName: 'Grand Theft Auto Games', sector: 'Entertainment' },
-    { symbol: 'WBD', name: 'Warner Bros. Discovery Inc.', kidFriendlyName: 'Movies & TV Shows', sector: 'Entertainment' },
-    { symbol: 'PARA', name: 'Paramount Global', kidFriendlyName: 'Movies & TV Network', sector: 'Entertainment' },
-    { symbol: 'ROKU', name: 'Roku Inc.', kidFriendlyName: 'TV Streaming Device', sector: 'Technology' },
-    
-    // Social Media & Apps
-    { symbol: 'SNAP', name: 'Snap Inc.', kidFriendlyName: 'Snapchat App', sector: 'Technology' },
-    { symbol: 'PINS', name: 'Pinterest Inc.', kidFriendlyName: 'Photo Sharing App', sector: 'Technology' },
-    { symbol: 'ZM', name: 'Zoom Video Communications Inc.', kidFriendlyName: 'Video Calling App', sector: 'Technology' },
-    { symbol: 'UBER', name: 'Uber Technologies Inc.', kidFriendlyName: 'Ride Sharing App', sector: 'Technology' },
-    { symbol: 'LYFT', name: 'Lyft Inc.', kidFriendlyName: 'Ride Sharing Service', sector: 'Technology' },
-    { symbol: 'ABNB', name: 'Airbnb Inc.', kidFriendlyName: 'Home Rental App', sector: 'Consumer Discretionary' },
-    { symbol: 'DASH', name: 'DoorDash Inc.', kidFriendlyName: 'Food Delivery App', sector: 'Consumer Discretionary' },
-    { symbol: 'GRUB', name: 'Grubhub Inc.', kidFriendlyName: 'Restaurant Delivery', sector: 'Consumer Discretionary' },
-    
-    // Retail & Consumer
-    { symbol: 'NKE', name: 'Nike Inc.', kidFriendlyName: 'Sports Shoes & Clothes', sector: 'Consumer Discretionary' },
-    { symbol: 'ADDYY', name: 'Adidas AG', kidFriendlyName: 'Sports Brand', sector: 'Consumer Discretionary' },
-    { symbol: 'LULU', name: 'Lululemon Athletica Inc.', kidFriendlyName: 'Yoga & Sports Clothes', sector: 'Consumer Discretionary' },
-    { symbol: 'UAA', name: 'Under Armour Inc.', kidFriendlyName: 'Sports Apparel', sector: 'Consumer Discretionary' },
-    { symbol: 'MCD', name: 'McDonald\'s Corporation', kidFriendlyName: 'Fast Food Restaurant', sector: 'Consumer Discretionary' },
-    { symbol: 'SBUX', name: 'Starbucks Corporation', kidFriendlyName: 'Coffee Shop', sector: 'Consumer Discretionary' },
-    { symbol: 'CMG', name: 'Chipotle Mexican Grill Inc.', kidFriendlyName: 'Burrito Restaurant', sector: 'Consumer Discretionary' },
-    { symbol: 'YUM', name: 'Yum! Brands Inc.', kidFriendlyName: 'KFC, Taco Bell & Pizza Hut', sector: 'Consumer Discretionary' },
-    { symbol: 'DNKN', name: 'Dunkin\' Brands Group Inc.', kidFriendlyName: 'Donut & Coffee Shop', sector: 'Consumer Discretionary' },
-    
-    // Major Retailers
-    { symbol: 'WMT', name: 'Walmart Inc.', kidFriendlyName: 'Big Store Chain', sector: 'Consumer Staples' },
-    { symbol: 'TGT', name: 'Target Corporation', kidFriendlyName: 'Target Stores', sector: 'Consumer Discretionary' },
-    { symbol: 'COST', name: 'Costco Wholesale Corporation', kidFriendlyName: 'Bulk Shopping Store', sector: 'Consumer Staples' },
-    { symbol: 'HD', name: 'The Home Depot Inc.', kidFriendlyName: 'Home Improvement Store', sector: 'Consumer Discretionary' },
-    { symbol: 'LOW', name: 'Lowe\'s Companies Inc.', kidFriendlyName: 'Home & Garden Store', sector: 'Consumer Discretionary' },
-    { symbol: 'BBY', name: 'Best Buy Co. Inc.', kidFriendlyName: 'Electronics Store', sector: 'Consumer Discretionary' },
-    { symbol: 'ETSY', name: 'Etsy Inc.', kidFriendlyName: 'Handmade Crafts Store', sector: 'Consumer Discretionary' },
-    { symbol: 'SHOP', name: 'Shopify Inc.', kidFriendlyName: 'Online Store Builder', sector: 'Technology' },
-    
-    // Food & Beverages
-    { symbol: 'KO', name: 'The Coca-Cola Company', kidFriendlyName: 'Coca-Cola Drinks', sector: 'Consumer Staples' },
-    { symbol: 'PEP', name: 'PepsiCo Inc.', kidFriendlyName: 'Pepsi & Snacks', sector: 'Consumer Staples' },
-    { symbol: 'MNST', name: 'Monster Beverage Corporation', kidFriendlyName: 'Energy Drinks', sector: 'Consumer Staples' },
-    { symbol: 'KDP', name: 'Keurig Dr Pepper Inc.', kidFriendlyName: 'Coffee & Soft Drinks', sector: 'Consumer Staples' },
-    { symbol: 'HSY', name: 'The Hershey Company', kidFriendlyName: 'Chocolate & Candy', sector: 'Consumer Staples' },
-    { symbol: 'GIS', name: 'General Mills Inc.', kidFriendlyName: 'Cereal & Food', sector: 'Consumer Staples' },
-    { symbol: 'K', name: 'Kellogg Company', kidFriendlyName: 'Cereal & Snacks', sector: 'Consumer Staples' },
-    
-    // Financial Services
-    { symbol: 'V', name: 'Visa Inc.', kidFriendlyName: 'Credit Card Payments', sector: 'Financial Services' },
-    { symbol: 'MA', name: 'Mastercard Incorporated', kidFriendlyName: 'Credit Card Company', sector: 'Financial Services' },
-    { symbol: 'PYPL', name: 'PayPal Holdings Inc.', kidFriendlyName: 'Online Payments', sector: 'Financial Services' },
-    { symbol: 'SQ', name: 'Block Inc.', kidFriendlyName: 'Square Payment Systems', sector: 'Financial Services' },
-    { symbol: 'AXP', name: 'American Express Company', kidFriendlyName: 'Credit Cards', sector: 'Financial Services' },
-    { symbol: 'JPM', name: 'JPMorgan Chase & Co.', kidFriendlyName: 'Big Bank', sector: 'Financial Services' },
-    { symbol: 'BAC', name: 'Bank of America Corporation', kidFriendlyName: 'Major Bank', sector: 'Financial Services' },
-    
-    // Healthcare & Biotech
-    { symbol: 'JNJ', name: 'Johnson & Johnson', kidFriendlyName: 'Band-Aids & Medicine', sector: 'Healthcare' },
-    { symbol: 'PFE', name: 'Pfizer Inc.', kidFriendlyName: 'Medicine & Vaccines', sector: 'Healthcare' },
-    { symbol: 'MRNA', name: 'Moderna Inc.', kidFriendlyName: 'COVID Vaccine Company', sector: 'Healthcare' },
-    { symbol: 'ABBV', name: 'AbbVie Inc.', kidFriendlyName: 'Medicine Company', sector: 'Healthcare' },
-    { symbol: 'TMO', name: 'Thermo Fisher Scientific Inc.', kidFriendlyName: 'Science Equipment', sector: 'Healthcare' },
-    
-    // Automotive
-    { symbol: 'F', name: 'Ford Motor Company', kidFriendlyName: 'Ford Cars & Trucks', sector: 'Consumer Discretionary' },
-    { symbol: 'GM', name: 'General Motors Company', kidFriendlyName: 'Chevy & Cadillac Cars', sector: 'Consumer Discretionary' },
-    { symbol: 'RIVN', name: 'Rivian Automotive Inc.', kidFriendlyName: 'Electric Trucks', sector: 'Consumer Discretionary' },
-    { symbol: 'LCID', name: 'Lucid Group Inc.', kidFriendlyName: 'Luxury Electric Cars', sector: 'Consumer Discretionary' },
-    
-    // Airlines & Travel
-    { symbol: 'AAL', name: 'American Airlines Group Inc.', kidFriendlyName: 'Airline Company', sector: 'Transportation' },
-    { symbol: 'DAL', name: 'Delta Air Lines Inc.', kidFriendlyName: 'Delta Airlines', sector: 'Transportation' },
-    { symbol: 'UAL', name: 'United Airlines Holdings Inc.', kidFriendlyName: 'United Airlines', sector: 'Transportation' },
-    { symbol: 'CCL', name: 'Carnival Corporation', kidFriendlyName: 'Cruise Ships', sector: 'Consumer Discretionary' },
-    { symbol: 'MAR', name: 'Marriott International Inc.', kidFriendlyName: 'Hotels', sector: 'Consumer Discretionary' },
-    
-    // Energy & Utilities
-    { symbol: 'XOM', name: 'Exxon Mobil Corporation', kidFriendlyName: 'Oil & Gas Company', sector: 'Energy' },
-    { symbol: 'CVX', name: 'Chevron Corporation', kidFriendlyName: 'Gas Stations', sector: 'Energy' },
-    { symbol: 'ENPH', name: 'Enphase Energy Inc.', kidFriendlyName: 'Solar Power Equipment', sector: 'Energy' },
-    { symbol: 'NEE', name: 'NextEra Energy Inc.', kidFriendlyName: 'Clean Energy Company', sector: 'Energy' },
-    
-    // Telecom & Internet
-    { symbol: 'VZ', name: 'Verizon Communications Inc.', kidFriendlyName: 'Cell Phone Service', sector: 'Technology' },
-    { symbol: 'T', name: 'AT&T Inc.', kidFriendlyName: 'Phone & Internet', sector: 'Technology' },
-    { symbol: 'CMCSA', name: 'Comcast Corporation', kidFriendlyName: 'Cable TV & Internet', sector: 'Technology' },
-    { symbol: 'CHTR', name: 'Charter Communications Inc.', kidFriendlyName: 'Internet Provider', sector: 'Technology' },
-    
-    // Cloud & Software
-    { symbol: 'CRM', name: 'Salesforce Inc.', kidFriendlyName: 'Business Software', sector: 'Technology' },
-    { symbol: 'ORCL', name: 'Oracle Corporation', kidFriendlyName: 'Database Software', sector: 'Technology' },
-    { symbol: 'IBM', name: 'International Business Machines Corporation', kidFriendlyName: 'Business Technology', sector: 'Technology' },
-    { symbol: 'CSCO', name: 'Cisco Systems Inc.', kidFriendlyName: 'Internet Equipment', sector: 'Technology' },
-    { symbol: 'NOW', name: 'ServiceNow Inc.', kidFriendlyName: 'Business Software', sector: 'Technology' },
-    { symbol: 'SNOW', name: 'Snowflake Inc.', kidFriendlyName: 'Cloud Computing', sector: 'Technology' },
-    { symbol: 'CRM', name: 'Salesforce Inc.', kidFriendlyName: 'Customer Management', sector: 'Technology' },
-    
-    // Semiconductors
-    { symbol: 'TSM', name: 'Taiwan Semiconductor Manufacturing Company', kidFriendlyName: 'Chip Maker', sector: 'Technology' },
-    { symbol: 'AVGO', name: 'Broadcom Inc.', kidFriendlyName: 'Computer Chips', sector: 'Technology' },
-    { symbol: 'QCOM', name: 'QUALCOMM Incorporated', kidFriendlyName: 'Phone Chips', sector: 'Technology' },
-    { symbol: 'TXN', name: 'Texas Instruments Incorporated', kidFriendlyName: 'Calculator Company', sector: 'Technology' },
-    { symbol: 'AMAT', name: 'Applied Materials Inc.', kidFriendlyName: 'Chip Making Equipment', sector: 'Technology' },
-    
-    // Real Estate & Construction
-    { symbol: 'PLD', name: 'Prologis Inc.', kidFriendlyName: 'Warehouse Buildings', sector: 'Real Estate' },
-    { symbol: 'AMT', name: 'American Tower Corporation', kidFriendlyName: 'Cell Phone Towers', sector: 'Real Estate' },
-    { symbol: 'CCI', name: 'Crown Castle International Corp.', kidFriendlyName: 'Communication Towers', sector: 'Real Estate' },
-    
-    // Industrials
-    { symbol: 'CAT', name: 'Caterpillar Inc.', kidFriendlyName: 'Construction Equipment', sector: 'Industrials' },
-    { symbol: 'BA', name: 'The Boeing Company', kidFriendlyName: 'Airplane Maker', sector: 'Industrials' },
-    { symbol: 'DE', name: 'Deere & Company', kidFriendlyName: 'Farm Equipment', sector: 'Industrials' },
-    { symbol: 'UPS', name: 'United Parcel Service Inc.', kidFriendlyName: 'Package Delivery', sector: 'Industrials' },
-    { symbol: 'FDX', name: 'FedEx Corporation', kidFriendlyName: 'Shipping Company', sector: 'Industrials' },
-    
-    // Miscellaneous
-    { symbol: 'WBA', name: 'Walgreens Boots Alliance Inc.', kidFriendlyName: 'Pharmacy Store', sector: 'Healthcare' },
-    { symbol: 'CVS', name: 'CVS Health Corporation', kidFriendlyName: 'Pharmacy & Health', sector: 'Healthcare' },
-    { symbol: 'COIN', name: 'Coinbase Global Inc.', kidFriendlyName: 'Cryptocurrency Exchange', sector: 'Financial Services' },
-    { symbol: 'HOOD', name: 'Robinhood Markets Inc.', kidFriendlyName: 'Stock Trading App', sector: 'Financial Services' },
-    { symbol: 'ZG', name: 'Zillow Group Inc.', kidFriendlyName: 'Home Search Website', sector: 'Technology' },
-    { symbol: 'PTON', name: 'Peloton Interactive Inc.', kidFriendlyName: 'Exercise Bikes', sector: 'Consumer Discretionary' }
-  ];
+  const categories = getUniqueCategories();
 
-  const categories = [
-    'All',
-    'Technology',
-    'Entertainment',
-    'Consumer Discretionary',
-    'Consumer Staples',
-    'Financial Services',
-    'Gaming',
-    'Food & Beverage',
-    'Retail',
-    'Streaming'
-  ];
-
-  // Fetch real stock data from Finnhub API
-  const fetchStockData = async (symbol: string, stockInfo: any): Promise<StockData | null> => {
-    try {
-      // Note: In production, you'd use a real Finnhub API key
-      // For now, we'll simulate realistic data based on the symbol
-      const basePrice = Math.random() * 500 + 10;
-      const change = (Math.random() - 0.5) * basePrice * 0.05;
-      const changePercent = (change / basePrice) * 100;
-
-      // Generate realistic chart data
-      const chartData = [];
-      let currentPrice = basePrice;
-      
-      for (let i = 29; i >= 0; i--) {
-        const date = new Date();
-        date.setDate(date.getDate() - i);
-        
-        const dailyVolatility = (Math.random() - 0.5) * 0.04;
-        currentPrice = currentPrice * (1 + dailyVolatility);
-        
-        chartData.push({
-          date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-          price: Number(currentPrice.toFixed(2)),
-          volume: Number((Math.random() * 20 + 5).toFixed(1))
-        });
-      }
-
-      // Generate kid-friendly news
-      const recentNews = [
-        {
-          title: `${stockInfo.kidFriendlyName} announces new product`,
-          summary: `The company revealed exciting new features and improvements to their popular products.`,
-          source: 'Kid Business News',
-          publishedAt: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString(),
-          url: `#`,
-          sentiment: 'positive' as const,
-          whyItMatters: `This could mean more people want to buy their products, which might make the stock price go up!`
-        },
-        {
-          title: `${stockInfo.kidFriendlyName} partners with other companies`,
-          summary: `New partnerships could help the company reach more customers and grow their business.`,
-          source: 'Young Investor Weekly',
-          publishedAt: new Date(Date.now() - Math.random() * 14 * 24 * 60 * 60 * 1000).toISOString(),
-          url: `#`,
-          sentiment: 'positive' as const,
-          whyItMatters: `When companies work together, they can often do better business and make more money.`
-        },
-        {
-          title: `Market changes affect ${stockInfo.kidFriendlyName}`,
-          summary: `Economic conditions and market trends are influencing how the company performs.`,
-          source: 'Student Stock Report',
-          publishedAt: new Date(Date.now() - Math.random() * 21 * 24 * 60 * 60 * 1000).toISOString(),
-          url: `#`,
-          sentiment: 'neutral' as const,
-          whyItMatters: `Sometimes outside events can affect how well a company does, even if the company itself is doing great!`
-        }
-      ];
-
-      return {
-        symbol,
-        name: stockInfo.name,
-        kidFriendlyName: stockInfo.kidFriendlyName,
-        price: Number((basePrice + change).toFixed(2)),
-        change: Number(change.toFixed(2)),
-        changePercent: Number(changePercent.toFixed(2)),
-        marketCap: `$${(Math.random() * 1000 + 10).toFixed(1)}B`,
-        volume: `${(Math.random() * 50 + 1).toFixed(1)}M`,
-        high52Week: Number((basePrice * (1 + Math.random() * 0.5)).toFixed(2)),
-        low52Week: Number((basePrice * (1 - Math.random() * 0.3)).toFixed(2)),
-        sector: stockInfo.sector,
-        industry: stockInfo.sector,
-        description: `${stockInfo.kidFriendlyName} is a company that ${getCompanyDescription(symbol)}`,
-        lastUpdated: new Date().toISOString(),
-        chartData,
-        recentNews
-      };
-    } catch (error) {
-      console.error(`Error fetching data for ${symbol}:`, error);
-      return null;
-    }
-  };
-
-  const getCompanyDescription = (symbol: string): string => {
-    const descriptions: { [key: string]: string } = {
-      'AAPL': 'makes iPhones, iPads, and Mac computers that people love to use.',
-      'GOOGL': 'runs Google search and YouTube, helping people find information and watch videos.',
-      'MSFT': 'creates Xbox games, Windows computers, and software for businesses.',
-      'AMZN': 'lets people buy almost anything online and delivers it to their door.',
-      'TSLA': 'builds electric cars that don\'t need gas and can drive themselves.',
-      'META': 'owns Facebook and Instagram where people share photos and connect with friends.',
-      'NFLX': 'streams movies and TV shows that you can watch anytime.',
-      'DIS': 'makes Disney movies, runs theme parks, and creates magical experiences.',
-      'NKE': 'designs cool sneakers and sports clothes that athletes wear.',
-      'MCD': 'serves burgers, fries, and Happy Meals at restaurants around the world.'
-    };
-    return descriptions[symbol] || 'provides products and services that people use every day.';
-  };
-
-  // Load stock data on component mount
+  // Initialize stocks with basic data
   useEffect(() => {
-    const loadStocks = async () => {
-      setLoading(true);
-      setError(null);
-      
-      try {
-        const stockPromises = popularStocks.map(stock => fetchStockData(stock.symbol, stock));
-        const results = await Promise.all(stockPromises);
-        const validStocks = results.filter((stock): stock is StockData => stock !== null);
-        
-        setStocks(validStocks);
-        setFilteredStocks(validStocks);
-      } catch (err) {
-        setError('Failed to load stock data. Please try again later.');
-        console.error('Error loading stocks:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadStocks();
+    console.log('Initializing stocks...');
+    const initialStocks = popularStocks.map(stock => ({
+      ...stock,
+      loading: false,
+      error: undefined
+    }));
+    setStocks(initialStocks);
+    setFilteredStocks(initialStocks);
+    setLoading(false);
   }, []);
 
   // Filter stocks based on search and category
   useEffect(() => {
-    let filtered = stocks;
+    console.log('Filtering stocks...', { searchTerm, selectedCategory });
+    let filtered: EnhancedStockData[] = [];
 
     if (searchTerm) {
-      filtered = filtered.filter(stock =>
-        stock.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        stock.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        stock.kidFriendlyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        stock.sector.toLowerCase().includes(searchTerm.toLowerCase())
+      const searchResults = searchStocks(searchTerm);
+      filtered = stocks.filter(stock => 
+        searchResults.some(result => result.symbol === stock.symbol)
+      );
+    } else {
+      filtered = getStocksByCategory(selectedCategory).map(categoryStock => 
+        stocks.find(stock => stock.symbol === categoryStock.symbol) || categoryStock
       );
     }
 
-    if (selectedCategory !== 'All') {
-      filtered = filtered.filter(stock => stock.sector === selectedCategory);
-    }
-
+    console.log('Filtered results:', filtered.length);
     setFilteredStocks(filtered);
   }, [stocks, searchTerm, selectedCategory]);
 
-  const handleStockClick = (stock: StockData) => {
-    setSelectedStock(stock);
-    setActiveTab('overview');
+  // Fetch real stock data for a specific stock
+  const fetchStockData = async (stock: EnhancedStockData): Promise<EnhancedStockData> => {
+    console.log(`Fetching real data for ${stock.symbol}...`);
+    
+    try {
+      // Update loading state
+      setStocks(prev => prev.map(s => 
+        s.symbol === stock.symbol ? { ...s, loading: true, error: undefined } : s
+      ));
+
+      const [quote, profile, news, candles] = await Promise.allSettled([
+        stockApi.getQuote(stock.symbol),
+        stockApi.getProfile(stock.symbol),
+        stockApi.getNews(
+          stock.symbol, 
+          new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          new Date().toISOString().split('T')[0]
+        ),
+        stockApi.getCandles(
+          stock.symbol,
+          'D',
+          Math.floor((Date.now() - 30 * 24 * 60 * 60 * 1000) / 1000),
+          Math.floor(Date.now() / 1000)
+        )
+      ]);
+
+      // Process chart data
+      let chartData: Array<{ date: string; price: number; volume: number; }> = [];
+      if (candles.status === 'fulfilled' && candles.value.s === 'ok') {
+        const candleData = candles.value;
+        chartData = candleData.t.map((timestamp, index) => ({
+          date: new Date(timestamp * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+          price: candleData.c[index],
+          volume: candleData.v[index] / 1000000 // Convert to millions
+        }));
+      }
+
+      const enhancedStock: EnhancedStockData = {
+        ...stock,
+        quote: quote.status === 'fulfilled' ? quote.value : undefined,
+        profile: profile.status === 'fulfilled' ? profile.value : undefined,
+        news: news.status === 'fulfilled' ? news.value.slice(0, 5) : undefined,
+        chartData,
+        lastUpdated: new Date().toISOString(),
+        loading: false,
+        error: undefined
+      };
+
+      console.log(`Successfully fetched data for ${stock.symbol}`);
+      return enhancedStock;
+
+    } catch (error) {
+      console.error(`Error fetching data for ${stock.symbol}:`, error);
+      
+      const errorStock: EnhancedStockData = {
+        ...stock,
+        loading: false,
+        error: 'Failed to load real-time data'
+      };
+
+      return errorStock;
+    }
+  };
+
+  const handleStockClick = async (stock: EnhancedStockData) => {
+    console.log('Stock clicked:', stock.symbol);
+    setLoadingStockDetail(true);
+    
+    try {
+      // If we don't have real data yet, fetch it
+      if (!stock.quote) {
+        const enhancedStock = await fetchStockData(stock);
+        setSelectedStock(enhancedStock);
+        
+        // Update the stock in our main list
+        setStocks(prev => prev.map(s => 
+          s.symbol === stock.symbol ? enhancedStock : s
+        ));
+      } else {
+        setSelectedStock(stock);
+      }
+      
+      setActiveTab('overview');
+    } catch (error) {
+      console.error('Error loading stock details:', error);
+      setSelectedStock(stock);
+    } finally {
+      setLoadingStockDetail(false);
+    }
   };
 
   const handleBackClick = () => {
+    console.log('Back button clicked');
     setSelectedStock(null);
+  };
+
+  const handleCategoryClick = (category: string) => {
+    console.log('Category clicked:', category);
+    setSelectedCategory(category);
+  };
+
+  const handleSearchChange = (value: string) => {
+    console.log('Search changed:', value);
+    setSearchTerm(value);
+  };
+
+  const handleLoadMore = () => {
+    console.log('Load more clicked');
+    setDisplayCount(prev => prev + 20);
+  };
+
+  const handleShowLess = () => {
+    console.log('Show less clicked');
+    setDisplayCount(20);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleClearFilters = () => {
+    console.log('Clear filters clicked');
+    setSearchTerm('');
+    setSelectedCategory('All');
+  };
+
+  const handleRefreshStock = async (stock: EnhancedStockData) => {
+    console.log('Refresh stock clicked:', stock.symbol);
+    const refreshedStock = await fetchStockData(stock);
+    setStocks(prev => prev.map(s => 
+      s.symbol === stock.symbol ? refreshedStock : s
+    ));
   };
 
   const formatCurrency = (value: number) => {
@@ -365,8 +208,16 @@ const RealStockResearch = () => {
     }).format(value);
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+  const formatLargeNumber = (value: number) => {
+    if (value >= 1e12) return `$${(value / 1e12).toFixed(1)}T`;
+    if (value >= 1e9) return `$${(value / 1e9).toFixed(1)}B`;
+    if (value >= 1e6) return `$${(value / 1e6).toFixed(1)}M`;
+    return `$${value.toLocaleString()}`;
+  };
+
+  const formatDate = (dateString: string | number) => {
+    const date = typeof dateString === 'number' ? new Date(dateString * 1000) : new Date(dateString);
+    return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -380,12 +231,23 @@ const RealStockResearch = () => {
     });
   };
 
+  const getKidFriendlyNewsExplanation = (headline: string, symbol: string) => {
+    const explanations = [
+      `This news about ${symbol} could affect how many people want to buy their stock. Good news usually makes stock prices go up!`,
+      `When companies make announcements, it can change how investors feel about the stock. This might make the price move up or down.`,
+      `News like this helps investors understand how well the company is doing. Strong companies usually have higher stock prices.`,
+      `This type of news can influence whether people think the company will make more money in the future.`,
+      `Stock prices often change when there's news about the company. Investors read news to decide if they want to buy or sell.`
+    ];
+    return explanations[Math.floor(Math.random() * explanations.length)];
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background pt-24 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <Loader2 className="animate-spin h-12 w-12 text-primary mx-auto mb-4" />
             <p className="text-lg text-muted-foreground">Loading stock data...</p>
           </div>
         </div>
@@ -398,8 +260,12 @@ const RealStockResearch = () => {
       <div className="min-h-screen bg-background pt-24 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center py-20">
+            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
             <p className="text-lg text-red-600 mb-4">{error}</p>
-            <Button onClick={() => window.location.reload()}>Try Again</Button>
+            <Button onClick={() => window.location.reload()}>
+              <RefreshCw className="mr-2 w-4 h-4" />
+              Try Again
+            </Button>
           </div>
         </div>
       </div>
@@ -408,6 +274,11 @@ const RealStockResearch = () => {
 
   // Stock Detail View
   if (selectedStock) {
+    const currentPrice = selectedStock.quote?.c || 0;
+    const change = selectedStock.quote?.d || 0;
+    const changePercent = selectedStock.quote?.dp || 0;
+    const marketCap = selectedStock.profile?.marketCapitalization || 0;
+
     return (
       <div className="min-h-screen bg-background pt-24 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -422,39 +293,81 @@ const RealStockResearch = () => {
             </Button>
           </div>
 
+          {loadingStockDetail && (
+            <div className="text-center py-8">
+              <Loader2 className="animate-spin h-8 w-8 text-primary mx-auto mb-2" />
+              <p className="text-muted-foreground">Loading detailed stock information...</p>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Stock Header */}
             <div className="lg:col-span-3">
               <div className="card-gradient p-8 rounded-2xl shadow-lg border border-border/50">
                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
-                  <div>
-                    <h1 className="text-3xl font-bold text-foreground mb-2">
-                      {selectedStock.kidFriendlyName}
-                    </h1>
-                    <p className="text-lg text-muted-foreground mb-2">
-                      {selectedStock.name} ({selectedStock.symbol})
-                    </p>
-                    <Badge variant="outline" className="text-sm">
-                      {selectedStock.sector}
-                    </Badge>
+                  <div className="flex items-center gap-4">
+                    {selectedStock.profile?.logo && (
+                      <img 
+                        src={selectedStock.profile.logo} 
+                        alt={`${selectedStock.name} logo`}
+                        className="w-16 h-16 rounded-lg object-contain bg-white p-2"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                    )}
+                    <div>
+                      <h1 className="text-3xl font-bold text-foreground mb-2">
+                        {selectedStock.kidFriendlyName}
+                      </h1>
+                      <p className="text-lg text-muted-foreground mb-2">
+                        {selectedStock.name} ({selectedStock.symbol})
+                      </p>
+                      <div className="flex gap-2">
+                        <Badge variant="outline" className="text-sm">
+                          {selectedStock.sector}
+                        </Badge>
+                        <Badge variant="secondary" className="text-sm">
+                          {selectedStock.category}
+                        </Badge>
+                      </div>
+                    </div>
                   </div>
                   <div className="text-right mt-4 md:mt-0">
                     <div className="text-4xl font-bold text-foreground mb-2">
-                      {formatCurrency(selectedStock.price)}
+                      {currentPrice > 0 ? formatCurrency(currentPrice) : 'Loading...'}
                     </div>
-                    <div className={`flex items-center justify-end text-lg font-semibold ${
-                      selectedStock.change >= 0 ? 'text-green-600' : 'text-red-600'
-                    }`}>
-                      {selectedStock.change >= 0 ? (
-                        <TrendingUp className="w-5 h-5 mr-1" />
+                    {currentPrice > 0 && (
+                      <div className={`flex items-center justify-end text-lg font-semibold ${
+                        change >= 0 ? 'text-green-600' : 'text-red-600'
+                      }`}>
+                        {change >= 0 ? (
+                          <TrendingUp className="w-5 h-5 mr-1" />
+                        ) : (
+                          <TrendingDown className="w-5 h-5 mr-1" />
+                        )}
+                        {formatCurrency(Math.abs(change))} ({Math.abs(changePercent).toFixed(2)}%)
+                      </div>
+                    )}
+                    {selectedStock.lastUpdated && (
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Last updated: {formatTime(selectedStock.lastUpdated)}
+                      </p>
+                    )}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleRefreshStock(selectedStock)}
+                      disabled={selectedStock.loading}
+                      className="mt-2"
+                    >
+                      {selectedStock.loading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
                       ) : (
-                        <TrendingDown className="w-5 h-5 mr-1" />
+                        <RefreshCw className="w-4 h-4" />
                       )}
-                      {formatCurrency(Math.abs(selectedStock.change))} ({Math.abs(selectedStock.changePercent).toFixed(2)}%)
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Last updated: {formatTime(selectedStock.lastUpdated)}
-                    </p>
+                      Refresh
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -464,9 +377,36 @@ const RealStockResearch = () => {
             <div className="lg:col-span-2">
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                 <TabsList className="grid w-full grid-cols-3 mb-6">
-                  <TabsTrigger value="overview" className="text-sm">Overview</TabsTrigger>
-                  <TabsTrigger value="chart" className="text-sm">Price Chart</TabsTrigger>
-                  <TabsTrigger value="news" className="text-sm">Recent News</TabsTrigger>
+                  <TabsTrigger 
+                    value="overview" 
+                    className="text-sm"
+                    onClick={() => {
+                      console.log('Overview tab clicked');
+                      setActiveTab('overview');
+                    }}
+                  >
+                    Overview
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="chart" 
+                    className="text-sm"
+                    onClick={() => {
+                      console.log('Chart tab clicked');
+                      setActiveTab('chart');
+                    }}
+                  >
+                    Price Chart
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="news" 
+                    className="text-sm"
+                    onClick={() => {
+                      console.log('News tab clicked');
+                      setActiveTab('news');
+                    }}
+                  >
+                    Recent News
+                  </TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="overview" className="space-y-6">
@@ -478,9 +418,13 @@ const RealStockResearch = () => {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-muted-foreground leading-relaxed">
+                      <p className="text-muted-foreground leading-relaxed mb-4">
                         {selectedStock.description}
                       </p>
+                      <div className="bg-primary/5 p-4 rounded-lg border-l-4 border-primary">
+                        <h4 className="font-semibold text-primary mb-2">Why Kids Know This Company:</h4>
+                        <p className="text-sm text-muted-foreground">{selectedStock.whyKidsKnow}</p>
+                      </div>
                     </CardContent>
                   </Card>
 
@@ -492,23 +436,68 @@ const RealStockResearch = () => {
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <p className="text-sm text-muted-foreground">Market Cap</p>
-                          <p className="text-lg font-semibold">{selectedStock.marketCap}</p>
+                          <p className="text-lg font-semibold">
+                            {marketCap > 0 ? formatLargeNumber(marketCap) : 'Loading...'}
+                          </p>
                         </div>
                         <div>
-                          <p className="text-sm text-muted-foreground">Volume</p>
-                          <p className="text-lg font-semibold">{selectedStock.volume}</p>
+                          <p className="text-sm text-muted-foreground">Today's High</p>
+                          <p className="text-lg font-semibold">
+                            {selectedStock.quote?.h ? formatCurrency(selectedStock.quote.h) : 'Loading...'}
+                          </p>
                         </div>
                         <div>
-                          <p className="text-sm text-muted-foreground">52 Week High</p>
-                          <p className="text-lg font-semibold">{formatCurrency(selectedStock.high52Week)}</p>
+                          <p className="text-sm text-muted-foreground">Today's Low</p>
+                          <p className="text-lg font-semibold">
+                            {selectedStock.quote?.l ? formatCurrency(selectedStock.quote.l) : 'Loading...'}
+                          </p>
                         </div>
                         <div>
-                          <p className="text-sm text-muted-foreground">52 Week Low</p>
-                          <p className="text-lg font-semibold">{formatCurrency(selectedStock.low52Week)}</p>
+                          <p className="text-sm text-muted-foreground">Previous Close</p>
+                          <p className="text-lg font-semibold">
+                            {selectedStock.quote?.pc ? formatCurrency(selectedStock.quote.pc) : 'Loading...'}
+                          </p>
                         </div>
                       </div>
                     </CardContent>
                   </Card>
+
+                  {selectedStock.profile && (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Company Info</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Country:</span>
+                            <span className="font-medium">{selectedStock.profile.country}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Exchange:</span>
+                            <span className="font-medium">{selectedStock.profile.exchange}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Industry:</span>
+                            <span className="font-medium">{selectedStock.profile.finnhubIndustry}</span>
+                          </div>
+                          {selectedStock.profile.weburl && (
+                            <div className="flex justify-between items-center">
+                              <span className="text-muted-foreground">Website:</span>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => window.open(selectedStock.profile?.weburl, '_blank')}
+                              >
+                                <ExternalLink className="w-4 h-4 mr-1" />
+                                Visit
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
                 </TabsContent>
 
                 <TabsContent value="chart" className="space-y-6">
@@ -517,60 +506,129 @@ const RealStockResearch = () => {
                       <CardTitle>30-Day Price Chart</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="h-80">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <LineChart data={selectedStock.chartData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="date" />
-                            <YAxis />
-                            <Tooltip 
-                              formatter={(value) => [formatCurrency(Number(value)), 'Price']}
-                              labelFormatter={(label) => `Date: ${label}`}
-                            />
-                            <Line 
-                              type="monotone" 
-                              dataKey="price" 
-                              stroke="hsl(var(--primary))" 
-                              strokeWidth={2}
-                              dot={false}
-                            />
-                          </LineChart>
-                        </ResponsiveContainer>
-                      </div>
+                      {selectedStock.chartData && selectedStock.chartData.length > 0 ? (
+                        <div className="h-80">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <LineChart data={selectedStock.chartData}>
+                              <CartesianGrid strokeDasharray="3 3" />
+                              <XAxis dataKey="date" />
+                              <YAxis />
+                              <Tooltip 
+                                formatter={(value, name) => [
+                                  name === 'price' ? formatCurrency(Number(value)) : `${Number(value).toFixed(1)}M`,
+                                  name === 'price' ? 'Price' : 'Volume'
+                                ]}
+                                labelFormatter={(label) => `Date: ${label}`}
+                              />
+                              <Line 
+                                type="monotone" 
+                                dataKey="price" 
+                                stroke="hsl(var(--primary))" 
+                                strokeWidth={2}
+                                dot={false}
+                              />
+                            </LineChart>
+                          </ResponsiveContainer>
+                        </div>
+                      ) : (
+                        <div className="h-80 flex items-center justify-center">
+                          <div className="text-center">
+                            <BarChart3 className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                            <p className="text-muted-foreground">Chart data loading...</p>
+                            <Button
+                              variant="outline"
+                              onClick={() => handleRefreshStock(selectedStock)}
+                              className="mt-4"
+                            >
+                              <RefreshCw className="w-4 h-4 mr-2" />
+                              Load Chart Data
+                            </Button>
+                          </div>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 </TabsContent>
 
                 <TabsContent value="news" className="space-y-6">
-                  {selectedStock.recentNews.map((news, index) => (
-                    <Card key={index}>
-                      <CardHeader>
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <CardTitle className="text-lg mb-2">{news.title}</CardTitle>
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                              <span>{news.source}</span>
-                              <span>{formatDate(news.publishedAt)}</span>
-                              <Badge 
-                                variant={news.sentiment === 'positive' ? 'default' : 
-                                        news.sentiment === 'negative' ? 'destructive' : 'secondary'}
-                                className="text-xs"
-                              >
-                                {news.sentiment}
-                              </Badge>
+                  {selectedStock.news && selectedStock.news.length > 0 ? (
+                    selectedStock.news.map((newsItem, index) => (
+                      <Card key={index} className="hover:shadow-lg transition-all duration-300">
+                        <CardHeader>
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <CardTitle className="text-lg mb-2 line-clamp-2">
+                                {newsItem.headline}
+                              </CardTitle>
+                              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                                <span>{newsItem.source}</span>
+                                <span>{formatDate(newsItem.datetime)}</span>
+                                <Badge variant="outline" className="text-xs">
+                                  {newsItem.category}
+                                </Badge>
+                              </div>
                             </div>
+                            {newsItem.image && (
+                              <img 
+                                src={newsItem.image} 
+                                alt="News"
+                                className="w-20 h-20 rounded-lg object-cover ml-4"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = 'none';
+                                }}
+                              />
+                            )}
                           </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-muted-foreground mb-4">{news.summary}</p>
-                        <div className="bg-primary/5 p-4 rounded-lg border-l-4 border-primary">
-                          <h4 className="font-semibold text-primary mb-2">Why This Matters:</h4>
-                          <p className="text-sm text-muted-foreground">{news.whyItMatters}</p>
-                        </div>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-muted-foreground mb-4 line-clamp-3">
+                            {newsItem.summary}
+                          </p>
+                          <div className="bg-primary/5 p-4 rounded-lg border-l-4 border-primary">
+                            <h4 className="font-semibold text-primary mb-2">Why This Matters for Kids:</h4>
+                            <p className="text-sm text-muted-foreground">
+                              {getKidFriendlyNewsExplanation(newsItem.headline, selectedStock.symbol)}
+                            </p>
+                          </div>
+                          <div className="mt-4 flex justify-between items-center">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => window.open(newsItem.url, '_blank')}
+                            >
+                              <ExternalLink className="w-4 h-4 mr-1" />
+                              Read Full Article
+                            </Button>
+                            <span className="text-xs text-muted-foreground">
+                              ID: {newsItem.id}
+                            </span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))
+                  ) : (
+                    <Card>
+                      <CardContent className="text-center py-12">
+                        <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                        <h3 className="text-xl font-semibold mb-2">Loading News...</h3>
+                        <p className="text-muted-foreground mb-4">
+                          We're fetching the latest news about {selectedStock.kidFriendlyName}
+                        </p>
+                        <Button
+                          variant="outline"
+                          onClick={() => handleRefreshStock(selectedStock)}
+                          disabled={selectedStock.loading}
+                        >
+                          {selectedStock.loading ? (
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          ) : (
+                            <RefreshCw className="w-4 h-4 mr-2" />
+                          )}
+                          Load News
+                        </Button>
                       </CardContent>
                     </Card>
-                  ))}
+                  )}
                 </TabsContent>
               </Tabs>
             </div>
@@ -586,12 +644,7 @@ const RealStockResearch = () => {
                     <div>
                       <h4 className="font-semibold text-sm text-primary">Did you know?</h4>
                       <p className="text-sm text-muted-foreground">
-                        {selectedStock.symbol === 'AAPL' && "Apple was started in a garage by Steve Jobs and Steve Wozniak!"}
-                        {selectedStock.symbol === 'GOOGL' && "Google processes over 8.5 billion searches every day!"}
-                        {selectedStock.symbol === 'DIS' && "Disney has created over 700 animated movies and shows!"}
-                        {selectedStock.symbol === 'TSLA' && "Tesla cars can receive updates over the internet, just like your phone!"}
-                        {!['AAPL', 'GOOGL', 'DIS', 'TSLA'].includes(selectedStock.symbol) && 
-                         `${selectedStock.kidFriendlyName} is one of the most popular companies in the ${selectedStock.sector} industry!`}
+                        {selectedStock.funFact}
                       </p>
                     </div>
                   </div>
@@ -616,9 +669,38 @@ const RealStockResearch = () => {
                         Stock prices go up and down based on how many people want to buy or sell them, kind of like trading cards!
                       </p>
                     </div>
+                    <div>
+                      <h4 className="font-semibold text-sm text-primary">What is market cap?</h4>
+                      <p className="text-xs text-muted-foreground">
+                        Market cap is the total value of all the company's stock. It tells us how big the company is!
+                      </p>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
+
+              {selectedStock.error && (
+                <Card className="border-red-200">
+                  <CardHeader>
+                    <CardTitle className="text-lg text-red-600 flex items-center">
+                      <AlertCircle className="w-5 h-5 mr-2" />
+                      Data Error
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-red-600 mb-3">{selectedStock.error}</p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleRefreshStock(selectedStock)}
+                      className="w-full"
+                    >
+                      <RefreshCw className="w-4 h-4 mr-2" />
+                      Try Again
+                    </Button>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           </div>
         </div>
@@ -638,6 +720,16 @@ const RealStockResearch = () => {
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Discover companies you know and love! Learn how businesses work and what makes their stock prices change.
           </p>
+          <div className="mt-6 flex items-center justify-center gap-4 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              <span>Real-time data from Finnhub</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+              <span>{popularStocks.length} companies</span>
+            </div>
+          </div>
         </div>
 
         {/* Search and Filters */}
@@ -648,10 +740,7 @@ const RealStockResearch = () => {
               type="text"
               placeholder="Search for companies you know..."
               value={searchTerm}
-              onChange={(e) => {
-                console.log('Search changed:', e.target.value);
-                setSearchTerm(e.target.value);
-              }}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="pl-10 py-3 text-lg"
             />
           </div>
@@ -662,10 +751,7 @@ const RealStockResearch = () => {
                 key={category}
                 variant={selectedCategory === category ? "default" : "outline"}
                 size="sm"
-                onClick={() => {
-                  console.log('Category clicked:', category);
-                  setSelectedCategory(category);
-                }}
+                onClick={() => handleCategoryClick(category)}
                 className="transition-all duration-300 hover:scale-105"
               >
                 {category}
@@ -679,51 +765,68 @@ const RealStockResearch = () => {
           {filteredStocks.slice(0, displayCount).map((stock) => (
             <Card 
               key={stock.symbol} 
-              className="cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 professional-card"
-              onClick={() => {
-                console.log('Stock clicked:', stock.symbol);
-                handleStockClick(stock);
-              }}
+              className="cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105 professional-card group"
+              onClick={() => handleStockClick(stock)}
             >
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <CardTitle className="text-lg mb-1 line-clamp-2">
+                    <CardTitle className="text-lg mb-1 line-clamp-2 group-hover:text-primary transition-colors">
                       {stock.kidFriendlyName}
                     </CardTitle>
                     <p className="text-sm text-muted-foreground mb-2">
-                      {stock.symbol}
+                      {stock.symbol} • {stock.name}
                     </p>
-                    <Badge variant="outline" className="text-xs">
-                      {stock.sector}
-                    </Badge>
+                    <div className="flex gap-1">
+                      <Badge variant="outline" className="text-xs">
+                        {stock.category}
+                      </Badge>
+                    </div>
                   </div>
+                  {stock.loading && (
+                    <Loader2 className="w-5 h-5 animate-spin text-primary" />
+                  )}
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   <div className="text-right">
-                    <div className="text-2xl font-bold text-foreground">
-                      {formatCurrency(stock.price)}
-                    </div>
-                    <div className={`flex items-center justify-end text-sm font-semibold ${
-                      stock.change >= 0 ? 'text-green-600' : 'text-red-600'
-                    }`}>
-                      {stock.change >= 0 ? (
-                        <TrendingUp className="w-4 h-4 mr-1" />
-                      ) : (
-                        <TrendingDown className="w-4 h-4 mr-1" />
-                      )}
-                      {Math.abs(stock.changePercent).toFixed(2)}%
-                    </div>
+                    {stock.quote ? (
+                      <>
+                        <div className="text-2xl font-bold text-foreground">
+                          {formatCurrency(stock.quote.c)}
+                        </div>
+                        <div className={`flex items-center justify-end text-sm font-semibold ${
+                          stock.quote.d >= 0 ? 'text-green-600' : 'text-red-600'
+                        }`}>
+                          {stock.quote.d >= 0 ? (
+                            <TrendingUp className="w-4 h-4 mr-1" />
+                          ) : (
+                            <TrendingDown className="w-4 h-4 mr-1" />
+                          )}
+                          {Math.abs(stock.quote.dp).toFixed(2)}%
+                        </div>
+                      </>
+                    ) : (
+                      <div className="text-center py-4">
+                        <div className="text-lg font-bold text-muted-foreground">Click to load</div>
+                        <div className="text-sm text-muted-foreground">real-time price</div>
+                      </div>
+                    )}
                   </div>
                   
                   <div className="pt-3 border-t border-border/50">
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>Volume: {stock.volume}</span>
-                      <span>Cap: {stock.marketCap}</span>
-                    </div>
+                    <p className="text-xs text-muted-foreground line-clamp-2">
+                      {stock.description}
+                    </p>
                   </div>
+
+                  {stock.error && (
+                    <div className="text-center">
+                      <AlertCircle className="w-4 h-4 text-red-500 mx-auto mb-1" />
+                      <p className="text-xs text-red-500">Data unavailable</p>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -734,10 +837,7 @@ const RealStockResearch = () => {
         {filteredStocks.length > displayCount && (
           <div className="text-center">
             <Button 
-              onClick={() => {
-                console.log('Load more clicked!');
-                setDisplayCount(prev => prev + 20);
-              }}
+              onClick={handleLoadMore}
               variant="outline"
               size="lg"
               className="hover:bg-primary hover:text-primary-foreground transition-all duration-300"
@@ -747,14 +847,11 @@ const RealStockResearch = () => {
           </div>
         )}
 
-        {/* Show All Button when showing all stocks */}
+        {/* Show Less Button */}
         {displayCount >= filteredStocks.length && filteredStocks.length > 20 && (
           <div className="text-center">
             <Button 
-              onClick={() => {
-                console.log('Show less clicked!');
-                setDisplayCount(20);
-              }}
+              onClick={handleShowLess}
               variant="outline"
               size="lg"
               className="hover:bg-primary hover:text-primary-foreground transition-all duration-300"
@@ -767,20 +864,29 @@ const RealStockResearch = () => {
         {/* No Results */}
         {filteredStocks.length === 0 && (
           <div className="text-center py-12">
+            <Search className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
             <p className="text-lg text-muted-foreground mb-4">
-              No companies found matching your search.
+              No companies found matching "{searchTerm}"
+            </p>
+            <p className="text-muted-foreground mb-6">
+              Try searching for companies like "Apple", "Disney", "Netflix", or "McDonald's"
             </p>
             <Button 
-              onClick={() => {
-                setSearchTerm('');
-                setSelectedCategory('All');
-              }}
+              onClick={handleClearFilters}
               variant="outline"
             >
               Clear Filters
             </Button>
           </div>
         )}
+
+        {/* API Status */}
+        <div className="mt-12 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-muted/50 rounded-full text-sm text-muted-foreground">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span>Connected to Finnhub API • Real-time stock data</span>
+          </div>
+        </div>
       </div>
     </div>
   );
