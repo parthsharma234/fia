@@ -724,13 +724,17 @@ const EntrepreneurshipGame = () => {
   };
 
   const handleStartGame = () => {
-    console.log('Start game clicked');
+    console.log('Start game clicked - current state:', { gameStarted, showTutorial });
     setGameStarted(true);
+    setShowTutorial(false);
+    console.log('Setting gameStarted to true');
   };
 
   const handleShowTutorial = () => {
-    console.log('Tutorial clicked');
+    console.log('Tutorial clicked - current state:', { gameStarted, showTutorial });
     setShowTutorial(true);
+    setGameStarted(false);
+    console.log('Setting showTutorial to true');
   };
 
   const handleResetGame = () => {
