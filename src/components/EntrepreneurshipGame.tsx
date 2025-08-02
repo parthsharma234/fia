@@ -19,6 +19,7 @@ import {
   BookOpen,
   Heart,
   ArrowRight,
+  ArrowLeft,
   Star,
   Trophy,
   Coins,
@@ -100,8 +101,10 @@ import {
   Dice3,
   Dice4,
   Dice5,
-  Dice6
+  Dice6,
+  Shield
 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
 interface GameState {
   currentStep: number;
@@ -162,6 +165,7 @@ interface BusinessEvent {
       customers?: number;
       satisfaction?: number;
       employees?: number;
+      marketShare?: number;
     };
     consequence: string;
   }>;
