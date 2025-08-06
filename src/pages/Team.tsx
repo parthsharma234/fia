@@ -6,51 +6,51 @@ import { Mail, Linkedin, MapPin } from 'lucide-react';
 const Team = () => {
   const executiveTeam = [
     {
-      name: "Sarah Chen",
-      title: "Founder & Executive Director",
-      bio: "Sarah founded Finance in Advance during her junior year of high school after recognizing the critical gap in financial education. She has led the organization's growth to 7+ chapters and 200+ students educated.",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face",
-      email: "sarah@financeinadvance.org",
+      name: "Jivitesh Babu",
+      title: "Chief Executive Officer",
+      bio: "Passionate about financial literacy and empowering young minds to make informed financial decisions.",
+      image: "/chapter-assets/jivi.png",
+      email: "jivitesh@financeinadvance.org",
       linkedin: "#"
     },
     {
-      name: "Marcus Williams",
-      title: "Program Director",
-      bio: "Marcus oversees curriculum development and ensures all programs meet the highest educational standards. He brings expertise in financial planning and youth education to our team.",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
-      email: "marcus@financeinadvance.org",
+      name: "Parth Sharma",
+      title: "Chief Operating Officer",
+      bio: "Dedicated to operational excellence and creating scalable educational programs.",
+      image: "/chapter-assets/parth.jpg",
+      email: "parth@financeinadvance.org",
       linkedin: "#"
     },
     {
-      name: "Emily Rodriguez",
-      title: "Outreach Coordinator",
-      bio: "Emily leads our community outreach efforts and manages partnerships with schools and organizations. She's passionate about making financial education accessible to all students.",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face",
-      email: "emily@financeinadvance.org",
+      name: "Nimit Arora",
+      title: "Chief Technology Officer",
+      bio: "Leading our digital transformation and innovative educational technology solutions.",
+      image: "/chapter-assets/nimit.png",
+      email: "nimit@financeinadvance.org",
       linkedin: "#"
     },
     {
-      name: "David Kim",
-      title: "Technology Lead",
-      bio: "David develops our digital platforms and educational tools. His background in computer science and finance helps create innovative learning experiences for students.",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
-      email: "david@financeinadvance.org",
+      name: "Rohan",
+      title: "Chief Financial Officer",
+      bio: "Ensuring financial sustainability while expanding our educational impact.",
+      image: "/chapter-assets/rohan.png",
+      email: "rohan@financeinadvance.org",
       linkedin: "#"
     },
     {
-      name: "Aisha Patel",
-      title: "Training Manager",
-      bio: "Aisha designs and delivers training programs for new volunteers and chapter leaders. Her expertise in education and leadership development strengthens our network.",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face",
-      email: "aisha@financeinadvance.org",
+      name: "Abdullah Ajimal",
+      title: "Chief Marketing Officer",
+      bio: "Building our brand and connecting with students across the globe.",
+      image: "/chapter-assets/abdullah.png",
+      email: "abdullah@financeinadvance.org",
       linkedin: "#"
     },
     {
-      name: "Jordan Thompson",
-      title: "Communications Director",
-      bio: "Jordan manages our digital presence and creates engaging content that spreads awareness about financial literacy. They ensure our message reaches diverse audiences.",
-      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face",
-      email: "jordan@financeinadvance.org",
+      name: "Vedant",
+      title: "Chief Strategy Officer",
+      bio: "Developing strategic initiatives to expand our educational reach and impact.",
+      image: "/chapter-assets/vedant.png",
+      email: "vedant@financeinadvance.org",
       linkedin: "#"
     }
   ];

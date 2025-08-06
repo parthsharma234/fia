@@ -105,6 +105,7 @@ import {
   Shield
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 interface GameState {
   currentStep: number;
@@ -723,18 +724,15 @@ const EntrepreneurshipGame = () => {
     return { rating: 'Keep Trying! 💪', color: 'text-red-600', description: 'Every entrepreneur faces challenges!' };
   };
 
+  const [showComingSoon, setShowComingSoon] = useState(false);
+  const [showGameGuide, setShowGameGuide] = useState(false);
+
   const handleStartGame = () => {
-    console.log('Start game clicked - current state:', { gameStarted, showTutorial });
-    setGameStarted(true);
-    setShowTutorial(false);
-    console.log('Setting gameStarted to true');
+    setShowComingSoon(true);
   };
 
   const handleShowTutorial = () => {
-    console.log('Tutorial clicked - current state:', { gameStarted, showTutorial });
-    setShowTutorial(true);
-    setGameStarted(false);
-    console.log('Setting showTutorial to true');
+    setShowGameGuide(true);
   };
 
   const handleResetGame = () => {
@@ -2238,6 +2236,118 @@ const EntrepreneurshipGame = () => {
           </div>
         </div>
       </div>
+
+      {/* Coming Soon Dialog */}
+      <Dialog open={showComingSoon} onOpenChange={setShowComingSoon}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Coming Soon</DialogTitle>
+            <DialogDescription>
+              The Entrepreneurship Game is currently under development. We're working hard to bring you an amazing interactive experience to learn about starting and growing a business. Stay tuned!
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+
+      {/* Game Guide Dialog */}
+      <Dialog open={showGameGuide} onOpenChange={setShowGameGuide}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">How to Play: Young Entrepreneur Game</DialogTitle>
+            <DialogDescription>
+              A comprehensive guide to our interactive business simulation game
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-6 mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-primary">🎯 Game Overview</h3>
+                <p className="text-sm text-muted-foreground">
+                  Experience the journey of building a business from idea to investment. Make strategic decisions, 
+                  manage resources, and learn real entrepreneurship skills through interactive gameplay.
+                </p>
+                
+                <h3 className="text-lg font-semibold text-primary">⏰ Duration</h3>
+                <p className="text-sm text-muted-foreground">15-30 minutes of engaging gameplay</p>
+                
+                <h3 className="text-lg font-semibold text-primary">🎮 How It Works</h3>
+                <ul className="text-sm text-muted-foreground space-y-2 list-disc list-inside">
+                  <li>Choose your industry (Tech, Food, Clothing, Eco, Services, Gaming)</li>
+                  <li>Design your product or service</li>
+                  <li>Allocate your starting budget wisely</li>
+                  <li>Launch and respond to market events</li>
+                  <li>Grow your business and handle challenges</li>
+                  <li>Pitch to investors for funding</li>
+                </ul>
+              </div>
+              
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-primary">📊 Key Metrics</h3>
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div className="bg-muted/50 p-3 rounded-lg">
+                    <div className="font-medium text-green-600">💰 Budget</div>
+                    <div className="text-muted-foreground">Your available money</div>
+                  </div>
+                  <div className="bg-muted/50 p-3 rounded-lg">
+                    <div className="font-medium text-blue-600">📈 Revenue</div>
+                    <div className="text-muted-foreground">Money from sales</div>
+                  </div>
+                  <div className="bg-muted/50 p-3 rounded-lg">
+                    <div className="font-medium text-purple-600">👥 Customers</div>
+                    <div className="text-muted-foreground">People who buy from you</div>
+                  </div>
+                  <div className="bg-muted/50 p-3 rounded-lg">
+                    <div className="font-medium text-orange-600">⭐ Satisfaction</div>
+                    <div className="text-muted-foreground">How happy customers are</div>
+                  </div>
+                </div>
+                
+                <h3 className="text-lg font-semibold text-primary">🏆 Scoring</h3>
+                <p className="text-sm text-muted-foreground">
+                  Your final score is based on revenue, customers, satisfaction, and smart decision-making. 
+                  Aim for "Unicorn Startup" status!
+                </p>
+                
+                <h3 className="text-lg font-semibold text-primary">🎲 Random Events</h3>
+                <p className="text-sm text-muted-foreground">
+                  Face real business challenges like competitor threats, viral moments, supply chain issues, 
+                  and innovation opportunities. Each choice has consequences!
+                </p>
+              </div>
+            </div>
+            
+            <div className="border-t pt-6">
+              <h3 className="text-lg font-semibold text-primary mb-4">📚 Learning Objectives</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-primary/5 p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">💡 Entrepreneurial Thinking</h4>
+                  <p className="text-sm text-muted-foreground">Learn to identify opportunities, take calculated risks, and think creatively about problem-solving.</p>
+                </div>
+                <div className="bg-primary/5 p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">💰 Financial Management</h4>
+                  <p className="text-sm text-muted-foreground">Understand budgeting, revenue generation, cost management, and investment principles.</p>
+                </div>
+                <div className="bg-primary/5 p-4 rounded-lg">
+                  <h4 className="font-medium mb-2">🎯 Strategic Decision Making</h4>
+                  <p className="text-sm text-muted-foreground">Practice making business decisions under pressure and understanding their long-term consequences.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-muted/30 p-4 rounded-lg">
+              <h4 className="font-medium text-primary mb-2">💡 Pro Tips for Success</h4>
+              <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
+                <li>Balance spending across different areas - don't put everything in one category</li>
+                <li>Customer satisfaction is just as important as making money</li>
+                <li>When facing events, think about long-term consequences, not just immediate gains</li>
+                <li>Different industries have different challenges - choose based on your interests</li>
+                <li>Innovation and taking smart risks often lead to the biggest rewards</li>
+              </ul>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
