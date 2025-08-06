@@ -4,8 +4,12 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, MapPin, Users, Calendar, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import chaptersData from '@/data/chapters.json';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { useState } from 'react';
 
 const Chapters = () => {
+  const [showComingSoon, setShowComingSoon] = useState(false);
+  
   const chapters = chaptersData.chapters.map(chapter => ({
     ...chapter,
     slug: chapter.id,
@@ -111,30 +115,21 @@ const Chapters = () => {
                     </p>
 
                     {/* Chapter Stats */}
-                    <div className="grid grid-cols-3 gap-4 mb-6 text-center">
-                      <div>
-                        <div className="text-xl font-bold text-primary">{chapter.members}</div>
-                        <div className="text-xs text-muted-foreground">Members</div>
-                      </div>
-                      <div>
-                        <div className="text-xl font-bold text-secondary">{chapter.studentsServed}</div>
-                        <div className="text-xs text-muted-foreground">Students</div>
-                      </div>
-                      <div>
+                    <div className="flex justify-center mb-6">
+                      <div className="text-center">
                         <div className="text-xl font-bold text-accent">{chapter.established}</div>
                         <div className="text-xs text-muted-foreground">Founded</div>
                       </div>
                     </div>
 
-                    <Link to={`/chapters/${chapter.id}`}>
-                      <Button 
-                        variant="outline" 
-                        className="w-full group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all duration-300"
-                      >
-                        Learn More
-                        <ArrowRight className="ml-2 w-4 h-4" />
-                      </Button>
-                    </Link>
+                    <Button 
+                      variant="outline" 
+                      className="w-full group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all duration-300"
+                      onClick={() => setShowComingSoon(true)}
+                    >
+                      Learn More
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -233,6 +228,18 @@ const Chapters = () => {
           </div>
         </div>
       </section>
+
+      {/* Coming Soon Dialog */}
+      <Dialog open={showComingSoon} onOpenChange={setShowComingSoon}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Coming Soon</DialogTitle>
+            <DialogDescription>
+              Individual chapter pages are currently under development. We're working on detailed information for each chapter including member profiles, local activities, and success stories. Check back soon!
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>

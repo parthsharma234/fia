@@ -760,9 +760,8 @@ const EntrepreneurshipGame = () => {
   };
 
   const handleBackToMenu = () => {
-    console.log('Back to menu clicked');
     setGameStarted(false);
-    setShowTutorial(false);
+    setShowGameGuide(false);
   };
 
   const handleStepClick = (stepId: number) => {
@@ -776,66 +775,8 @@ const EntrepreneurshipGame = () => {
     console.log('Tab changed:', value);
   };
 
-  // Tutorial Modal
-  if (showTutorial) {
-    return (
-      <div className="min-h-screen bg-background pt-24 pb-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl flex items-center">
-                <BookOpen className="w-6 h-6 mr-2" />
-                How to Play: Young Entrepreneur Game
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {gameSteps.map((step, index) => (
-                    <div key={step.id} className="card-gradient p-4 rounded-lg">
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold">
-                          {index + 1}
-                        </div>
-                        <h3 className="font-semibold">{step.title}</h3>
-                      </div>
-                      <p className="text-sm text-muted-foreground">{step.description}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="bg-primary/5 p-6 rounded-lg">
-                  <h3 className="font-semibold text-primary mb-3">🎯 Game Tips:</h3>
-                  <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li>• Start with $1,000 virtual dollars to build your business</li>
-                    <li>• Every decision affects your budget, customers, and satisfaction</li>
-                    <li>• Random events will test your problem-solving skills</li>
-                    <li>• Try to balance spending money with making money</li>
-                    <li>• Happy customers are more valuable than lots of unhappy customers</li>
-                    <li>• You can replay the game to try different strategies!</li>
-                  </ul>
-                </div>
-
-                <div className="flex gap-4 justify-center">
-                  <Button onClick={handleStartGame} variant="default" size="lg">
-                    <Play className="mr-2 w-5 h-5" />
-                    Start Playing
-                  </Button>
-                  <Button onClick={handleBackToMenu} variant="outline" size="lg">
-                    <ArrowLeft className="mr-2 w-5 h-5" />
-                    Back to Menu
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
-  }
-
-  // Game Start Screen
-  if (!gameStarted) {
+  // Main Game Landing Screen
+  if (!gameStarted && !showGameGuide) {
     return (
       <div className="min-h-screen bg-background pt-24 pb-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

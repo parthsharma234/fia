@@ -7,48 +7,42 @@ const Team = () => {
   const executiveTeam = [
     {
       name: "Jivitesh Babu",
-      title: "Chief Executive Officer",
-      bio: "Passionate about financial literacy and empowering young minds to make informed financial decisions.",
+      bio: "Hello! My name is Jivitesh Babu. I'm a Junior at Farmington High School. I'm passionate about learning finance, business, and economics. I hope to work in fintech, corporate finance, or investment banking and become an entrepreneur. In my free time, I enjoy hanging out with my friends and working on my own projects.",
       image: "/chapter-assets/jivi.png",
       email: "jivitesh@financeinadvance.org",
       linkedin: "#"
     },
     {
       name: "Parth Sharma",
-      title: "Chief Operating Officer",
-      bio: "Dedicated to operational excellence and creating scalable educational programs.",
+      bio: "I'm Parth Sharma, a Junior at Farmington High School. I love learning about engineering, space and AI. In my free time, I enjoy playing basketball and watching movies.",
       image: "/chapter-assets/parth.jpg",
       email: "parth@financeinadvance.org",
       linkedin: "#"
     },
     {
       name: "Nimit Arora",
-      title: "Chief Technology Officer",
-      bio: "Leading our digital transformation and innovative educational technology solutions.",
+      bio: "Hello, My name is Nimit Arora. I am a junior at Farmington High school. I am interested in Finance, math, and science. I enjoy playing basketball and video games in my free time.",
       image: "/chapter-assets/nimit.png",
       email: "nimit@financeinadvance.org",
       linkedin: "#"
     },
     {
       name: "Rohan",
-      title: "Chief Financial Officer",
-      bio: "Ensuring financial sustainability while expanding our educational impact.",
+      bio: "As the Connecticut Branch Manager for Finance in Advance, I lead statewide outreach efforts to promote financial literacy among students and communities. I am deeply passionate about finance, especially personal finance education, and am committed to empowering others with the knowledge and tools needed to make informed financial decisions. I strive to expand access to essential financial skills by coordinating events, building connections with schools and libraries, and organizing impactful workshops. Looking ahead, I aspire to pursue a career in the financial industry, with a strong interest in wealth management and financial advisory.",
       image: "/chapter-assets/rohan.png",
       email: "rohan@financeinadvance.org",
       linkedin: "#"
     },
     {
       name: "Abdullah Ajimal",
-      title: "Chief Marketing Officer",
-      bio: "Building our brand and connecting with students across the globe.",
+      bio: "Hi, My name is Abdullah. I am currently a junior at Farmington High school, I have a passion for physics, computer science, and economics. In the future I strive to work in the finance field as an investment banker or financial analyst. I enjoy cooking, volunteering for kids and traveling with friends.",
       image: "/chapter-assets/abdullah.png",
       email: "abdullah@financeinadvance.org",
       linkedin: "#"
     },
     {
       name: "Vedant",
-      title: "Chief Strategy Officer",
-      bio: "Developing strategic initiatives to expand our educational reach and impact.",
+      bio: "I'm Vedant, a passionate student leader focused on expanding financial literacy education. I enjoy exploring innovative approaches to teaching complex financial concepts and building meaningful connections within our community. When I'm not working on Finance in Advance initiatives, you can find me reading about market trends and playing soccer with friends.",
       image: "/chapter-assets/vedant.png",
       email: "vedant@financeinadvance.org",
       linkedin: "#"
@@ -104,15 +98,9 @@ const Team = () => {
                   </div>
 
                   {/* Member Info */}
-                  <h3 className="text-2xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
+                  <h3 className="text-2xl font-bold text-foreground mb-6 group-hover:text-primary transition-colors duration-300">
                     {member.name}
                   </h3>
-                  
-                  <div className="mb-4">
-                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-secondary/10 text-secondary">
-                      {member.title}
-                    </span>
-                  </div>
                   
                   <p className="text-muted-foreground mb-6 leading-relaxed text-sm">
                     {member.bio}
