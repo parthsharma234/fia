@@ -1,6 +1,5 @@
 import Navigation from '@/components/Navigation';
 import Hero from '@/components/Hero';
-import AppleStyleStorySection from '@/components/AppleStyleStorySection';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Users, BookOpen, TrendingUp, Target, Heart, Globe, Calculator, PiggyBank, CreditCard, Building, GraduationCap, Award, MapPin, Calendar, CheckCircle, Star, Lightbulb, HandHeart } from 'lucide-react';
@@ -144,7 +143,6 @@ const Index = () => {
     <div className="min-h-screen">
       <Navigation />
       <Hero />
-      <AppleStyleStorySection />
       
       {/* Impact Statistics */}
       <section className="py-20 bg-primary text-primary-foreground relative overflow-hidden">

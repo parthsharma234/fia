@@ -1,7 +1,7 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
-import { Mail, Linkedin, MapPin } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 
 const Team = () => {
   const executiveTeam = [
@@ -9,43 +9,37 @@ const Team = () => {
       name: "Jivitesh Babu",
       bio: "Hello! My name is Jivitesh Babu. I'm a Junior at Farmington High School. I'm passionate about learning finance, business, and economics. I hope to work in fintech, corporate finance, or investment banking and become an entrepreneur. In my free time, I enjoy hanging out with my friends and working on my own projects.",
       image: "/chapter-assets/jivi.png",
-      email: "jivitesh@financeinadvance.org",
-      linkedin: "#"
+
     },
     {
       name: "Parth Sharma",
       bio: "I'm Parth Sharma, a Junior at Farmington High School. I love learning about engineering, space and AI. In my free time, I enjoy playing basketball and watching movies.",
-      image: "/chapter-assets/parth.jpg",
-      email: "parth@financeinadvance.org",
-      linkedin: "#"
+      image: "/parth.jpg",
+
     },
     {
       name: "Nimit Arora",
       bio: "Hello, My name is Nimit Arora. I am a junior at Farmington High school. I am interested in Finance, math, and science. I enjoy playing basketball and video games in my free time.",
-      image: "/chapter-assets/nimit.png",
-      email: "nimit@financeinadvance.org",
-      linkedin: "#"
+      image: "/nimit.png",
+
     },
     {
       name: "Rohan",
       bio: "As the Connecticut Branch Manager for Finance in Advance, I lead statewide outreach efforts to promote financial literacy among students and communities. I am deeply passionate about finance, especially personal finance education, and am committed to empowering others with the knowledge and tools needed to make informed financial decisions. I strive to expand access to essential financial skills by coordinating events, building connections with schools and libraries, and organizing impactful workshops. Looking ahead, I aspire to pursue a career in the financial industry, with a strong interest in wealth management and financial advisory.",
-      image: "/chapter-assets/rohan.png",
-      email: "rohan@financeinadvance.org",
-      linkedin: "#"
+      image: "/rohan.png",
+
     },
     {
       name: "Abdullah Ajimal",
       bio: "Hi, My name is Abdullah. I am currently a junior at Farmington High school, I have a passion for physics, computer science, and economics. In the future I strive to work in the finance field as an investment banker or financial analyst. I enjoy cooking, volunteering for kids and traveling with friends.",
-      image: "/chapter-assets/abdullah.png",
-      email: "abdullah@financeinadvance.org",
-      linkedin: "#"
+      image: "/abdullah.png",
+
     },
     {
       name: "Vedant",
       bio: "I'm Vedant, a passionate student leader focused on expanding financial literacy education. I enjoy exploring innovative approaches to teaching complex financial concepts and building meaningful connections within our community. When I'm not working on Finance in Advance initiatives, you can find me reading about market trends and playing soccer with friends.",
       image: "/chapter-assets/vedant.png",
-      email: "vedant@financeinadvance.org",
-      linkedin: "#"
+
     }
   ];
 
@@ -106,21 +100,7 @@ const Team = () => {
                     {member.bio}
                   </p>
 
-                  {/* Contact Links */}
-                  <div className="flex justify-center space-x-4">
-                    <a 
-                      href={`mailto:${member.email}`}
-                      className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all duration-300 group/icon"
-                    >
-                      <Mail size={18} />
-                    </a>
-                    <a 
-                      href={member.linkedin}
-                      className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-all duration-300 group/icon"
-                    >
-                      <Linkedin size={18} />
-                    </a>
-                  </div>
+
                 </div>
               </div>
             ))}
@@ -147,7 +127,6 @@ const Team = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button variant="premium" size="lg" className="hover-glow">
-                  <Mail className="mr-2" size={20} />
                   Apply to Join
                 </Button>
                 <Button variant="outline" size="lg">

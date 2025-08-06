@@ -1,4 +1,0 @@
-project_id = "uelpknvcdovlfnrvmszv"
-
-[functions.stock-data]
-verify_jwt = false

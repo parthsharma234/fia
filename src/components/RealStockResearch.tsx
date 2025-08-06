@@ -376,7 +376,7 @@ const RealStockResearch = () => {
             {/* Main Content */}
             <div className="lg:col-span-2">
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-3 mb-6">
+                <TabsList className="grid w-full grid-cols-2 mb-6">
                   <TabsTrigger 
                     value="overview" 
                     className="text-sm"
@@ -396,16 +396,6 @@ const RealStockResearch = () => {
                     }}
                   >
                     Price Chart
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="news" 
-                    className="text-sm"
-                    onClick={() => {
-                      console.log('News tab clicked');
-                      setActiveTab('news');
-                    }}
-                  >
-                    Recent News
                   </TabsTrigger>
                 </TabsList>
 
@@ -548,87 +538,6 @@ const RealStockResearch = () => {
                       )}
                     </CardContent>
                   </Card>
-                </TabsContent>
-
-                <TabsContent value="news" className="space-y-6">
-                  {selectedStock.news && selectedStock.news.length > 0 ? (
-                    selectedStock.news.map((newsItem, index) => (
-                      <Card key={index} className="hover:shadow-lg transition-all duration-300">
-                        <CardHeader>
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <CardTitle className="text-lg mb-2 line-clamp-2">
-                                {newsItem.headline}
-                              </CardTitle>
-                              <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                                <span>{newsItem.source}</span>
-                                <span>{formatDate(newsItem.datetime)}</span>
-                                <Badge variant="outline" className="text-xs">
-                                  {newsItem.category}
-                                </Badge>
-                              </div>
-                            </div>
-                            {newsItem.image && (
-                              <img 
-                                src={newsItem.image} 
-                                alt="News"
-                                className="w-20 h-20 rounded-lg object-cover ml-4"
-                                onError={(e) => {
-                                  e.currentTarget.style.display = 'none';
-                                }}
-                              />
-                            )}
-                          </div>
-                        </CardHeader>
-                        <CardContent>
-                          <p className="text-muted-foreground mb-4 line-clamp-3">
-                            {newsItem.summary}
-                          </p>
-                          <div className="bg-primary/5 p-4 rounded-lg border-l-4 border-primary">
-                            <h4 className="font-semibold text-primary mb-2">Why This Matters for Kids:</h4>
-                            <p className="text-sm text-muted-foreground">
-                              {getKidFriendlyNewsExplanation(newsItem.headline, selectedStock.symbol)}
-                            </p>
-                          </div>
-                          <div className="mt-4 flex justify-between items-center">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => window.open(newsItem.url, '_blank')}
-                            >
-                              <ExternalLink className="w-4 h-4 mr-1" />
-                              Read Full Article
-                            </Button>
-                            <span className="text-xs text-muted-foreground">
-                              ID: {newsItem.id}
-                            </span>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))
-                  ) : (
-                    <Card>
-                      <CardContent className="text-center py-12">
-                        <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                        <h3 className="text-xl font-semibold mb-2">Loading News...</h3>
-                        <p className="text-muted-foreground mb-4">
-                          We're fetching the latest news about {selectedStock.kidFriendlyName}
-                        </p>
-                        <Button
-                          variant="outline"
-                          onClick={() => handleRefreshStock(selectedStock)}
-                          disabled={selectedStock.loading}
-                        >
-                          {selectedStock.loading ? (
-                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          ) : (
-                            <RefreshCw className="w-4 h-4 mr-2" />
-                          )}
-                          Load News
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  )}
                 </TabsContent>
               </Tabs>
             </div>

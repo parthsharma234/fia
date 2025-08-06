@@ -2190,6 +2190,35 @@ const EntrepreneurshipGame = () => {
         </DialogContent>
       </Dialog>
 
+      {/* Coming Soon Dialog */}
+      <Dialog open={showComingSoon} onOpenChange={setShowComingSoon}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl text-center">🚀 Coming Soon!</DialogTitle>
+            <DialogDescription className="text-center">
+              The Young Entrepreneur Game is currently under development
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 mt-6 text-center">
+            <div className="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto animate-pulse">
+              <Rocket className="w-8 h-8 text-white" />
+            </div>
+            <p className="text-muted-foreground">
+              We're working hard to bring you an amazing entrepreneurship experience. 
+              Stay tuned for updates!
+            </p>
+            <Button 
+              onClick={() => setShowComingSoon(false)}
+              variant="default"
+              className="w-full"
+            >
+              Got it!
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Game Guide Dialog */}
       <Dialog open={showGameGuide} onOpenChange={setShowGameGuide}>
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
