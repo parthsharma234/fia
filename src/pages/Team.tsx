@@ -7,22 +7,22 @@ const Team = () => {
   const executiveTeam = [
     {
       name: "Jivitesh Babu",
-      bio: "Hello! My name is Jivitesh Babu. I'm a Junior at Farmington High School. I'm passionate about learning finance, business, and economics. I hope to work in fintech, corporate finance, or investment banking and become an entrepreneur. In my free time, I enjoy hanging out with my friends and working on my own projects.",
+      bio: "Hello! My name is Jivitesh Babu. I'm a Senior at Farmington High School. I'm passionate about learning finance, business, and economics. I hope to work in fintech, corporate finance, or investment banking and become an entrepreneur. In my free time, I enjoy hanging out with my friends and working on my own projects.",
       image: "/chapter-assets/jivi.png",
     },
     {
       name: "Parth Sharma",
-      bio: "I'm Parth Sharma, a Junior at Farmington High School. I love learning about engineering, space and AI. In my free time, I enjoy playing basketball and watching movies.",
+      bio: "I'm Parth Sharma, a Senior at Farmington High School. I love learning about engineering, space and AI. In my free time, I enjoy playing basketball and watching movies.",
       image: "/parth.jpg",
     },
     {
       name: "Rithvik Satyavarapu",
-      bio: "Hi! My name is Rithvik Satyavarapu. I am a Senior at Farmington High School. I love learning about computer science, business, and economics. In the future, I aspire to become an investment banker or have a career in Corporate Finance. In my free time, I enjoy playing with my dog, Rory, and chess matches with my friends.",
-      image: "/chapter-assets/rithvik.png",
+      bio: "Hi! My name is Rithvik Satyavarapu. I am a freshman in college at UT Austin. I love learning about computer science, business, and economics. In the future, I aspire to become an investment banker or have a career in Corporate Finance. In my free time, I enjoy playing with my dog, Rory, and chess matches with my friends.",
+      image: "/lovable-uploads/2eddb6ef-27b9-43a1-b4ab-6e4c76dae968.png",
     },
     {
       name: "Nimit Arora",
-      bio: "Hello, My name is Nimit Arora. I am a junior at Farmington High school. I am interested in Finance, math, and science. I enjoy playing basketball and video games in my free time.",
+      bio: "Hello, My name is Nimit Arora. I am a senior at Farmington High school. I am interested in Finance, math, and science. I enjoy playing basketball and video games in my free time.",
       image: "/nimit.png",
     },
     {
@@ -32,7 +32,7 @@ const Team = () => {
     },
     {
       name: "Abdullah Ajimal",
-      bio: "Hi, My name is Abdullah. I am currently a junior at Farmington High school, I have a passion for physics, computer science, and economics. In the future I strive to work in the finance field as an investment banker or financial analyst. I enjoy cooking, volunteering for kids and traveling with friends.",
+      bio: "Hi, My name is Abdullah. I am currently a senior at Farmington High school, I have a passion for physics, computer science, and economics. In the future I strive to work in the finance field as an investment banker or financial analyst. I enjoy cooking, volunteering for kids and traveling with friends.",
       image: "/abdullah.png",
     },
     {
