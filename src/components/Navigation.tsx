@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, GraduationCap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [showComingSoon, setShowComingSoon] = useState(false);
   
   const location = useLocation();
   const { ref: navRef, isVisible } = useScrollAnimation(0.1);
@@ -25,9 +27,19 @@ const Navigation = () => {
     { name: 'Programs', href: '/programs' },
     { name: 'Team', href: '/team' },
     { name: 'Chapters', href: '/chapters' },
-    { name: 'Stock Research', href: '/stock-research' },
-    { name: 'Entrepreneur Game', href: '/entrepreneurship-game' },
+    { name: 'Stock Research', href: '#', comingSoon: true },
+    { name: 'Entrepreneur Game', href: '#', comingSoon: true },
   ];
+
+  const handleNavClick = (link: any, e: React.MouseEvent) => {
+    if (link.comingSoon) {
+      e.preventDefault();
+      setShowComingSoon(true);
+      setIsOpen(false);
+    } else {
+      setIsOpen(false);
+    }
+  };
 
   return (
     <nav 
@@ -69,6 +81,7 @@ const Navigation = () => {
                 <Link
                   key={link.name}
                   to={link.href}
+                  onClick={(e) => handleNavClick(link, e)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 relative group ${
                     location.pathname === link.href 
                       ? 'text-primary-foreground bg-primary-light/80 shadow-soft' 
@@ -131,12 +144,12 @@ const Navigation = () => {
               <Link
                 key={link.name}
                 to={link.href}
+                onClick={(e) => handleNavClick(link, e)}
                 className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 ${
                   location.pathname === link.href 
                     ? 'text-primary-foreground bg-primary-light/80 shadow-soft' 
                     : 'text-primary-foreground hover:text-secondary hover:bg-primary-soft/40'
                 } animate-slide-in-bottom animate-stagger-${index + 1}`}
-                onClick={() => setIsOpen(false)}
               >
                 {link.name}
               </Link>
@@ -158,6 +171,18 @@ const Navigation = () => {
           </div>
         </div>
       </div>
+
+      {/* Coming Soon Dialog */}
+      <Dialog open={showComingSoon} onOpenChange={setShowComingSoon}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Coming Soon!</DialogTitle>
+            <DialogDescription>
+              This feature is currently under development. Stay tuned for updates!
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </nav>
   );
 };

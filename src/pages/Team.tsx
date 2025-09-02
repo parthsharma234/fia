@@ -40,6 +40,11 @@ const Team = () => {
       bio: "I'm Vedant, a passionate student leader focused on expanding financial literacy education. I enjoy exploring innovative approaches to teaching complex financial concepts and building meaningful connections within our community. When I'm not working on Finance in Advance initiatives, you can find me reading about market trends and playing soccer with friends.",
       image: "/chapter-assets/vedant.png",
 
+    },
+    {
+      name: "Rithvik Satyavarapu",
+      bio: "Hi! My name is Rithvik Satyavarapu. I am a Senior at Farmington High School. I love learning about computer science, business, and economics. In the future, I aspire to become an investment banker or have a career in Corporate Finance. In my free time, I enjoy playing with my dog, Rory, and chess matches with my friends.",
+      image: "/chapter-assets/rithvik.png",
     }
   ];
 
