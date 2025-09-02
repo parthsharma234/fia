@@ -9,42 +9,36 @@ const Team = () => {
       name: "Jivitesh Babu",
       bio: "Hello! My name is Jivitesh Babu. I'm a Junior at Farmington High School. I'm passionate about learning finance, business, and economics. I hope to work in fintech, corporate finance, or investment banking and become an entrepreneur. In my free time, I enjoy hanging out with my friends and working on my own projects.",
       image: "/chapter-assets/jivi.png",
-
     },
     {
       name: "Parth Sharma",
       bio: "I'm Parth Sharma, a Junior at Farmington High School. I love learning about engineering, space and AI. In my free time, I enjoy playing basketball and watching movies.",
       image: "/parth.jpg",
-
-    },
-    {
-      name: "Nimit Arora",
-      bio: "Hello, My name is Nimit Arora. I am a junior at Farmington High school. I am interested in Finance, math, and science. I enjoy playing basketball and video games in my free time.",
-      image: "/nimit.png",
-
-    },
-    {
-      name: "Rohan",
-      bio: "As the Connecticut Branch Manager for Finance in Advance, I lead statewide outreach efforts to promote financial literacy among students and communities. I am deeply passionate about finance, especially personal finance education, and am committed to empowering others with the knowledge and tools needed to make informed financial decisions. I strive to expand access to essential financial skills by coordinating events, building connections with schools and libraries, and organizing impactful workshops. Looking ahead, I aspire to pursue a career in the financial industry, with a strong interest in wealth management and financial advisory.",
-      image: "/rohan.png",
-
-    },
-    {
-      name: "Abdullah Ajimal",
-      bio: "Hi, My name is Abdullah. I am currently a junior at Farmington High school, I have a passion for physics, computer science, and economics. In the future I strive to work in the finance field as an investment banker or financial analyst. I enjoy cooking, volunteering for kids and traveling with friends.",
-      image: "/abdullah.png",
-
-    },
-    {
-      name: "Vedant",
-      bio: "I'm Vedant, a passionate student leader focused on expanding financial literacy education. I enjoy exploring innovative approaches to teaching complex financial concepts and building meaningful connections within our community. When I'm not working on Finance in Advance initiatives, you can find me reading about market trends and playing soccer with friends.",
-      image: "/chapter-assets/vedant.png",
-
     },
     {
       name: "Rithvik Satyavarapu",
       bio: "Hi! My name is Rithvik Satyavarapu. I am a Senior at Farmington High School. I love learning about computer science, business, and economics. In the future, I aspire to become an investment banker or have a career in Corporate Finance. In my free time, I enjoy playing with my dog, Rory, and chess matches with my friends.",
       image: "/chapter-assets/rithvik.png",
+    },
+    {
+      name: "Nimit Arora",
+      bio: "Hello, My name is Nimit Arora. I am a junior at Farmington High school. I am interested in Finance, math, and science. I enjoy playing basketball and video games in my free time.",
+      image: "/nimit.png",
+    },
+    {
+      name: "Rohan",
+      bio: "As the Connecticut Branch Manager for Finance in Advance, I lead statewide outreach efforts to promote financial literacy among students and communities. I am deeply passionate about finance, especially personal finance education, and am committed to empowering others with the knowledge and tools needed to make informed financial decisions. I strive to expand access to essential financial skills by coordinating events, building connections with schools and libraries, and organizing impactful workshops. Looking ahead, I aspire to pursue a career in the financial industry, with a strong interest in wealth management and financial advisory.",
+      image: "/rohan.png",
+    },
+    {
+      name: "Abdullah Ajimal",
+      bio: "Hi, My name is Abdullah. I am currently a junior at Farmington High school, I have a passion for physics, computer science, and economics. In the future I strive to work in the finance field as an investment banker or financial analyst. I enjoy cooking, volunteering for kids and traveling with friends.",
+      image: "/abdullah.png",
+    },
+    {
+      name: "Vedant",
+      bio: "I'm Vedant, a passionate student leader focused on expanding financial literacy education. I enjoy exploring innovative approaches to teaching complex financial concepts and building meaningful connections within our community. When I'm not working on Finance in Advance initiatives, you can find me reading about market trends and playing soccer with friends.",
+      image: "/chapter-assets/vedant.png",
     }
   ];
 
