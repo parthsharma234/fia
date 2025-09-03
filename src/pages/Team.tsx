@@ -8,7 +8,7 @@ const Team = () => {
     {
       name: "Jivitesh Babu",
       bio: "Hello! My name is Jivitesh Babu. I'm a Senior at Farmington High School. I'm passionate about learning finance, business, and economics. I hope to work in fintech, corporate finance, or investment banking and become an entrepreneur. In my free time, I enjoy hanging out with my friends and working on my own projects.",
-      image: "/chapter-assets/jivi.png",
+      image: "/jivi.png",
     },
     {
       name: "Parth Sharma",
@@ -38,7 +38,7 @@ const Team = () => {
     {
       name: "Vedant",
       bio: "I'm Vedant, a passionate student leader focused on expanding financial literacy education. I enjoy exploring innovative approaches to teaching complex financial concepts and building meaningful connections within our community. When I'm not working on Finance in Advance initiatives, you can find me reading about market trends and playing soccer with friends.",
-      image: "/chapter-assets/vedant.png",
+      image: "/vedant.png",
     }
   ];
 
