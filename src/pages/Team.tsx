@@ -38,7 +38,7 @@ const Team = () => {
     {
       name: "Vedant",
       bio: "I'm Vedant, a passionate student leader focused on expanding financial literacy education. I enjoy exploring innovative approaches to teaching complex financial concepts and building meaningful connections within our community. When I'm not working on Finance in Advance initiatives, you can find me reading about market trends and playing soccer with friends.",
-      image: "/lovable-uploads/6ae47cca-0a83-40b0-a67d-c5bf646158da.png",
+      image: "/vedant.png",
     }
   ];
 
